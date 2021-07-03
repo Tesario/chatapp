@@ -1,0 +1,30 @@
+@import "app.scss";
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__desc {
+        color: var(--text-color);
+        max-width: 500px;
+    }
+
+    &__author {
+        margin-top: 2rem;
+        color: var(--text-color);
+
+        a {
+            color: var(--text-color);
+            padding-bottom: .1rem;
+            transition: .2s ease-in-out;
+            border-bottom: 1px solid var(--secondary-color);
+
+            &:hover {
+                border-bottom: 1px solid var(--primary-color);
+                ;
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+@import "app.scss";
+
+.forbidden {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__title {
+        color: var(--text-color);
+    }
+
+    .btn {
+        i {
+            margin-left: .5rem;
+        }
+    }
+}

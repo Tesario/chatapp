@@ -1,0 +1,77 @@
+@import "app.scss";
+
+.chatroom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &__desc {
+        color: var(--text-color);
+        max-width: 500px;
+    }
+
+    &__form {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        max-width: 500px;
+        width: 100%;
+
+        &__inner {
+            display: flex;
+
+            .btn {
+                margin-left: 1rem;
+                min-width: 58px;
+                min-height: 58px;
+            }
+
+            .form-floating {
+                width: 100%;
+            }
+        }
+
+        .form-check {
+            display: flex;
+            margin-top: .5rem;
+
+            input {
+                border: 1px solid var(--primary-color);
+                width: 20px;
+                height: 20px;
+
+                &:checked {
+                    background-color: var(--primary-color) !important;
+                }
+            }
+
+            label {
+                margin: .25rem 0 0 .5rem;
+                color: var(--text-color);
+            }
+        }
+
+    }
+
+    &__list {
+        margin-top: 2rem;
+        max-width: 500px;
+
+        &__inner {
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+
+            &__item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                &+& {
+                    margin-top: .5rem
+                }
+            }
+        }
+    }
+}
