@@ -5,38 +5,38 @@ import { Link } from "react-router-dom";
 import "./CreateChatroom.scss";
 
 function CreateChatroom(props) {
-  const [state, setState] = useState({ name: "", private: false });
+  const [state, setState] = useState({
+    name: "",
+    private: false,
+    userId: null,
+  });
   const [chatrooms, setChatrooms] = useState([]);
   const { notify } = props;
 
   useEffect(() => {
     getChatrooms();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = async (e) => {
     e.preventDefault();
 
-    if (state.name) {
-      axios({
-        url: "/chatroom/create",
-        method: "POST",
-        data: state,
-        headers: {
-          authorization: sessionStorage.getItem("token"),
-        },
+    await axios({
+      url: "/chatroom/create",
+      method: "POST",
+      data: state,
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        notify(res.data);
+        setState({ name: "", private: false });
+        getChatrooms();
       })
-        .then((response) => {
-          notify(response.data);
-          setState({ name: "", private: false });
-          getChatrooms();
-        })
-        .catch((error) => {
-          notify(error);
-        });
-      return;
-    }
-    notify({ message: "You must fill all fields!" });
+      .catch((error) => {
+        notify(error.response.data);
+      });
   };
 
   const handleChange = (e) => {
@@ -49,15 +49,18 @@ function CreateChatroom(props) {
 
   const getChatrooms = () => {
     axios({
-      url: "/chatroom/show",
+      url: "/chatroom/public",
       method: "GET",
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
     })
       .then((response) => {
         notify(response.data);
         setChatrooms(response.data);
       })
       .catch((error) => {
-        notify(error);
+        notify(error.response.data);
       });
   };
 
@@ -97,7 +100,7 @@ function CreateChatroom(props) {
             />
             <label htmlFor="email">Chatroom name</label>
           </div>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" aria-label="Create">
             <i className="fas fa-plus"></i>
           </button>
         </div>

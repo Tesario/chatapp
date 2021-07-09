@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 
@@ -11,29 +11,33 @@ function Login(props) {
   });
   const { notify } = props;
 
-  const onFormSubmit = (e) => {
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      props.history.push("/create");
+    }
+  }, [props.history]);
+
+  const onFormSubmit = async (e) => {
     e.preventDefault();
 
-    if (state.email && state.password) {
-      axios({
+    try {
+      await axios({
         url: "/user/login",
-        method: "POST",
+        method: "post",
         data: state,
-      })
-        .then((response) => {
-          notify(response.data);
-          setState({ ...state, password: "" });
-          if (response.data.status) {
-            sessionStorage.setItem("token", response.data.token);
-            props.history.push("/create");
-          }
-        })
-        .catch((error) => {
-          notify(error.message);
-        });
-      return;
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        setState({ email: "", password: "" });
+        notify(res.data);
+        sessionStorage.setItem("token", res.data.token);
+        props.history.push("/create");
+      });
+    } catch (error) {
+      setState({ password: "" });
+      notify(error.response.data);
     }
-    notify({ message: "You must fill all fields!" });
   };
 
   const handleChange = (e) => {
@@ -46,7 +50,7 @@ function Login(props) {
       <form className="login__form" onSubmit={(e) => onFormSubmit(e)}>
         <div className="form-floating">
           <input
-            type="email"
+            type="text"
             name="email"
             className="form-control"
             placeholder="Email"

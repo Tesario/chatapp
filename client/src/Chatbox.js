@@ -7,55 +7,31 @@ import { useParams } from "react-router";
 import "./Chatbox.scss";
 
 function Chatbox(props) {
-  const [state, setState] = useState({ message: "", name: "" });
+  let { id } = useParams();
+  const [state, setState] = useState({ message: "", chatroomId: id });
+  const [currentUser, setCurrentUser] = useState(null);
   const [chat, setChat] = useState([]);
 
   const { notify } = props;
   const scrollDown = useRef();
   const socketRef = useRef();
-  let { id } = useParams();
 
   useEffect(() => {
     getMessages();
 
-    axios({
-      url: "/user/isUserAuth",
-      method: "GET",
-      headers: {
-        authorization: sessionStorage.getItem("token"),
-      },
-    })
-      .then((response) => {
-        setState({
-          ...state,
-          name: response.data.user.name,
-        });
-      })
-      .catch(() => {
-        notify("Login failed!");
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     socketRef.current = io.connect("http://localhost:8000/", {
       transports: ["websocket"],
     });
 
-    socketRef.current.on("message", ({ name, message }) => {
-      const chatCopy = [...chat.messages];
-      chatCopy.push({
-        sender: name,
-        body: message,
-        date: Date.now(),
-      });
-      const final = { ...chat, messages: chatCopy };
-      setChat({ ...final });
+    socketRef.current.on("message", (sended) => {
+      if (sended) {
+        getMessages();
+      }
     });
-    chatScrollToDown();
-
     return () => socketRef.current.disconnect();
-  }, [chat]);
+
+    // eslint-disable-next-line
+  }, []);
 
   const onTextChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -73,36 +49,43 @@ function Chatbox(props) {
     }
   };
 
-  const onMessageSubmit = (e) => {
+  const onMessageSubmit = async (e) => {
     e.preventDefault();
-    if (state.name && state.message) {
-      socketRef.current.emit("message", state);
+    socketRef.current.emit("message", { sended: true });
 
-      axios({
-        url: "/chatroom/saveMessage/" + id,
-        method: "PATCH",
-        data: { ...state },
-      })
-        .then((response) => {
-          console.log(response.data.message);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
+    try {
+      await axios({
+        url: "/message/create",
+        method: "POST",
+        data: state,
+        headers: {
+          authorization: sessionStorage.getItem("token"),
+        },
+      });
 
-      setState({ ...state, message: "" });
+      getMessages();
+    } catch (error) {
+      notify(error.response.data);
     }
+
+    setState({ ...state, message: "" });
   };
 
-  const getMessages = () => {
-    axios.get("/chatroom/find/" + id).then((response) => {
-      const data = response.data;
-      if (data.message) {
-        notify({ message: "Chatroom connection failed!" });
-        return;
-      }
-      setChat(...data);
-    });
+  const getMessages = async () => {
+    try {
+      const res = await axios({
+        url: "/message/" + id,
+        method: "GET",
+        headers: {
+          authorization: sessionStorage.getItem("token"),
+        },
+      });
+      setCurrentUser(res.data.currentUser.name);
+      setChat(res.data.messages);
+      chatScrollToDown();
+    } catch (error) {
+      notify(error.response.data);
+    }
   };
 
   const showScrollDownBtn = () => {
@@ -121,22 +104,22 @@ function Chatbox(props) {
   };
 
   const renderChat = () => {
-    if (chat.messages === undefined) return;
+    if (chat === []) return;
     let prevName = "";
-    return chat.messages.map((message, index) => {
+    return chat.map((message, index) => {
       const result =
-        prevName === message.sender ? (
+        prevName === message.senderId.name ? (
           <div
             key={index}
             className={
-              message.sender === state.name
+              message.senderId.name === currentUser
                 ? "message message--left message--merged"
                 : "message message--right message--merged"
             }
           >
             <div className="message__body">
               <span className="message__body__time">
-                {dateFormat(message.date, "h:MM TT")}
+                {dateFormat(message.createdAt, "h:MM TT")}
               </span>
               <div className="message__body__inner">{message.body}</div>
             </div>
@@ -145,21 +128,21 @@ function Chatbox(props) {
           <div
             key={index}
             className={
-              message.sender === state.name
+              message.senderId.name === currentUser
                 ? "message message--left"
                 : "message message--right"
             }
           >
-            <div className="message__sender">{message.sender}</div>
+            <div className="message__sender">{message.senderId.name}</div>
             <div className="message__body">
               <span className="message__body__time">
-                {dateFormat(message.date, "h:MM TT")}
+                {dateFormat(message.createdAt, "h:MM TT")}
               </span>
               <div className="message__body__inner">{message.body}</div>
             </div>
           </div>
         );
-      prevName = message.sender;
+      prevName = message.senderId.name;
       return result;
     });
   };

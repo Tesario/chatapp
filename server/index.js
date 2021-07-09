@@ -1,16 +1,21 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import bodyParser from "body-parser";
 import { createServer } from "http";
 import * as io from "socket.io";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
 
-import homeRoutes from "./routes/home.js";
+// Routes
 import userRoutes from "./routes/user.js";
 import chatroomRoutes from "./routes/chatroom.js";
+import messageRoutes from "./routes/message.js";
+import authRoutes from "./routes/auth.js";
 
-dotenv.config();
+// Middlewares
+import errorHandler from "./middlewares/errorHandler.js";
+
 const app = express();
 
 const server = createServer(app);
@@ -24,14 +29,18 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 // Routes
-app.use("/", homeRoutes);
 app.use("/user", userRoutes);
 app.use("/chatroom", chatroomRoutes);
+app.use("/message", messageRoutes);
+app.use("/auth", authRoutes);
+
+//  Error middleware
+app.use(errorHandler);
 
 // Socket.io
 socketio.on("connection", function (socket) {
-  socket.on("message", ({ name, message }) => {
-    socketio.emit("message", { name, message });
+  socket.on("message", (sended) => {
+    socketio.emit("message", sended);
   });
 });
 
@@ -49,7 +58,10 @@ mongoose
     console.log("Mongoose: " + err.message);
   });
 
-mongoose.set("useFindAndModify", false); // Console warnings off
+// Console warnings off
+mongoose.set("useFindAndModify", false);
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useCreateIndex", true);
 
 server.listen(port, () => {
   console.log(`Server is running at ${port}`);

@@ -1,37 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 
 import "./Register.scss";
 
 function Register(props) {
-  const [state, setState] = useState({ name: "", email: "", password: "" });
+  const [state, setState] = useState({ email: "", name: "", password: "" });
   const { notify } = props;
 
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-
-    if (state.name && state.email && state.password) {
-      axios({
-        url: "/user/create",
-        method: "POST",
-        data: state,
-      })
-        .then((response) => {
-          setState({ name: "", email: "", password: "" });
-          notify(response.data);
-
-          if (response.data.status) {
-            sessionStorage.setItem("token", response.data.token);
-            props.history.push("/create");
-          }
-        })
-        .catch((error) => {
-          notify(error);
-        });
-      return;
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      props.history.push("/create");
     }
-    notify({ message: "You must fill all fields!" });
+  }, [props.history]);
+
+  const onFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios({
+        method: "POST",
+        url: "/user/register",
+        data: state,
+        headers: new Headers({ "Content-Type": "application/json" }),
+      }).then((res) => {
+        setState({ name: "", email: "", password: "" });
+        notify(res.data);
+        sessionStorage.setItem("token", res.data.token);
+        props.history.push("/create");
+      });
+    } catch (err) {
+      notify(err.response.data);
+    }
+
+    // try {
+    //   const data = await axios({
+    //     url: "/user/create",
+    //     method: "POST",
+    //     data: state,
+    //   });
+
+    //   setState({ name: "", email: "", password: "" });
+    //   notify(data);
+    //   console.log(data);
+
+    //   if (data.status) {
+    //     sessionStorage.setItem("token", data.token);
+    //     props.history.push("/create");
+    //   }
+    // } catch (error) {
+    //   console.log(error.response.data.error);
+    //   notify({ message: error.response.data.error });
+    // }
   };
 
   const handleChange = (e) => {
@@ -44,7 +63,7 @@ function Register(props) {
       <form className="register__form" onSubmit={(e) => onFormSubmit(e)}>
         <div className="form-floating">
           <input
-            type="email"
+            type="text"
             name="email"
             className="form-control"
             placeholder="Email"

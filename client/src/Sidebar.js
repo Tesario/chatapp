@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
-import axios from "axios";
 
 import "./Sidebar.scss";
 
@@ -9,19 +8,7 @@ function Sidebar(props) {
   const sidebar = useRef(null);
 
   useEffect(() => {
-    axios({
-      url: "/user/isUserAuth",
-      method: "GET",
-      headers: {
-        authorization: sessionStorage.getItem("token"),
-      },
-    })
-      .then((response) => {
-        setIsAuth(response.data.auth);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    isAuthFunc();
 
     if (window.location.href.includes("/chatroom/")) {
       sidebar.current.classList.add("sidebar--without-border");
@@ -29,6 +16,14 @@ function Sidebar(props) {
       sidebar.current.classList.remove("sidebar--without-border");
     }
   });
+
+  const isAuthFunc = () => {
+    if (sessionStorage.getItem("token")) {
+      setIsAuth(true);
+    } else {
+      setIsAuth(false);
+    }
+  };
 
   const handleTogglerClick = (e) => {
     if (sidebar.current.classList.contains("sidebar--active")) {
@@ -48,36 +43,36 @@ function Sidebar(props) {
     <div className="sidebar" ref={sidebar}>
       <div className="sidebar__items">
         {isAuth && (
-          <Link to="/">
+          <Link to="/" aria-label="Home">
             <i className="fas fa-home fa-fw"></i>
             <div className="link">Chat</div>
           </Link>
         )}
         {!isAuth && (
-          <Link to="/login">
+          <Link to="/login" aria-label="Login">
             <i className="fas fa-user fa-fw"></i>
             <div className="link">Login</div>
           </Link>
         )}
         {isAuth && (
           <>
-            <Link to="/create">
+            <Link to="/create" aria-label="Create channel">
               <i className="fas fa-plus-circle fa-fw"></i>
               <div className="link">Create&nbsp;channel</div>
             </Link>
 
-            <Link to="/settings">
+            <Link to="/settings" aria-label="Settings">
               <i className="fas fa-cog fa-fw"></i>
               <div className="link">Settings</div>
             </Link>
           </>
         )}
-        <Link to="/info">
+        <Link to="/info" aria-label="Information">
           <i className="fas fa-info-circle fa-fw"></i>
           <div className="link">Information</div>
         </Link>
         {isAuth && (
-          <a href="/#" onClick={(e) => handleLogout(e)}>
+          <a href="/#" onClick={(e) => handleLogout(e)} aria-label="Logout">
             <i className="fas fa-sign-out-alt fa-fw"></i>
             <div className="link">Logout</div>
           </a>

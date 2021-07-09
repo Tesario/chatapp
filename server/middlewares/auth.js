@@ -1,21 +1,23 @@
 import jwt from "jsonwebtoken";
+import User from "../models/user.js";
+import errorResponse from "../utils/errorResponse.js";
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   const token = req.headers.authorization;
-
-  if (token != "null") {
-    jwt.verify(token, process.env.SECRET, (err, decoded) => {
-      if (err) {
-        res.json({ message: "Token expired!" });
-      } else {
-        req.user = decoded;
-        next();
-      }
-    });
-    return;
+  if (!token) {
+    return next(new errorResponse("Forbidden"));
   }
-  console.log(req.headers);
-  res.json({ message: "Forbidden!" });
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const findedUser = await User.findById(decoded.id);
+
+    if (findedUser) {
+      req.user = decoded;
+      return next();
+    }
+  } catch (err) {
+    return next(new errorResponse("Not authorized", 401));
+  }
 };
 
 export default auth;

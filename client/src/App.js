@@ -11,25 +11,23 @@ import Forbidden from "./Forbidden";
 import NotFound from "./NotFound";
 import Sidebar from "./Sidebar";
 
+import UserRoute from "./UserRoute";
+
 import "./App.scss";
 import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
 const notify = (data) => {
-  switch (data.status) {
-    case "success":
-      toast.success(data.message, {
-        position: toast.POSITION.TOP_LEFT,
-        autoClose: 3000,
-      });
-      break;
-
-    default:
-      toast.error(data.message, {
-        position: toast.POSITION.TOP_LEFT,
-        autoClose: 3000,
-      });
-      break;
+  if (data.success) {
+    toast.success(data.message, {
+      position: toast.POSITION.TOP_LEFT,
+      autoClose: 3000,
+    });
+  } else {
+    toast.error(data.message, {
+      position: toast.POSITION.TOP_LEFT,
+      autoClose: 3000,
+    });
   }
 };
 
@@ -61,21 +59,19 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
-          <Route path="/chatroom/:id">
-            <Chatbox notify={notify} />
-          </Route>
+          <UserRoute path="/chatroom/:id" component={Chatbox} notify={notify} />
           <Route path="/login">
             <Login notify={notify} />
           </Route>
           <Route path="/register">
             <Register notify={notify} />
           </Route>
-          <Route path="/create">
-            <CreateChatroom notify={notify} />
-          </Route>
-          <Route path="/settings">
-            <Settings />
-          </Route>
+          <UserRoute
+            path="/create"
+            component={CreateChatroom}
+            notify={notify}
+          />
+          <UserRoute path="/settings" component={Settings} />
           <Route path="/info">
             <Info />
           </Route>
