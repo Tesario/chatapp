@@ -8,7 +8,7 @@ function NotFound() {
     <div className="forbidden container-fluid">
       <h1 className="forbidden__title">Forbidden - Error 403</h1>
       <Link to="/login" className="btn btn-primary">
-        Back to login <i class="fas fa-user"></i>
+        Back to login <i className="fas fa-user"></i>
       </Link>
     </div>
   );

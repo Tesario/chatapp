@@ -1,6 +1,6 @@
-@import "app.scss";
+@import "../assets/css/global.scss";
 
-.login {
+.register {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,7 +18,7 @@
             width: 100%;
         }
 
-        .register-link {
+        .login-link {
             color: var(--text-color);
             margin-top: .5rem;
             border-bottom: 1px solid var(--primary-color);

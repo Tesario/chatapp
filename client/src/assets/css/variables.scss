@@ -11,6 +11,14 @@ $line-height: 1.25em;
 $title-size: 2em;
 $subtitle-size: 1.5em;
 
+// Breakpoints
+$xs: 0;
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1400px;
+
 :root {
     --primary-color: #87c232;
     --secondary-color: #222629;

@@ -1,0 +1,61 @@
+@import "../assets/css/global.scss";
+
+#home {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .title {
+        color: var(--text-color);
+    }
+
+
+    .my-chatrooms {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 500px;
+        width: 100%;
+        height: 100%;
+        border-right: 1px solid var(--primary-color);
+        padding: 0 1.5rem;
+
+        .flex-chatrooms {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-item {
+            display: flex;
+            background-color: $gray-dark;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--secondary-color);
+        }
+    }
+
+    .link {
+        width: 100%;
+        padding: .75rem;
+        color: var(--text-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        i {
+            margin-left: .5rem;
+        }
+    }
+
+
+    .leave.btn {
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+            font-size: 1.4em;
+        }
+    }
+}

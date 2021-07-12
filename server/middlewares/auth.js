@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.js";
-import errorResponse from "../utils/errorResponse.js";
+import User from "../models/User.js";
+import ErrorResponse from "../utils/ErrorResponse.js";
 
 const auth = async (req, res, next) => {
   const token = req.headers.authorization;
   if (!token) {
-    return next(new errorResponse("Forbidden"));
+    return next(new ErrorResponse("Forbidden"));
   }
   try {
     const decoded = jwt.verify(token, process.env.SECRET);
@@ -16,7 +16,7 @@ const auth = async (req, res, next) => {
       return next();
     }
   } catch (err) {
-    return next(new errorResponse("Not authorized", 401));
+    return next(new ErrorResponse("Not authorized", 401));
   }
 };
 

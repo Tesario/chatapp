@@ -25,9 +25,6 @@ function Login(props) {
         url: "/user/login",
         method: "post",
         data: state,
-        headers: {
-          "Content-Type": "application/json",
-        },
       }).then((res) => {
         setState({ email: "", password: "" });
         notify(res.data);
@@ -35,7 +32,7 @@ function Login(props) {
         props.history.push("/create");
       });
     } catch (error) {
-      setState({ password: "" });
+      setState({ ...state, password: "" });
       notify(error.response.data);
     }
   };

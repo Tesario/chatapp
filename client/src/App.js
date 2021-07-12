@@ -1,30 +1,32 @@
 import React, { useEffect } from "react";
-import Chatbox from "./Chatbox";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { toast } from "react-toastify";
-import Register from "./Register";
-import Login from "./Login";
-import Info from "./Info";
-import Settings from "./Settings";
-import CreateChatroom from "./CreateChatroom";
-import Forbidden from "./Forbidden";
-import NotFound from "./NotFound";
-import Sidebar from "./Sidebar";
+import Register from "./components/Register";
+import Chatbox from "./components/Chatbox";
+import Login from "./components/Login";
+import Info from "./components/Info";
+import Settings from "./components/Settings";
+import CreateChatroom from "./components/CreateChatroom";
+import Forbidden from "./components/Forbidden";
+import NotFound from "./components/NotFound";
+import Sidebar from "./components/Sidebar";
+import Home from "./components/Home";
 
-import UserRoute from "./UserRoute";
+import UserRoute from "./components/UserRoute";
 
-import "./App.scss";
+import "./assets/css/global.scss";
 import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
 const notify = (data) => {
-  if (data.success) {
-    toast.success(data.message, {
+  const { success, message } = data;
+  if (success) {
+    toast.success(message, {
       position: toast.POSITION.TOP_LEFT,
       autoClose: 3000,
     });
   } else {
-    toast.error(data.message, {
+    toast.error(message, {
       position: toast.POSITION.TOP_LEFT,
       autoClose: 3000,
     });
@@ -66,6 +68,7 @@ function App() {
           <Route path="/register">
             <Register notify={notify} />
           </Route>
+          <UserRoute exact path="/" component={Home} notify={notify} />
           <UserRoute
             path="/create"
             component={CreateChatroom}
@@ -82,7 +85,7 @@ function App() {
             <NotFound />
           </Route>
         </Switch>
-        <Sidebar />
+        <Sidebar notify={notify} />
       </div>
     </Router>
   );

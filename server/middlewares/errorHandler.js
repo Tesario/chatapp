@@ -1,8 +1,7 @@
-import ErrorResponse from "../utils/errorResponse.js";
+import ErrorResponse from "../utils/ErrorResponse.js";
 
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
-
   error.message = err.message;
 
   if (err.code === "11000") {
@@ -15,9 +14,10 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(message, 400);
   }
 
-  res
-    .status(error.statusCode || 500)
-    .json({ success: false, message: error.message || "Server Error" });
+  res.status(error.statusCode || 500).json({
+    success: false,
+    message: error.message || "Server Error",
+  });
 };
 
 export default errorHandler;

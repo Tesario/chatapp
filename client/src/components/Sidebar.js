@@ -4,6 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import "./Sidebar.scss";
 
 function Sidebar(props) {
+  const { notify } = props;
   const [isAuth, setIsAuth] = useState(false);
   const sidebar = useRef(null);
 
@@ -36,18 +37,13 @@ function Sidebar(props) {
   const handleLogout = (e) => {
     e.preventDefault();
     sessionStorage.removeItem("token");
+    notify({ success: true, message: "Logout was successful" });
     props.history.push("/login");
   };
 
   return (
     <div className="sidebar" ref={sidebar}>
       <div className="sidebar__items">
-        {isAuth && (
-          <Link to="/" aria-label="Home">
-            <i className="fas fa-home fa-fw"></i>
-            <div className="link">Chat</div>
-          </Link>
-        )}
         {!isAuth && (
           <Link to="/login" aria-label="Login">
             <i className="fas fa-user fa-fw"></i>
@@ -56,11 +52,14 @@ function Sidebar(props) {
         )}
         {isAuth && (
           <>
+            <Link to="/" aria-label="Home">
+              <i className="fas fa-home fa-fw"></i>
+              <div className="link">Home</div>
+            </Link>
             <Link to="/create" aria-label="Create channel">
               <i className="fas fa-plus-circle fa-fw"></i>
               <div className="link">Create&nbsp;channel</div>
             </Link>
-
             <Link to="/settings" aria-label="Settings">
               <i className="fas fa-cog fa-fw"></i>
               <div className="link">Settings</div>

@@ -1,7 +1,7 @@
-@import "app.scss";
+@import "../assets/css/global.scss";
 
 .chatbox {
-    height: calc(100vh - .5rem);
+    padding: 0 .5rem !important;
 
     &__messages {
         height: calc(100vh - 45px - 1.5rem);

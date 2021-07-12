@@ -1,20 +1,20 @@
-import dotenv from "dotenv";
-dotenv.config();
 import express from "express";
 import bodyParser from "body-parser";
 import { createServer } from "http";
 import * as io from "socket.io";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import cors from "cors";
 
 // Routes
 import userRoutes from "./routes/user.js";
 import chatroomRoutes from "./routes/chatroom.js";
 import messageRoutes from "./routes/message.js";
-import authRoutes from "./routes/auth.js";
 
 // Middlewares
 import errorHandler from "./middlewares/errorHandler.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -23,8 +23,8 @@ const socketio = new io.Server(server);
 
 const port = process.env.port || 8000;
 
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(express.json({ limit: "30mb", extended: true }));
+app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 app.use(cors());
 
@@ -32,7 +32,6 @@ app.use(cors());
 app.use("/user", userRoutes);
 app.use("/chatroom", chatroomRoutes);
 app.use("/message", messageRoutes);
-app.use("/auth", authRoutes);
 
 //  Error middleware
 app.use(errorHandler);
@@ -45,7 +44,7 @@ socketio.on("connection", function (socket) {
 });
 
 // MongoDB
-const URL_DB = "mongodb://localhost/chatdb";
+const URL_DB = process.env.DATABASE_URI;
 mongoose
   .connect(URL_DB, {
     useNewUrlParser: true,

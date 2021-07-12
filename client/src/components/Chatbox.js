@@ -19,7 +19,7 @@ function Chatbox(props) {
   useEffect(() => {
     getMessages();
 
-    socketRef.current = io.connect("http://localhost:8000/", {
+    socketRef.current = io.connect("http://localhost:8000", {
       transports: ["websocket"],
     });
 
@@ -72,20 +72,21 @@ function Chatbox(props) {
   };
 
   const getMessages = async () => {
-    try {
-      const res = await axios({
-        url: "/message/" + id,
-        method: "GET",
-        headers: {
-          authorization: sessionStorage.getItem("token"),
-        },
+    await axios({
+      url: "/message/" + id,
+      method: "GET",
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        setCurrentUser(res.data.currentUser.name);
+        setChat(res.data.messages);
+        chatScrollToDown();
+      })
+      .catch((error) => {
+        notify(error.response.data);
       });
-      setCurrentUser(res.data.currentUser.name);
-      setChat(res.data.messages);
-      chatScrollToDown();
-    } catch (error) {
-      notify(error.response.data);
-    }
   };
 
   const showScrollDownBtn = () => {

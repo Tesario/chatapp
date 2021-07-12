@@ -58,7 +58,7 @@ h1 {
   display: flex;
 
   .container-fluid {
-    height: 100vh;
-    padding: 0 .5rem;
+    min-height: 100vh;
+    padding: 2rem .5rem;
   }
 }

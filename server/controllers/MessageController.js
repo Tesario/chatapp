@@ -1,27 +1,35 @@
-import Message from "../models/message.js";
-import User from "../models/user.js";
+import Message from "../models/Message.js";
+import User from "../models/User.js";
+import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const getMessages = async (req, res, next) => {
   try {
     const { chatroomId } = req.params;
+
+    if (!chatroomId.match(/^[0-9a-fA-F]{24}$/)) {
+      return next(new ErrorResponse("Chatroom do not exist", 404));
+    }
+
     const messages = await Message.find({
       chatroomId,
     })
       .populate("senderId")
       .select("body createdAt senderId");
 
+    if (!messages) {
+      return next(new ErrorResponse("Chatroom do not exist", 404));
+    }
+
     const currentUser = await User.findById(req.user.id);
 
-    res
-      .status(200)
-      .json({
-        currentUser,
-        messages,
-        message: "Chatroom loaded",
-        success: true,
-      });
+    res.status(200).json({
+      currentUser,
+      messages,
+      message: "Chatroom loaded",
+      success: true,
+    });
   } catch (err) {
-    return next(err);
+    next(err);
   }
 };
 

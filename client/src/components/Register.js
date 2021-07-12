@@ -21,7 +21,6 @@ function Register(props) {
         method: "POST",
         url: "/user/register",
         data: state,
-        headers: new Headers({ "Content-Type": "application/json" }),
       }).then((res) => {
         setState({ name: "", email: "", password: "" });
         notify(res.data);
@@ -31,26 +30,6 @@ function Register(props) {
     } catch (err) {
       notify(err.response.data);
     }
-
-    // try {
-    //   const data = await axios({
-    //     url: "/user/create",
-    //     method: "POST",
-    //     data: state,
-    //   });
-
-    //   setState({ name: "", email: "", password: "" });
-    //   notify(data);
-    //   console.log(data);
-
-    //   if (data.status) {
-    //     sessionStorage.setItem("token", data.token);
-    //     props.history.push("/create");
-    //   }
-    // } catch (error) {
-    //   console.log(error.response.data.error);
-    //   notify({ message: error.response.data.error });
-    // }
   };
 
   const handleChange = (e) => {

@@ -1,7 +1,7 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 import sha256 from "js-sha256";
 import jwt from "jsonwebtoken";
-import errorResponse from "../utils/errorResponse.js";
+import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const userRegister = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -11,7 +11,7 @@ export const userRegister = async (req, res, next) => {
   });
 
   if (userExist.length) {
-    return next(new errorResponse("User already exist", 400));
+    return next(new ErrorResponse("User already exist", 400));
   }
 
   const newUser = new User({
@@ -43,7 +43,7 @@ export const userLogin = async (req, res, next) => {
   });
 
   if (!user) {
-    return next(new errorResponse("Wrong email or password", 400));
+    return next(new ErrorResponse("Wrong email or password", 400));
   }
   const token = jwt.sign({ id: user.id }, process.env.SECRET);
 

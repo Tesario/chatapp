@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 import "./CreateChatroom.scss";
 
@@ -36,6 +35,7 @@ function CreateChatroom(props) {
       })
       .catch((error) => {
         notify(error.response.data);
+        setState({ ...state, name: "" });
       });
   };
 
@@ -47,8 +47,8 @@ function CreateChatroom(props) {
     setState({ ...state, [e.target.name]: e.target.checked });
   };
 
-  const getChatrooms = () => {
-    axios({
+  const getChatrooms = async () => {
+    await axios({
       url: "/chatroom/public",
       method: "GET",
       headers: {
@@ -64,15 +64,37 @@ function CreateChatroom(props) {
       });
   };
 
+  const handleJoin = async (name) => {
+    await axios({
+      url: "/chatroom/join/" + name,
+      method: "PUT",
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
+    })
+      .then((response) => {
+        notify(response.data);
+        getChatrooms();
+        props.history.push("/chatroom/" + name);
+      })
+      .catch((error) => {
+        notify(error.response.data);
+      });
+  };
+
   const renderChatrooms = () => {
     if (chatrooms.length) {
       return chatrooms.map((chatroom, index) => {
         return (
           <li key={index} className="chatroom__list__inner__item">
             {chatroom.name}
-            <Link className="btn btn-primary" to={"/chatroom/" + chatroom._id}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => handleJoin(chatroom.name)}
+            >
               Join
-            </Link>
+            </button>
           </li>
         );
       });
