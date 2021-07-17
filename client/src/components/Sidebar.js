@@ -56,9 +56,9 @@ function Sidebar(props) {
               <i className="fas fa-home fa-fw"></i>
               <div className="link">Home</div>
             </Link>
-            <Link to="/create" aria-label="Create channel">
+            <Link to="/create" aria-label="Chatrooms">
               <i className="fas fa-plus-circle fa-fw"></i>
-              <div className="link">Create&nbsp;channel</div>
+              <div className="link">Chatrooms</div>
             </Link>
             <Link to="/settings" aria-label="Settings">
               <i className="fas fa-cog fa-fw"></i>

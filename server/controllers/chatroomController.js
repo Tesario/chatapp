@@ -1,4 +1,5 @@
 import Chatroom from "../models/Chatroom.js";
+import sha256 from "js-sha256";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const getChatroom = async (req, res, next) => {
@@ -11,8 +12,10 @@ export const getChatroom = async (req, res, next) => {
 };
 
 export const createChatroom = async (req, res, next) => {
+  const { name, isPrivate, password } = req.body;
+
   try {
-    const findedChatroom = await Chatroom.findOne({ name: req.body.name });
+    const findedChatroom = await Chatroom.findOne({ name });
 
     if (findedChatroom) {
       return next(new ErrorResponse("Chatroom name is taken", 400));
@@ -22,8 +25,9 @@ export const createChatroom = async (req, res, next) => {
   }
 
   const newChatroom = new Chatroom({
-    name: req.body.name,
-    isPrivate: req.body.isPrivate,
+    name,
+    isPrivate,
+    password: isPrivate ? sha256(password + process.env.SALT) : null,
     members: [req.user.id],
   });
 
@@ -60,6 +64,37 @@ export const getPublicChatrooms = async (req, res, next) => {
     res.status(200).json(chatrooms);
   } catch (err) {
     next(err);
+  }
+};
+
+export const joinToPrivateChatroom = async (req, res, next) => {
+  const { joinName, joinPassword } = req.body;
+
+  try {
+    const findedChatroom = await Chatroom.findOne({ name: joinName });
+
+    if (findedChatroom === null) {
+      return next(new ErrorResponse("Chatroom does not exist", 404));
+    }
+    if (!findedChatroom.isPrivate) {
+      return next(new ErrorResponse("Chatroom does not private", 404));
+    }
+
+    if (findedChatroom.members.includes(req.user.id)) {
+      return next(new ErrorResponse("You are already in this chatroom"));
+    }
+
+    if (sha256(joinPassword + process.env.SALT) !== findedChatroom.password) {
+      return next(new ErrorResponse("Wrong password"), 401);
+    }
+
+    await Chatroom.updateOne(
+      { name: joinName },
+      { $push: { members: req.user.id } }
+    );
+    res.json({ success: true, message: "You are joined successful" });
+  } catch (error) {
+    next(error);
   }
 };
 

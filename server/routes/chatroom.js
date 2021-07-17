@@ -6,6 +6,7 @@ import {
   getPublicChatrooms,
   joinToChatroom,
   leaveChatroom,
+  joinToPrivateChatroom,
 } from "../controllers/ChatroomController.js";
 import auth from "../middlewares/auth.js";
 
@@ -23,10 +24,13 @@ router.get("/:id", auth, getChatroom);
 // Create chatroom
 router.post("/create", auth, createChatroom);
 
+// User joining to the private chatroom
+router.put("/join/private/:name", auth, joinToPrivateChatroom);
+
 // User joining to the chatroom
 router.put("/join/:name", auth, joinToChatroom);
 
-// User joining to the chatroom
+// User leaving to the chatroom
 router.put("/:name/leave", auth, leaveChatroom);
 
 export default router;

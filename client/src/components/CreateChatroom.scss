@@ -6,6 +6,25 @@
     align-items: center;
     justify-content: center;
 
+    .forms {
+        width: 100%;
+        display: flex;
+
+        @media (max-width: $lg) {
+            flex-direction: column;
+        }
+    }
+
+    .create-chatroom,
+    .join-chatroom {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        flex: 1;
+        width: 100%;
+    }
+
     &__desc {
         color: var(--text-color);
         max-width: 500px;
@@ -32,6 +51,14 @@
             }
         }
 
+        .password {
+            margin-top: 1rem;
+
+            &.hide {
+                display: none;
+            }
+        }
+
         .form-check {
             display: flex;
             margin-top: .5rem;
@@ -55,7 +82,7 @@
     }
 
     &__list {
-        margin-top: 2rem;
+        margin-top: 5rem;
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -89,6 +116,36 @@
                 border-right: 1px solid var(--primary-color);
                 border-bottom: 1px solid var(--primary-color);
             }
+        }
+    }
+
+    .join-chatroom {
+        @media (max-width: $lg) {
+            margin-top: 3rem;
+        }
+
+        form {
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .form-floating {
+            width: 100%;
+        }
+
+        .form-footer {
+            width: 100%;
+            margin-top: 1rem;
+            display: flex;
+        }
+
+        .btn {
+            margin-left: 1rem;
+            padding: 1rem 1.5rem
         }
     }
 }

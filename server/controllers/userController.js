@@ -4,11 +4,15 @@ import jwt from "jsonwebtoken";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const userRegister = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, passwordAgain } = req.body;
 
   const userExist = await User.find({
     $or: [{ email: email }, { name: name }],
   });
+
+  if (password !== passwordAgain) {
+    return next(new ErrorResponse("Passwords do not match", 400));
+  }
 
   if (userExist.length) {
     return next(new ErrorResponse("User already exist", 400));

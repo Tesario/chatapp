@@ -1,5 +1,6 @@
 import Message from "../models/Message.js";
 import User from "../models/User.js";
+import Chatroom from "../models/Chatroom.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const getMessages = async (req, res, next) => {
@@ -8,6 +9,15 @@ export const getMessages = async (req, res, next) => {
 
     if (!chatroomId.match(/^[0-9a-fA-F]{24}$/)) {
       return next(new ErrorResponse("Chatroom do not exist", 404));
+    }
+
+    const chatroomMembers = await Chatroom.findById(chatroomId).select(
+      "members"
+    );
+    if (!chatroomMembers.members.includes(req.user.id)) {
+      return next(
+        new ErrorResponse("You have not access to this chatroom", 401)
+      );
     }
 
     const messages = await Message.find({

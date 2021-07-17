@@ -5,7 +5,12 @@ import { Link, withRouter } from "react-router-dom";
 import "./Register.scss";
 
 function Register(props) {
-  const [state, setState] = useState({ email: "", name: "", password: "" });
+  const [state, setState] = useState({
+    email: "",
+    name: "",
+    password: "",
+    passwordAgain: "",
+  });
   const { notify } = props;
 
   useEffect(() => {
@@ -22,7 +27,7 @@ function Register(props) {
         url: "/user/register",
         data: state,
       }).then((res) => {
-        setState({ name: "", email: "", password: "" });
+        setState({ name: "", email: "", password: "", passwordAgain: "" });
         notify(res.data);
         sessionStorage.setItem("token", res.data.token);
         props.history.push("/create");
@@ -75,6 +80,18 @@ function Register(props) {
             onChange={(e) => handleChange(e)}
           />
           <label htmlFor="password">Password</label>
+        </div>
+        <div className="form-floating">
+          <input
+            type="password"
+            name="passwordAgain"
+            className="form-control"
+            placeholder="Password again"
+            autoComplete="off"
+            value={state.passwordAgain}
+            onChange={(e) => handleChange(e)}
+          />
+          <label htmlFor="passwordAgain">Password again</label>
         </div>
         <Link className="login-link" to="/login">
           Already have an account?

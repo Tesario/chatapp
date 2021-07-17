@@ -13,6 +13,11 @@ const ChatroomSchema = new Schema(
       type: Boolean,
       required: [true, "Public or private is required"],
     },
+    password: {
+      type: String,
+      default: null,
+      minlength: [6, "Minimum length for password is 6 characters"],
+    },
     members: [
       {
         type: Schema.Types.ObjectId,
