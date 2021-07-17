@@ -1,5 +1,4 @@
 import express from "express";
-import bodyParser from "body-parser";
 import { createServer } from "http";
 import * as io from "socket.io";
 import mongoose from "mongoose";

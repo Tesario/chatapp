@@ -6,7 +6,7 @@ import "./CreateChatroom.scss";
 function CreateChatroom(props) {
   const [state, setState] = useState({
     name: "",
-    private: false,
+    isPrivate: false,
     userId: null,
   });
   const [chatrooms, setChatrooms] = useState([]);
@@ -30,8 +30,8 @@ function CreateChatroom(props) {
     })
       .then((res) => {
         notify(res.data);
-        setState({ name: "", private: false });
-        getChatrooms();
+        setState({ name: "", isPrivate: false });
+        props.history.push("/chatroom/" + res.data.chatroom.name);
       })
       .catch((error) => {
         notify(error.response.data);
@@ -129,13 +129,13 @@ function CreateChatroom(props) {
         <div className="form-check">
           <input
             className="form-check-input"
-            name="private"
+            name="isPrivate"
             type="checkbox"
-            id="private"
-            checked={state.private}
+            id="isPrivate"
+            checked={state.isPrivate}
             onChange={(e) => handleCheck(e)}
           />
-          <label className="form-check-label" htmlFor="private">
+          <label className="form-check-label" htmlFor="isPrivate">
             Private
           </label>
         </div>

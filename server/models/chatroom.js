@@ -9,13 +9,16 @@ const ChatroomSchema = new Schema(
       unique: true,
       required: [true, "Name is required"],
     },
-    private: {
-      type: String,
+    isPrivate: {
+      type: Boolean,
       required: [true, "Public or private is required"],
     },
-    members: {
-      type: Array,
-    },
+    members: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );

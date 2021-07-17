@@ -9,7 +9,6 @@
         color: var(--text-color);
     }
 
-
     .my-chatrooms {
         display: flex;
         flex-direction: column;
@@ -22,6 +21,7 @@
 
         .flex-chatrooms {
             width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
         }
@@ -47,7 +47,6 @@
         }
     }
 
-
     .leave.btn {
         color: var(--primary-color);
         display: flex;
@@ -56,6 +55,56 @@
 
         i {
             font-size: 1.4em;
+        }
+    }
+
+    .flex-info {
+        color: var(--text-color);
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--primary-color);
+
+        .flex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    .users {
+        margin-top: .5rem;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        .users-list {
+            margin-top: .5rem;
+            width: 100%;
+        }
+    }
+
+    .user {
+        padding: .5rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .btn {
+            padding: 0
+        }
+
+        i {
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+
+        &:not(:first-child) {
+            border-top: 1px solid var(--primary-color);
+        }
+
+        &:last-child {
+            padding-bottom: 0;
         }
     }
 }

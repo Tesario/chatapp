@@ -23,7 +23,7 @@ export const createChatroom = async (req, res, next) => {
 
   const newChatroom = new Chatroom({
     name: req.body.name,
-    private: req.body.private,
+    isPrivate: req.body.isPrivate,
     members: [req.user.id],
   });
 
@@ -33,6 +33,7 @@ export const createChatroom = async (req, res, next) => {
     res.json({
       message: "Chatroom created successfully!",
       success: true,
+      chatroom: newChatroom,
     });
   } catch (err) {
     next(err);
@@ -43,7 +44,8 @@ export const getUsersChatroom = async (req, res, next) => {
   try {
     const chatrooms = await Chatroom.find({
       members: { $in: [req.user.id] },
-    });
+    }).populate("members");
+
     res.status(200).json({ success: true, chatrooms });
   } catch (error) {
     next(error);
@@ -53,7 +55,7 @@ export const getUsersChatroom = async (req, res, next) => {
 export const getPublicChatrooms = async (req, res, next) => {
   try {
     const chatrooms = await Chatroom.find({
-      $and: [{ private: false }, { members: { $nin: [req.user.id] } }],
+      $and: [{ isPrivate: false }, { members: { $nin: [req.user.id] } }],
     });
     res.status(200).json(chatrooms);
   } catch (err) {
@@ -63,9 +65,9 @@ export const getPublicChatrooms = async (req, res, next) => {
 
 export const joinToChatroom = async (req, res, next) => {
   try {
-    const findedChatrooms = await Chatroom.findOne({ name: req.params.name });
+    const findedChatroom = await Chatroom.findOne({ name: req.params.name });
 
-    if (findedChatrooms.members.includes(req.user.id)) {
+    if (findedChatroom.members.includes(req.user.id)) {
       return next(new ErrorResponse("You are already in this chatroom"));
     }
 
