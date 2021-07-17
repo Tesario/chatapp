@@ -37,8 +37,12 @@ app.use(errorHandler);
 
 // Socket.io
 socketio.on("connection", function (socket) {
-  socket.on("message", (sended) => {
-    socketio.emit("message", sended);
+  socket.on("joinRoom", (room) => {
+    socket.join(room);
+  });
+
+  socket.on("message", ({ sended, room }) => {
+    socketio.to(room).emit("message", { sended });
   });
 });
 

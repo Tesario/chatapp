@@ -31,6 +31,11 @@ function Chatbox(props) {
     return () => socketRef.current.disconnect();
 
     // eslint-disable-next-line
+  }, [socketRef]);
+
+  useEffect(() => {
+    socketRef.current.emit("joinRoom", id);
+    // eslint-disable-next-line
   }, []);
 
   const onTextChange = (e) => {
@@ -51,7 +56,7 @@ function Chatbox(props) {
 
   const onMessageSubmit = async (e) => {
     e.preventDefault();
-    socketRef.current.emit("message", { sended: true });
+    socketRef.current.emit("message", { sended: true, room: id });
 
     try {
       await axios({
