@@ -8,6 +8,9 @@ const ChatroomSchema = new Schema(
       type: String,
       unique: true,
       required: [true, "Name is required"],
+      match: [/^[a-zA-Z0-9_.]+$/, "Name is not valid"],
+      maxlength: [20, "Maximum length for name is 20 characters"],
+      minlength: [3, "Minimum length for name is 3 characters"],
     },
     isPrivate: {
       type: Boolean,

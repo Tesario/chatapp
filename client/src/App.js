@@ -19,17 +19,19 @@ import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
 const notify = (data) => {
-  const { success, message } = data;
-  if (success) {
-    toast.success(message, {
-      position: toast.POSITION.TOP_LEFT,
-      autoClose: 3000,
-    });
-  } else {
-    toast.error(message, {
-      position: toast.POSITION.TOP_LEFT,
-      autoClose: 3000,
-    });
+  const { success, message, isShow } = data;
+  if (isShow) {
+    if (success) {
+      toast.success(message, {
+        position: toast.POSITION.TOP_LEFT,
+        autoClose: 3000,
+      });
+    } else {
+      toast.error(message, {
+        position: toast.POSITION.TOP_LEFT,
+        autoClose: 3000,
+      });
+    }
   }
 };
 

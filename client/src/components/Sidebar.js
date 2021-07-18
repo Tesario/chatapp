@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useHistory } from "react-router-dom";
+import axios from "axios";
 
 import "./Sidebar.scss";
 
 function Sidebar(props) {
+  const history = useHistory();
   const { notify } = props;
   const [isAuth, setIsAuth] = useState(false);
   const sidebar = useRef(null);
@@ -18,12 +20,20 @@ function Sidebar(props) {
     }
   });
 
-  const isAuthFunc = () => {
-    if (sessionStorage.getItem("token")) {
-      setIsAuth(true);
-    } else {
-      setIsAuth(false);
-    }
+  const isAuthFunc = async () => {
+    await axios({
+      url: "/user/is-auth",
+      method: "GET",
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
+    })
+      .then(() => {
+        setIsAuth(true);
+      })
+      .catch(() => {
+        setIsAuth(false);
+      });
   };
 
   const handleTogglerClick = (e) => {
@@ -38,7 +48,7 @@ function Sidebar(props) {
     e.preventDefault();
     sessionStorage.removeItem("token");
     notify({ success: true, message: "Logout was successful" });
-    props.history.push("/login");
+    history.push("/login");
   };
 
   return (

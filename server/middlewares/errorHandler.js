@@ -3,6 +3,7 @@ import ErrorResponse from "../utils/ErrorResponse.js";
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
+  error.isShow = err.isShow;
 
   if (err.code === "11000") {
     const message = "Duplicate fields";
@@ -17,6 +18,7 @@ const errorHandler = (err, req, res, next) => {
   res.status(error.statusCode || 500).json({
     success: false,
     message: error.message || "Server Error",
+    isShow: error.isShow,
   });
 };
 

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useHistory } from "react-router-dom";
 
 import "./Register.scss";
 
 function Register(props) {
+  const history = useHistory();
   const [state, setState] = useState({
     email: "",
     name: "",
@@ -15,9 +16,9 @@ function Register(props) {
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
-      props.history.push("/create");
+      history.push("/create");
     }
-  }, [props.history]);
+  });
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
@@ -30,10 +31,10 @@ function Register(props) {
         setState({ name: "", email: "", password: "", passwordAgain: "" });
         notify(res.data);
         sessionStorage.setItem("token", res.data.token);
-        props.history.push("/create");
+        history.push("/");
       });
-    } catch (err) {
-      notify(err.response.data);
+    } catch (error) {
+      notify(error.response.data);
     }
   };
 
@@ -62,12 +63,12 @@ function Register(props) {
             type="text"
             name="name"
             className="form-control"
-            placeholder="Name"
+            placeholder="Username"
             autoComplete="off"
             value={state.name}
             onChange={(e) => handleChange(e)}
           />
-          <label htmlFor="email">Name</label>
+          <label htmlFor="name">Username</label>
         </div>
         <div className="form-floating">
           <input

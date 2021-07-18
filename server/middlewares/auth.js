@@ -15,8 +15,8 @@ const auth = async (req, res, next) => {
       req.user = decoded;
       return next();
     }
-  } catch (err) {
-    return next(new ErrorResponse("Not authorized", 401));
+  } catch (error) {
+    return next(new ErrorResponse("Not authorized", 401, false));
   }
 };
 

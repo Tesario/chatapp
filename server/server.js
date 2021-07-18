@@ -56,8 +56,8 @@ mongoose
   .then(() => {
     console.log("Mongoose is connected");
   })
-  .catch((err) => {
-    console.log("Mongoose: " + err.message);
+  .catch((error) => {
+    console.log("Mongoose: " + error.message);
   });
 
 // Console warnings off

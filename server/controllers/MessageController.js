@@ -1,6 +1,5 @@
 import Message from "../models/Message.js";
 import User from "../models/User.js";
-import Chatroom from "../models/Chatroom.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const getMessages = async (req, res, next) => {
@@ -8,16 +7,7 @@ export const getMessages = async (req, res, next) => {
     const { chatroomId } = req.params;
 
     if (!chatroomId.match(/^[0-9a-fA-F]{24}$/)) {
-      return next(new ErrorResponse("Chatroom do not exist", 404));
-    }
-
-    const chatroomMembers = await Chatroom.findById(chatroomId).select(
-      "members"
-    );
-    if (!chatroomMembers.members.includes(req.user.id)) {
-      return next(
-        new ErrorResponse("You have not access to this chatroom", 401)
-      );
+      return next(new ErrorResponse("Chatroom does not exist", 404));
     }
 
     const messages = await Message.find({
@@ -27,7 +17,7 @@ export const getMessages = async (req, res, next) => {
       .select("body createdAt senderId");
 
     if (!messages) {
-      return next(new ErrorResponse("Chatroom do not exist", 404));
+      return next(new ErrorResponse("Chatroom does not exist", 404));
     }
 
     const currentUser = await User.findById(req.user.id);
@@ -38,8 +28,8 @@ export const getMessages = async (req, res, next) => {
       message: "Chatroom loaded",
       success: true,
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -52,9 +42,8 @@ export const createMessage = async (req, res, next) => {
 
   try {
     const savedMessage = await newMessage.save();
-
     res.status(200).json(savedMessage);
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 };

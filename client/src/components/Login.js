@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useHistory } from "react-router-dom";
 
 import "./Login.scss";
 
 function Login(props) {
+  const history = useHistory();
   const [state, setState] = useState({
     email: "vtesar2003@gmail.com",
     password: "",
@@ -13,9 +14,9 @@ function Login(props) {
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
-      props.history.push("/create");
+      history.push("/");
     }
-  }, [props.history]);
+  });
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +30,7 @@ function Login(props) {
         setState({ email: "", password: "" });
         notify(res.data);
         sessionStorage.setItem("token", res.data.token);
-        props.history.push("/create");
+        history.push("/");
       });
     } catch (error) {
       setState({ ...state, password: "" });

@@ -39,8 +39,8 @@ export const createChatroom = async (req, res, next) => {
       success: true,
       chatroom: newChatroom,
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -62,8 +62,8 @@ export const getPublicChatrooms = async (req, res, next) => {
       $and: [{ isPrivate: false }, { members: { $nin: [req.user.id] } }],
     });
     res.status(200).json(chatrooms);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 

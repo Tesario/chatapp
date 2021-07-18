@@ -24,6 +24,7 @@ function Chatbox(props) {
     });
 
     socketRef.current.on("message", (sended) => {
+      console.log("ÁÁÁhoj");
       if (sended) {
         getMessages();
       }
@@ -56,23 +57,21 @@ function Chatbox(props) {
 
   const onMessageSubmit = async (e) => {
     e.preventDefault();
-    socketRef.current.emit("message", { sended: true, room: id });
 
-    try {
-      await axios({
-        url: "/message/create",
-        method: "POST",
-        data: state,
-        headers: {
-          authorization: sessionStorage.getItem("token"),
-        },
+    await axios({
+      url: "/message/" + id + "/create",
+      method: "POST",
+      data: state,
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
+    })
+      .then(() => {
+        socketRef.current.emit("message", { sended: true, room: id });
+      })
+      .catch((error) => {
+        notify(error.response.data);
       });
-
-      getMessages();
-    } catch (error) {
-      notify(error.response.data);
-    }
-
     setState({ ...state, message: "" });
   };
 
@@ -113,45 +112,79 @@ function Chatbox(props) {
     if (chat === []) return;
     let prevName = "";
     return chat.map((message, index) => {
-      const result =
-        prevName === message.senderId.name ? (
-          <div
-            key={index}
-            className={
-              message.senderId.name === currentUser
-                ? "message message--left message--merged"
-                : "message message--right message--merged"
-            }
-          >
-            <div className="message__body">
-              <span className="message__body__time">
-                {dateFormat(message.createdAt, "h:MM TT")}
-              </span>
-              <div className="message__body__inner">{message.body}</div>
-            </div>
-          </div>
-        ) : (
-          <div
-            key={index}
-            className={
-              message.senderId.name === currentUser
-                ? "message message--left"
-                : "message message--right"
-            }
-          >
+      const actualUser = prevName !== message.senderId.name;
+      const result = (
+        <div
+          key={index}
+          className={
+            "message " +
+            (message.senderId.name === currentUser
+              ? "message--left"
+              : "message--right") +
+            (!actualUser ? " message--merged" : "")
+          }
+        >
+          {actualUser ? (
             <div className="message__sender">{message.senderId.name}</div>
-            <div className="message__body">
-              <span className="message__body__time">
-                {dateFormat(message.createdAt, "h:MM TT")}
-              </span>
-              <div className="message__body__inner">{message.body}</div>
-            </div>
+          ) : (
+            ""
+          )}
+          <div className="message__body">
+            <span className="message__body__time">
+              {dateFormat(message.createdAt, "h:MM TT")}
+            </span>
+            <div className="message__body__inner">{message.body}</div>
           </div>
-        );
+        </div>
+      );
       prevName = message.senderId.name;
       return result;
     });
   };
+
+  // const renderChat = () => {
+  //   if (chat === []) return;
+  //   let prevName = "";
+  //   return chat.map((message, index) => {
+  //     const result =
+  //       prevName === message.senderId.name ? (
+  //         <div
+  //           key={index}
+  //           className={
+  //             message.senderId.name === currentUser
+  //               ? "message message--left message--merged"
+  //               : "message message--right message--merged"
+  //           }
+  //         >
+  //           <div className="message__body">
+  //             <span className="message__body__time">
+  //               {dateFormat(message.createdAt, "h:MM TT")}
+  //             </span>
+  //             <div className="message__body__inner">{message.body}</div>
+  //           </div>
+  //         </div>
+  //       ) : (
+  //         <div
+  //           key={index}
+  //           className={
+  //             message.senderId.name === currentUser
+  //               ? "message message--left"
+  //               : "message message--right"
+  //           }
+  //         >
+  //           <div className="message__sender">{message.senderId.name}</div>
+  //           <div className="message__body">
+  //             <span className="message__body__time">
+  //               {dateFormat(message.createdAt, "h:MM TT")}
+  //             </span>
+  //             <div className="message__body__inner">{message.body}</div>
+  //           </div>
+  //         </div>
+  //       );
+  //     prevName = message.senderId.name;
+  //     return result;
+  //   });
+  // };
 
   return (
     <div className="chatbox container-fluid">

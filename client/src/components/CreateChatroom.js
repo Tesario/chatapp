@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import "./CreateChatroom.scss";
 
 function CreateChatroom(props) {
+  const history = useHistory();
   const [state, setState] = useState({
     name: "",
     isPrivate: false,
@@ -36,7 +38,7 @@ function CreateChatroom(props) {
       .then((res) => {
         notify(res.data);
         setState({ name: "", isPrivate: false, password: "" });
-        props.history.push("/chatroom/" + res.data.chatroom.name);
+        history.push("/chatroom/" + res.data.chatroom.name);
       })
       .catch((error) => {
         notify(error.response.data);
@@ -46,23 +48,26 @@ function CreateChatroom(props) {
 
   const onJoinFormSubmit = async (e) => {
     e.preventDefault();
-
-    await axios({
-      url: "/chatroom/join/private/" + joinRoomState.joinName,
-      method: "PUT",
-      data: joinRoomState,
-      headers: {
-        authorization: sessionStorage.getItem("token"),
-      },
-    })
-      .then((response) => {
-        notify(response.data);
-        getChatrooms();
-        props.history.push("/chatroom/" + joinRoomState.joinName);
+    if (joinRoomState.joinName && joinRoomState.joinPassword) {
+      return await axios({
+        url: "/chatroom/join/private/" + joinRoomState.joinName,
+        method: "PUT",
+        data: joinRoomState,
+        headers: {
+          authorization: sessionStorage.getItem("token"),
+        },
       })
-      .catch((error) => {
-        notify(error.response.data);
-      });
+        .then((response) => {
+          notify(response.data);
+          getChatrooms();
+          history.push("/chatroom/" + joinRoomState.joinName);
+        })
+        .catch((error) => {
+          notify(error.response.data);
+        });
+    }
+    notify({ success: false, message: "Fill name and password" });
+    return;
   };
 
   const handleChange = (e) => {
@@ -105,7 +110,8 @@ function CreateChatroom(props) {
       .then((response) => {
         notify(response.data);
         getChatrooms();
-        props.history.push("/chatroom/" + name);
+        console.log(response.data);
+        history.push("/chatroom/" + name);
       })
       .catch((error) => {
         notify(error.response.data);

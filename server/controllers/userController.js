@@ -5,15 +5,15 @@ import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const userRegister = async (req, res, next) => {
   const { name, email, password, passwordAgain } = req.body;
-
   const userExist = await User.find({
-    $or: [{ email: email }, { name: name }],
+    $or: [{ email }, { name }],
   });
 
   if (password !== passwordAgain) {
     return next(new ErrorResponse("Passwords do not match", 400));
   }
 
+  console.log(userExist);
   if (userExist.length) {
     return next(new ErrorResponse("User already exist", 400));
   }
@@ -33,8 +33,8 @@ export const userRegister = async (req, res, next) => {
       success: true,
       token,
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -58,11 +58,10 @@ export const userLogin = async (req, res, next) => {
   });
 };
 
-export const getUser = async (req, res) => {
+export const isAuth = async (req, res, next) => {
   try {
-    const user = await User.find({ _id: req.params.userId });
-    res.json(user);
-  } catch (err) {
-    res.json({ message: err.message });
+    res.status(200).json({ success: true });
+  } catch (error) {
+    return next(error);
   }
 };
