@@ -1,14 +1,15 @@
 import Message from "../models/Message.js";
 import User from "../models/User.js";
+import Chatroom from "../models/Chatroom.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const getMessages = async (req, res, next) => {
   try {
-    const { chatroomId } = req.params;
+    const { chatroomName } = req.params;
 
-    if (!chatroomId.match(/^[0-9a-fA-F]{24}$/)) {
-      return next(new ErrorResponse("Chatroom does not exist", 404));
-    }
+    const chatroomId = await Chatroom.find({ name: chatroomName }).select(
+      "_id"
+    );
 
     const messages = await Message.find({
       chatroomId,
@@ -34,10 +35,12 @@ export const getMessages = async (req, res, next) => {
 };
 
 export const createMessage = async (req, res, next) => {
+  const { chatroomName, message } = req.body;
+  const chatroom = await Chatroom.findOne({ name: chatroomName }).select("_id");
   const newMessage = new Message({
-    chatroomId: req.body.chatroomId,
+    chatroomId: chatroom._id,
     senderId: req.user.id,
-    body: req.body.message,
+    body: message,
   });
 
   try {

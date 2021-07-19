@@ -9,9 +9,9 @@ import IsMember from "../middlewares/isMember.js";
 const router = express.Router();
 
 // Get chatroom messages
-router.get("/:chatroomId", auth, IsMember, getMessages);
+router.get("/:chatroomName", auth, IsMember, getMessages);
 
 // Create chatroom message
-router.post("/:chatroomId/create", auth, IsMember, createMessage);
+router.post("/:chatroomName/create", auth, IsMember, createMessage);
 
 export default router;

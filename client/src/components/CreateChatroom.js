@@ -110,7 +110,6 @@ function CreateChatroom(props) {
       .then((response) => {
         notify(response.data);
         getChatrooms();
-        console.log(response.data);
         history.push("/chatroom/" + name);
       })
       .catch((error) => {

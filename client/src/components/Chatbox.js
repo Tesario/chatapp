@@ -7,8 +7,8 @@ import { useParams } from "react-router";
 import "./Chatbox.scss";
 
 function Chatbox(props) {
-  let { id } = useParams();
-  const [state, setState] = useState({ message: "", chatroomId: id });
+  let { name } = useParams();
+  const [state, setState] = useState({ message: "", chatroomName: name });
   const [currentUser, setCurrentUser] = useState(null);
   const [chat, setChat] = useState([]);
 
@@ -24,7 +24,6 @@ function Chatbox(props) {
     });
 
     socketRef.current.on("message", (sended) => {
-      console.log("ÁÁÁhoj");
       if (sended) {
         getMessages();
       }
@@ -35,7 +34,7 @@ function Chatbox(props) {
   }, [socketRef]);
 
   useEffect(() => {
-    socketRef.current.emit("joinRoom", id);
+    socketRef.current.emit("joinRoom", name);
     // eslint-disable-next-line
   }, []);
 
@@ -59,7 +58,7 @@ function Chatbox(props) {
     e.preventDefault();
 
     await axios({
-      url: "/message/" + id + "/create",
+      url: "/message/" + name + "/create",
       method: "POST",
       data: state,
       headers: {
@@ -67,7 +66,7 @@ function Chatbox(props) {
       },
     })
       .then(() => {
-        socketRef.current.emit("message", { sended: true, room: id });
+        socketRef.current.emit("message", { sended: true, room: name });
       })
       .catch((error) => {
         notify(error.response.data);
@@ -77,7 +76,7 @@ function Chatbox(props) {
 
   const getMessages = async () => {
     await axios({
-      url: "/message/" + id,
+      url: "/message/" + name,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -141,50 +140,6 @@ function Chatbox(props) {
       return result;
     });
   };
-
-  // const renderChat = () => {
-  //   if (chat === []) return;
-  //   let prevName = "";
-  //   return chat.map((message, index) => {
-  //     const result =
-  //       prevName === message.senderId.name ? (
-  //         <div
-  //           key={index}
-  //           className={
-  //             message.senderId.name === currentUser
-  //               ? "message message--left message--merged"
-  //               : "message message--right message--merged"
-  //           }
-  //         >
-  //           <div className="message__body">
-  //             <span className="message__body__time">
-  //               {dateFormat(message.createdAt, "h:MM TT")}
-  //             </span>
-  //             <div className="message__body__inner">{message.body}</div>
-  //           </div>
-  //         </div>
-  //       ) : (
-  //         <div
-  //           key={index}
-  //           className={
-  //             message.senderId.name === currentUser
-  //               ? "message message--left"
-  //               : "message message--right"
-  //           }
-  //         >
-  //           <div className="message__sender">{message.senderId.name}</div>
-  //           <div className="message__body">
-  //             <span className="message__body__time">
-  //               {dateFormat(message.createdAt, "h:MM TT")}
-  //             </span>
-  //             <div className="message__body__inner">{message.body}</div>
-  //           </div>
-  //         </div>
-  //       );
-  //     prevName = message.senderId.name;
-  //     return result;
-  //   });
-  // };
 
   return (
     <div className="chatbox container-fluid">

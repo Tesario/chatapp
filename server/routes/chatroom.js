@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  getChatroom,
   createChatroom,
   getUsersChatroom,
   getPublicChatrooms,
@@ -17,9 +16,6 @@ router.get("/public", auth, getPublicChatrooms);
 
 // Get user's chatrooms
 router.get("/get-user-chatrooms", auth, getUsersChatroom);
-
-// Get chatroom
-router.get("/:id", auth, getChatroom);
 
 // Create chatroom
 router.post("/create", auth, createChatroom);

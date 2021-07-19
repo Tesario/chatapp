@@ -13,7 +13,6 @@ export const userRegister = async (req, res, next) => {
     return next(new ErrorResponse("Passwords do not match", 400));
   }
 
-  console.log(userExist);
   if (userExist.length) {
     return next(new ErrorResponse("User already exist", 400));
   }

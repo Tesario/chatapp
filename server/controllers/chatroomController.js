@@ -2,15 +2,6 @@ import Chatroom from "../models/Chatroom.js";
 import sha256 from "js-sha256";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
-export const getChatroom = async (req, res, next) => {
-  try {
-    const chatroom = await Chatroom.find({ _id: req.params.id });
-    res.json(chatroom);
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const createChatroom = async (req, res, next) => {
   const { name, isPrivate, password } = req.body;
 

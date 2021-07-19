@@ -58,7 +58,7 @@ function Home(props) {
               setCurrentChatroom(chatroom);
             }}
           >
-            <Link className="link" to={"/chatroom/" + chatroom._id}>
+            <Link className="link" to={"/chatroom/" + chatroom.name}>
               <div className="name">{chatroom.name}</div>
               <div className="members">
                 {chatroom.members.length}

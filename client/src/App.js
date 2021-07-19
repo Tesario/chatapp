@@ -63,7 +63,11 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
-          <UserRoute path="/chatroom/:id" component={Chatbox} notify={notify} />
+          <UserRoute
+            path="/chatroom/:name"
+            component={Chatbox}
+            notify={notify}
+          />
           <Route path="/login">
             <Login notify={notify} />
           </Route>
