@@ -4,7 +4,7 @@ import axios from "axios";
 import dateFormat from "dateformat";
 import { useParams } from "react-router";
 
-import "./Chatbox.scss";
+import "./Chatroom.scss";
 
 function Chatbox(props) {
   let { name } = useParams();
@@ -155,12 +155,13 @@ function Chatbox(props) {
           placeholder="Message..."
           autoComplete="off"
         />
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" aria-label="Send message">
           <i className="fas fa-paper-plane"></i>
         </button>
         <a
           ref={scrollDown}
           href="/#"
+          aria-label="Scroll to down"
           className="chatbox__form__scroll-down btn btn-primary"
           onClick={(e) => {
             e.preventDefault();

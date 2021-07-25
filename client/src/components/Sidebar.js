@@ -81,7 +81,7 @@ function Sidebar(props) {
           <div className="link">Information</div>
         </Link>
         {isAuth && (
-          <a href="/#" onClick={(e) => handleLogout(e)} aria-label="Logout">
+          <a href="/" onClick={(e) => handleLogout(e)} aria-label="Logout">
             <i className="fas fa-sign-out-alt fa-fw"></i>
             <div className="link">Logout</div>
           </a>

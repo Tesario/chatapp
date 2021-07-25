@@ -25,6 +25,14 @@ a {
   }
 }
 
+.btn:not(.btn-primary) {
+
+  &:focus,
+  &:hover {
+    box-shadow: none;
+  }
+}
+
 textarea,
 input {
   background-color: $white-darker !important;
@@ -52,6 +60,10 @@ h1 {
   padding-bottom: .5rem;
   font-size: $subtitle-size;
   border-bottom: 2px solid var(--primary-color);
+}
+
+.desc.darken {
+  filter: brightness(.85);
 }
 
 .app {

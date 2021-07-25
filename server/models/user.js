@@ -21,6 +21,9 @@ const UserSchema = new Schema({
     maxlength: [20, "Maximum length for username is 20 characters"],
     minlength: [3, "Minimum length for username is 3 characters"],
   },
+  lowerCaseName: {
+    type: String,
+  },
   password: {
     type: String,
     required: [true, "Please fill a password field"],

@@ -7,12 +7,12 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.code === "11000") {
     const message = "Duplicate fields";
-    error = new ErrorResponse(message, 400);
+    error = new ErrorResponse(message, 400, true);
   }
 
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors)[0];
-    error = new ErrorResponse(message, 400);
+    error = new ErrorResponse(message, 400, true);
   }
 
   res.status(error.statusCode || 500).json({

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { toast } from "react-toastify";
 import Register from "./components/Register";
-import Chatbox from "./components/Chatbox";
+import Chatroom from "./components/Chatroom";
 import Login from "./components/Login";
 import Info from "./components/Info";
 import Settings from "./components/Settings";
@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 toast.configure();
 const notify = (data) => {
   const { success, message, isShow } = data;
-  if (isShow) {
+  if (isShow || isShow === undefined) {
     if (success) {
       toast.success(message, {
         position: toast.POSITION.TOP_LEFT,
@@ -65,7 +65,7 @@ function App() {
         <Switch>
           <UserRoute
             path="/chatroom/:name"
-            component={Chatbox}
+            component={Chatroom}
             notify={notify}
           />
           <Route path="/login">

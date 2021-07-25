@@ -9,6 +9,8 @@ import cors from "cors";
 import userRoutes from "./routes/user.js";
 import chatroomRoutes from "./routes/chatroom.js";
 import messageRoutes from "./routes/message.js";
+import friendRequestRoutes from "./routes/friendRequest.js";
+import directChatroomRoutes from "./routes/directChatroom.js";
 
 // Middlewares
 import errorHandler from "./middlewares/errorHandler.js";
@@ -31,6 +33,8 @@ app.use(cors());
 app.use("/user", userRoutes);
 app.use("/chatroom", chatroomRoutes);
 app.use("/message", messageRoutes);
+app.use("/friend-request", friendRequestRoutes);
+app.use("/direct-chatroom", directChatroomRoutes);
 
 //  Error middleware
 app.use(errorHandler);

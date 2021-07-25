@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
+import { DirectChatroomSchema } from "./DirectChatroom.js";
 
 // Schema
 const Schema = mongoose.Schema;
 const ChatroomSchema = new Schema(
   {
+    ...DirectChatroomSchema.obj,
     name: {
       type: String,
       unique: true,
@@ -11,6 +13,9 @@ const ChatroomSchema = new Schema(
       match: [/^[a-zA-Z0-9_.]+$/, "Name is not valid"],
       maxlength: [20, "Maximum length for name is 20 characters"],
       minlength: [3, "Minimum length for name is 3 characters"],
+    },
+    lowerCaseName: {
+      type: String,
     },
     isPrivate: {
       type: Boolean,
@@ -21,12 +26,6 @@ const ChatroomSchema = new Schema(
       default: null,
       minlength: [6, "Minimum length for password is 6 characters"],
     },
-    members: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   { timestamps: true }
 );

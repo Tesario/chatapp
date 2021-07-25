@@ -1,14 +1,18 @@
 import Chatroom from "../models/Chatroom.js";
+import { DirectChatroom } from "../models/DirectChatroom.js";
 import sha256 from "js-sha256";
 import ErrorResponse from "../utils/ErrorResponse.js";
+import User from "../models/User.js";
 
 export const createChatroom = async (req, res, next) => {
   const { name, isPrivate, password } = req.body;
 
   try {
-    const findedChatroom = await Chatroom.findOne({ name });
+    const foundChatroom = await Chatroom.findOne({
+      lowerCaseName: name.toLowerCase(),
+    });
 
-    if (findedChatroom) {
+    if (foundChatroom) {
       return next(new ErrorResponse("Chatroom name is taken", 400));
     }
   } catch (error) {
@@ -17,6 +21,7 @@ export const createChatroom = async (req, res, next) => {
 
   const newChatroom = new Chatroom({
     name,
+    lowerCaseName: name.toLowerCase(),
     isPrivate,
     password: isPrivate ? sha256(password + process.env.SALT) : null,
     members: [req.user.id],
@@ -37,11 +42,13 @@ export const createChatroom = async (req, res, next) => {
 
 export const getUsersChatroom = async (req, res, next) => {
   try {
-    const chatrooms = await Chatroom.find({
+    let chatrooms = await Chatroom.find({
       members: { $in: [req.user.id] },
     }).populate("members");
 
-    res.status(200).json({ success: true, chatrooms });
+    const user = await User.findOne({ _id: req.user.id });
+
+    res.status(200).json({ success: true, chatrooms, user: user.name });
   } catch (error) {
     next(error);
   }
@@ -52,6 +59,7 @@ export const getPublicChatrooms = async (req, res, next) => {
     const chatrooms = await Chatroom.find({
       $and: [{ isPrivate: false }, { members: { $nin: [req.user.id] } }],
     });
+
     res.status(200).json(chatrooms);
   } catch (error) {
     next(error);
@@ -62,20 +70,20 @@ export const joinToPrivateChatroom = async (req, res, next) => {
   const { joinName, joinPassword } = req.body;
 
   try {
-    const findedChatroom = await Chatroom.findOne({ name: joinName });
+    const foundChatroom = await Chatroom.findOne({ name: joinName });
 
-    if (findedChatroom === null) {
+    if (foundChatroom === null) {
       return next(new ErrorResponse("Chatroom does not exist", 404));
     }
-    if (!findedChatroom.isPrivate) {
+    if (!foundChatroom.isPrivate) {
       return next(new ErrorResponse("Chatroom does not private", 404));
     }
 
-    if (findedChatroom.members.includes(req.user.id)) {
+    if (foundChatroom.members.includes(req.user.id)) {
       return next(new ErrorResponse("You are already in this chatroom"));
     }
 
-    if (sha256(joinPassword + process.env.SALT) !== findedChatroom.password) {
+    if (sha256(joinPassword + process.env.SALT) !== foundChatroom.password) {
       return next(new ErrorResponse("Wrong password"), 401);
     }
 
@@ -91,9 +99,9 @@ export const joinToPrivateChatroom = async (req, res, next) => {
 
 export const joinToChatroom = async (req, res, next) => {
   try {
-    const findedChatroom = await Chatroom.findOne({ name: req.params.name });
+    const foundChatroom = await Chatroom.findOne({ name: req.params.name });
 
-    if (findedChatroom.members.includes(req.user.id)) {
+    if (foundChatroom.members.includes(req.user.id)) {
       return next(new ErrorResponse("You are already in this chatroom"));
     }
 
@@ -109,9 +117,9 @@ export const joinToChatroom = async (req, res, next) => {
 
 export const leaveChatroom = async (req, res, next) => {
   try {
-    const findedChatroom = await Chatroom.findOne({ name: req.params.name });
+    const foundChatroom = await Chatroom.findOne({ name: req.params.name });
 
-    if (!findedChatroom) {
+    if (!foundChatroom) {
       return next(new ErrorResponse("Chatroom does not exist", 400));
     }
 
