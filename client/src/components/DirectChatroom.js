@@ -6,7 +6,7 @@ import { useParams } from "react-router";
 
 import "./Chatroom.scss";
 
-function Chatroom(props) {
+function DirectChatroom(props) {
   let { name } = useParams();
   const [state, setState] = useState({ message: "", chatroomName: name });
   const [currentUser, setCurrentUser] = useState(null);
@@ -58,7 +58,7 @@ function Chatroom(props) {
     e.preventDefault();
 
     await axios({
-      url: "/message/" + name + "/create",
+      url: "/message/direct-chatroom/" + name + "/create",
       method: "POST",
       data: state,
       headers: {
@@ -76,7 +76,7 @@ function Chatroom(props) {
 
   const getMessages = async () => {
     await axios({
-      url: "/message/" + name,
+      url: "/message/direct-chatroom/" + name,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -175,4 +175,4 @@ function Chatroom(props) {
   );
 }
 
-export default Chatroom;
+export default DirectChatroom;

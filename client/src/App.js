@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { toast } from "react-toastify";
 import Register from "./components/Register";
 import Chatroom from "./components/Chatroom";
+import DirectChatroom from "./components/DirectChatroom";
 import Login from "./components/Login";
 import Info from "./components/Info";
 import Settings from "./components/Settings";
@@ -66,6 +67,11 @@ function App() {
           <UserRoute
             path="/chatroom/:name"
             component={Chatroom}
+            notify={notify}
+          />
+          <UserRoute
+            path="/direct-chatroom/:name"
+            component={DirectChatroom}
             notify={notify}
           />
           <Route path="/login">
