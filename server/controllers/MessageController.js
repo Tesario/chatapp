@@ -6,13 +6,13 @@ import { DirectChatroom } from "../models/DirectChatroom.js";
 
 export const getMessages = async (req, res, next) => {
   try {
-    const { chatroomName } = req.params;
+    const { chatroomName, messagesCount } = req.params;
 
-    const chatroomId = await Chatroom.find({ name: chatroomName }).select(
-      "_id"
-    );
+    const chatroomId = await Chatroom.find({
+      name: chatroomName,
+    }).select("_id");
 
-    const messages = await Message.find({
+    let messages = await Message.find({
       chatroomId,
     })
       .populate("senderId")
@@ -22,11 +22,18 @@ export const getMessages = async (req, res, next) => {
       return next(new ErrorResponse("Chatroom does not exist", 404));
     }
 
+    let moreMessages = false;
+    if (messages.length > messages.slice(-messagesCount).length) {
+      messages = messages.slice(-messagesCount);
+      moreMessages = true;
+    }
+
     const currentUser = await User.findById(req.user.id);
 
     res.status(200).json({
       currentUser,
       messages,
+      moreMessages,
       message: "Chatroom loaded",
       success: true,
     });
@@ -54,13 +61,13 @@ export const createMessage = async (req, res, next) => {
 
 export const getDirectMessages = async (req, res, next) => {
   try {
-    const { chatroomName } = req.params;
+    const { chatroomName, messagesCount } = req.params;
 
-    const chatroomId = await DirectChatroom.find({ name: chatroomName }).select(
-      "_id"
-    );
+    const chatroomId = await DirectChatroom.find({
+      name: chatroomName,
+    }).select("_id");
 
-    const messages = await Message.find({
+    let messages = await Message.find({
       chatroomId,
     })
       .populate("senderId")
@@ -70,11 +77,18 @@ export const getDirectMessages = async (req, res, next) => {
       return next(new ErrorResponse("Chatroom does not exist", 404));
     }
 
+    let moreMessages = false;
+    if (messages.length > messages.slice(-messagesCount).length) {
+      messages = messages.slice(-messagesCount);
+      moreMessages = true;
+    }
+
     const currentUser = await User.findById(req.user.id);
 
     res.status(200).json({
       currentUser,
       messages,
+      moreMessages,
       message: "Chatroom loaded",
       success: true,
     });

@@ -11,16 +11,10 @@ import IsDirectMember from "../middlewares/isDirectMember.js";
 
 const router = express.Router();
 
-// Get chatroom messages
-router.get("/:chatroomName", auth, IsMember, getMessages);
-
-// Create chatroom message
-router.post("/:chatroomName/create", auth, IsMember, createMessage);
-
 // Direct chatroom
 // Get chatroom messages
 router.get(
-  "/direct-chatroom/:chatroomName",
+  "/direct-chatroom/:chatroomName/:messagesCount",
   auth,
   IsDirectMember,
   getDirectMessages
@@ -33,5 +27,11 @@ router.post(
   IsDirectMember,
   createDirectMessage
 );
+
+// Get chatroom messages
+router.get("/:chatroomName/:messagesCount", auth, IsMember, getMessages);
+
+// Create chatroom message
+router.post("/:chatroomName/create", auth, IsMember, createMessage);
 
 export default router;

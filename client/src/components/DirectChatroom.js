@@ -4,13 +4,15 @@ import axios from "axios";
 import dateFormat from "dateformat";
 import { useParams } from "react-router";
 
-import "./Chatroom.scss";
+import "./DirectChatroom.scss";
 
 function DirectChatroom(props) {
   let { name } = useParams();
   const [state, setState] = useState({ message: "", chatroomName: name });
   const [currentUser, setCurrentUser] = useState(null);
   const [chat, setChat] = useState([]);
+  const [messagesCount, setMessagesCount] = useState(50);
+  const [moreMessages, setMoreMessages] = useState(false);
 
   const { notify } = props;
   const scrollDown = useRef();
@@ -18,7 +20,10 @@ function DirectChatroom(props) {
 
   useEffect(() => {
     getMessages();
+    // eslint-disable-next-line
+  }, [messagesCount]);
 
+  useEffect(() => {
     socketRef.current = io.connect("http://localhost:8000", {
       transports: ["websocket"],
     });
@@ -44,14 +49,18 @@ function DirectChatroom(props) {
 
   const chatScrollToDown = () => {
     const lastMessage = document.querySelector(
-      ".chatbox__messages .message:last-child"
+      ".direct-chatbox__messages .message:last-child"
     );
 
     if (lastMessage) {
       lastMessage.scrollIntoView();
-      document.querySelector(".chatbox__messages").style.scrollBehavior =
+      document.querySelector(".direct-chatbox__messages").style.scrollBehavior =
         "smooth";
     }
+  };
+
+  const handleMessagesCount = () => {
+    setMessagesCount(messagesCount * 1 + 50);
   };
 
   const onMessageSubmit = async (e) => {
@@ -76,7 +85,7 @@ function DirectChatroom(props) {
 
   const getMessages = async () => {
     await axios({
-      url: "/message/direct-chatroom/" + name,
+      url: "/message/direct-chatroom/" + name + "/" + messagesCount,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -85,6 +94,7 @@ function DirectChatroom(props) {
       .then((res) => {
         setCurrentUser(res.data.currentUser.name);
         setChat(res.data.messages);
+        setMoreMessages(res.data.moreMessages);
         chatScrollToDown();
       })
       .catch((error) => {
@@ -93,16 +103,18 @@ function DirectChatroom(props) {
   };
 
   const showScrollDownBtn = () => {
-    const chatboxMessages = document.querySelector(".chatbox__messages");
+    const chatboxMessages = document.querySelector(".direct-chatbox__messages");
     if (
       chatboxMessages.scrollHeight -
         (chatboxMessages.scrollTop + chatboxMessages.offsetHeight) >
       200
     ) {
-      scrollDown.current.classList.add("chatbox__form__scroll-down--scrolling");
+      scrollDown.current.classList.add(
+        "direct-chatbox__form__scroll-down--scrolling"
+      );
     } else {
       scrollDown.current.classList.remove(
-        "chatbox__form__scroll-down--scrolling"
+        "direct-chatbox__form__scroll-down--scrolling"
       );
     }
   };
@@ -142,11 +154,25 @@ function DirectChatroom(props) {
   };
 
   return (
-    <div className="chatbox container-fluid">
-      <div className="chatbox__messages" onScroll={() => showScrollDownBtn()}>
+    <div className="direct-chatbox container-fluid">
+      <div
+        className="direct-chatbox__messages"
+        onScroll={() => showScrollDownBtn()}
+      >
+        {moreMessages ? (
+          <button
+            className="btn more-messages"
+            aria-label="Show more messages"
+            onClick={() => handleMessagesCount()}
+          >
+            <i className="fas fa-plus"></i>
+          </button>
+        ) : (
+          ""
+        )}
         {renderChat()}
       </div>
-      <form className="chatbox__form" onSubmit={onMessageSubmit}>
+      <form className="direct-chatbox__form" onSubmit={onMessageSubmit}>
         <input
           name="message"
           className="form-control"
@@ -162,7 +188,7 @@ function DirectChatroom(props) {
           ref={scrollDown}
           href="/#"
           aria-label="Scroll to down"
-          className="chatbox__form__scroll-down btn btn-primary"
+          className="direct-chatroom__form__scroll-down btn btn-primary"
           onClick={(e) => {
             e.preventDefault();
             chatScrollToDown();

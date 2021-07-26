@@ -11,6 +11,8 @@ function Chatroom(props) {
   const [state, setState] = useState({ message: "", chatroomName: name });
   const [currentUser, setCurrentUser] = useState(null);
   const [chat, setChat] = useState([]);
+  const [messagesCount, setMessagesCount] = useState(50);
+  const [moreMessages, setMoreMessages] = useState(false);
 
   const { notify } = props;
   const scrollDown = useRef();
@@ -18,7 +20,10 @@ function Chatroom(props) {
 
   useEffect(() => {
     getMessages();
+    // eslint-disable-next-line
+  }, [messagesCount]);
 
+  useEffect(() => {
     socketRef.current = io.connect("http://localhost:8000", {
       transports: ["websocket"],
     });
@@ -54,6 +59,10 @@ function Chatroom(props) {
     }
   };
 
+  const handleMessagesCount = () => {
+    setMessagesCount(messagesCount * 1 + 50);
+  };
+
   const onMessageSubmit = async (e) => {
     e.preventDefault();
 
@@ -76,7 +85,7 @@ function Chatroom(props) {
 
   const getMessages = async () => {
     await axios({
-      url: "/message/" + name,
+      url: "/message/" + name + "/" + messagesCount,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -85,6 +94,7 @@ function Chatroom(props) {
       .then((res) => {
         setCurrentUser(res.data.currentUser.name);
         setChat(res.data.messages);
+        setMoreMessages(res.data.moreMessages);
         chatScrollToDown();
       })
       .catch((error) => {
@@ -144,6 +154,17 @@ function Chatroom(props) {
   return (
     <div className="chatbox container-fluid">
       <div className="chatbox__messages" onScroll={() => showScrollDownBtn()}>
+        {moreMessages ? (
+          <button
+            className="btn more-messages"
+            aria-label="Show more messages"
+            onClick={() => handleMessagesCount()}
+          >
+            <i className="fas fa-plus"></i>
+          </button>
+        ) : (
+          ""
+        )}
         {renderChat()}
       </div>
       <form className="chatbox__form" onSubmit={onMessageSubmit}>
