@@ -86,7 +86,7 @@ function App() {
             component={CreateChatroom}
             notify={notify}
           />
-          <UserRoute path="/settings" component={Settings} />
+          <UserRoute path="/settings" component={Settings} notify={notify} />
           <Route path="/info">
             <Info />
           </Route>

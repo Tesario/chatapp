@@ -258,7 +258,10 @@ function Home(props) {
               {members.map((member, index) => {
                 return (
                   <li className="user" key={index}>
-                    <div> {member.name}</div>
+                    <div className="image">
+                      <img src={member.picture} alt={member.name} />
+                    </div>
+                    <div className="name">{member.name}</div>
                     {currentUser !== member.name ? (
                       <button
                         className="btn"
@@ -293,6 +296,12 @@ function Home(props) {
           <div key={index} className="friend-request">
             <div className="date">
               {dateFormat(friendRequest.createdAt, "hh:MM TT, dd. mm. yyyy")}
+            </div>
+            <div className="image">
+              <img
+                src={friendRequest.senderId.picture}
+                alt={friendRequest.senderId.name}
+              />
             </div>
             <div className="name"> {friendRequest.senderId.name}</div>
             <div className="buttons">
@@ -330,9 +339,27 @@ function Home(props) {
         return (
           <div key={index} className="friend">
             <Link to={"direct-chatroom/" + friend.name} className="name">
-              {friend.members[0].name === currentUser
-                ? friend.members[1].name
-                : friend.members[0].name}
+              {friend.members[0].name === currentUser ? (
+                <>
+                  <div className="image">
+                    <img
+                      src={friend.members[1].picture}
+                      alt={friend.members[1].name}
+                    />
+                  </div>
+                  {friend.members[1].name}
+                </>
+              ) : (
+                <>
+                  <div className="image">
+                    <img
+                      src={friend.members[0].picture}
+                      alt={friend.members[0].name}
+                    />
+                  </div>
+                  {friend.members[0].name}
+                </>
+              )}
             </Link>
             <button
               type="button"
@@ -385,7 +412,12 @@ function Home(props) {
       return foundUsers.map((item, index) => {
         return (
           <div key={index} className="user">
-            <div className="name">{item.user.name}</div>
+            <div className="content">
+              <div className="image">
+                <img src={item.user.picture} alt={item.user.name} />
+              </div>
+              <div className="name">{item.user.name}</div>
+            </div>
             {renderActionButton(item.action, item.user)}
           </div>
         );

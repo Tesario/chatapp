@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,react
 
+# Pictures
+client/public/profile-pictures
+
 ### Node ###
 # Logs
 logs

@@ -30,6 +30,11 @@ const UserSchema = new Schema({
     minlength: [6, "Minimum length for password is 6 characters"],
     select: false,
   },
+  picture: {
+    type: String,
+    required: true,
+    default: "/default-profile-picture.png",
+  },
 });
 
 UserSchema.pre("save", async function (next) {
@@ -37,6 +42,11 @@ UserSchema.pre("save", async function (next) {
     next();
   }
   this.password = await sha256(this.password + process.env.SALT);
+});
+
+UserSchema.pre("update", function (next) {
+  this.options.runValidators = true;
+  next();
 });
 
 // Model

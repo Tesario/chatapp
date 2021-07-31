@@ -107,3 +107,53 @@ export const searchUsers = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const editUser = async (req, res, next) => {
+  const { email, name } = req.body;
+
+  try {
+    const userExist = await User.findOne({
+      $and: [
+        { $or: [{ email }, { lowerCaseName: name.toLowerCase() }] },
+        { _id: { $ne: req.user.id } },
+      ],
+    });
+
+    if (userExist) {
+      return next(new ErrorResponse("User already exist", 400));
+    }
+    await User.updateOne(
+      { _id: req.user.id },
+      req.file
+        ? {
+            picture: "/profile-pictures/" + req.file.filename,
+            email,
+            name,
+            lowerCaseName: name.toLowerCase(),
+          }
+        : {
+            email,
+            name,
+            lowerCaseName: name.toLowerCase(),
+          },
+      { runValidators: true }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, message: "Profile updated successful" });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getUser = async (req, res, next) => {
+  const { id } = req.user;
+  try {
+    const user = await User.findById(id);
+
+    res.status(200).json({ user });
+  } catch (error) {
+    return next(error);
+  }
+};

@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import dateFormat from "dateformat";
 import { useParams } from "react-router";
+import "unicode-emoji-picker";
 
 import "./Chatroom.scss";
 
@@ -13,17 +14,17 @@ function Chatroom(props) {
   const [chat, setChat] = useState([]);
   const [messagesCount, setMessagesCount] = useState(50);
   const [moreMessages, setMoreMessages] = useState(false);
+  const [emoji, setEmoji] = useState("");
 
   const { notify } = props;
+  const messageInputRef = useRef();
   const scrollDown = useRef();
   const socketRef = useRef();
+  const emojiRef = useRef();
+  const emojiFillerRef = useRef();
 
   useEffect(() => {
     getMessages();
-    // eslint-disable-next-line
-  }, [messagesCount]);
-
-  useEffect(() => {
     socketRef.current = io.connect("http://localhost:8000", {
       transports: ["websocket"],
     });
@@ -33,15 +34,64 @@ function Chatroom(props) {
         getMessages();
       }
     });
+
     return () => socketRef.current.disconnect();
 
     // eslint-disable-next-line
   }, [socketRef]);
 
   useEffect(() => {
+    getMessages(false);
+    // eslint-disable-next-line
+  }, [messagesCount]);
+
+  useEffect(() => {
+    emojiRef.current.setTranslation({
+      "face-emotion": {
+        emoji: "😀️",
+        title: "Emotion",
+      },
+      "food-drink": {
+        emoji: "🥕️",
+        title: "Food",
+      },
+      "animals-nature": {
+        emoji: "🦜️",
+        title: "Animals",
+      },
+      "person-people": {
+        emoji: "🧍",
+        title: "Humans",
+      },
+      objects: {
+        emoji: "👒",
+        title: "Clothes",
+      },
+      symbols: {
+        emoji: "💬️",
+        title: "Marks",
+      },
+      flags: {
+        emoji: "🚩",
+        title: "Pennants",
+      },
+    });
+
+    emojiRef.current.addEventListener("emoji-pick", (e) => {
+      setEmoji(e.detail.emoji);
+      messageInputRef.current.focus();
+    });
+
     socketRef.current.emit("joinRoom", name);
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    setState({ ...state, message: state.message + emoji });
+    setEmoji("");
+    messageInputRef.current.focus();
+    // eslint-disable-next-line
+  }, [emoji]);
 
   const onTextChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -63,8 +113,20 @@ function Chatroom(props) {
     setMessagesCount(messagesCount * 1 + 50);
   };
 
+  const handleToggleEmoji = (toggle = true) => {
+    if (toggle) {
+      emojiRef.current.classList.toggle("show");
+      emojiFillerRef.current.classList.toggle("show");
+      return;
+    }
+
+    emojiRef.current.classList.remove("show");
+    emojiFillerRef.current.classList.remove("show");
+  };
+
   const onMessageSubmit = async (e) => {
     e.preventDefault();
+    handleToggleEmoji(false);
 
     await axios({
       url: "/message/" + name + "/create",
@@ -83,7 +145,7 @@ function Chatroom(props) {
     setState({ ...state, message: "" });
   };
 
-  const getMessages = async () => {
+  const getMessages = async (enableScroll = true) => {
     await axios({
       url: "/message/" + name + "/" + messagesCount,
       method: "GET",
@@ -95,7 +157,9 @@ function Chatroom(props) {
         setCurrentUser(res.data.currentUser.name);
         setChat(res.data.messages);
         setMoreMessages(res.data.moreMessages);
-        chatScrollToDown();
+        if (enableScroll) {
+          chatScrollToDown();
+        }
       })
       .catch((error) => {
         notify(error.response.data);
@@ -119,33 +183,41 @@ function Chatroom(props) {
 
   const renderChat = () => {
     if (chat === []) return;
+    let prevTime = 0;
     let prevName = "";
     return chat.map((message, index) => {
-      const actualUser = prevName !== message.senderId.name;
+      const isPrevTimeSame =
+        prevTime !== dateFormat(message.createdAt, "h:MM TT") ||
+        prevName !== message.senderId.name;
       const result = (
         <div
           key={index}
           className={
             "message " +
-            (message.senderId.name === currentUser
-              ? "message--left"
-              : "message--right") +
-            (!actualUser ? " message--merged" : "")
+            (message.senderId.name === currentUser ? "left" : "right") +
+            (!isPrevTimeSame ? " merged" : "")
           }
         >
-          {actualUser ? (
-            <div className="message__sender">{message.senderId.name}</div>
+          {isPrevTimeSame ? (
+            <div className="header">
+              <div className="image">
+                <img
+                  src={message.senderId.picture}
+                  alt={message.senderId.name}
+                />
+              </div>
+              <div className="sender">{message.senderId.name}</div>
+              <span className="time">
+                {dateFormat(message.createdAt, "h:MM TT")}
+              </span>
+            </div>
           ) : (
             ""
           )}
-          <div className="message__body">
-            <span className="message__body__time">
-              {dateFormat(message.createdAt, "h:MM TT")}
-            </span>
-            <div className="message__body__inner">{message.body}</div>
-          </div>
+          <div className="body">{message.body}</div>
         </div>
       );
+      prevTime = dateFormat(message.createdAt, "h:MM TT");
       prevName = message.senderId.name;
       return result;
     });
@@ -167,15 +239,39 @@ function Chatroom(props) {
         )}
         {renderChat()}
       </div>
-      <form className="chatbox__form" onSubmit={onMessageSubmit}>
+      <span
+        id="emoji-filler"
+        ref={emojiFillerRef}
+        onClick={handleToggleEmoji}
+      ></span>
+      <form className="chatbox__form" onSubmit={(e) => onMessageSubmit(e)}>
+        <unicode-emoji-picker ref={emojiRef}></unicode-emoji-picker>
         <input
           name="message"
           className="form-control"
           onChange={(e) => onTextChange(e)}
           value={state.message}
+          ref={messageInputRef}
+          onClick={() => handleToggleEmoji(false)}
           placeholder="Message..."
           autoComplete="off"
         />
+        <button
+          type="button"
+          className="btn btn-emoji"
+          aria-label="Emoji"
+          onClick={handleToggleEmoji}
+        >
+          <i className="far fa-grin-alt"></i>
+        </button>
+        <button
+          type="button"
+          className="btn btn-file"
+          aria-label="File"
+          onClick={() => handleToggleEmoji(false)}
+        >
+          <i className="far fa-folder-open"></i>
+        </button>
         <button className="btn btn-primary" aria-label="Send message">
           <i className="fas fa-paper-plane"></i>
         </button>

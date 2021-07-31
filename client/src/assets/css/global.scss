@@ -13,6 +13,12 @@ a {
   text-decoration: none;
 }
 
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
 .btn.btn-primary {
   background-color: var(--primary-color);
   border: none;
@@ -40,7 +46,7 @@ input {
   &:hover,
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(var(--primary-color), .5) !important;
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--primary-color) !important;
   }
 }
 
@@ -60,6 +66,10 @@ h1 {
   padding-bottom: .5rem;
   font-size: $subtitle-size;
   border-bottom: 2px solid var(--primary-color);
+
+  &.without-line {
+    border: 0;
+  }
 }
 
 .desc.darken {
