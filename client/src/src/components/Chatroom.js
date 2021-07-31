@@ -153,16 +153,14 @@ function Chatroom(props) {
       method: "POST",
       data: formData,
       headers: {
-        "Content-Type": "multipart/form-data",
         authorization: sessionStorage.getItem("token"),
       },
     })
       .then(() => {
-        setFiles([]);
         socketRef.current.emit("message", { sended: true, room: name });
       })
       .catch((error) => {
-        notify(error);
+        notify(error.response.data);
       });
     setState({ ...state, message: "" });
   };
@@ -237,33 +235,6 @@ function Chatroom(props) {
             ""
           )}
           <div className="body">{message.body}</div>
-          {message.files.length !== 0 &&
-            message.files.map((file, index) => {
-              const ext = file.url.split(".")[1];
-              return ext === "png" ||
-                ext === "jpeg" ||
-                ext === "jpg" ||
-                ext === "gif" ? (
-                <a
-                  key={index}
-                  className="file-image"
-                  download={file.url}
-                  href={file.url}
-                >
-                  <img src={file.url} alt={file.name} />
-                </a>
-              ) : (
-                <a
-                  className="file"
-                  key={index}
-                  download={file.url}
-                  href={file.url}
-                >
-                  <i className="fas fa-file-download"></i>
-                  <div>{file.name}</div>
-                </a>
-              );
-            })}
         </div>
       );
       prevTime = dateFormat(message.createdAt, "h:MM TT");

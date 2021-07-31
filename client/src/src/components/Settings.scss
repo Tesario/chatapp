@@ -1,0 +1,89 @@
+@import "../assets/css/global.scss";
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .controlls {
+        display: grid;
+        width: 100%;
+        gap: 3rem;
+        grid-template-columns: repeat(2, 1fr);
+
+        @media (max-width: $lg) {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+
+    form {
+        color: var(--text-color);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        @media (max-width: $lg) {
+            padding: 1rem !important;
+        }
+
+        .subtitle {
+            margin-right: auto;
+        }
+    }
+
+    .colors-form {
+        padding-left: 2.5rem;
+
+        .form-input {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+
+            &:not(:first-child) {
+                border-top: 1px solid var(--primary-color);
+            }
+        }
+
+        .btn {
+            margin-top: 1rem;
+        }
+    }
+
+    .profile-form {
+        padding-right: 1rem;
+
+        .file-input,
+        .form-floating {
+            width: 100%;
+
+            label {
+                color: #000;
+            }
+        }
+
+        .file-input {
+            label {
+                color: var(--text-color);
+                margin-top: 1rem;
+                display: flex;
+                align-items: center;
+
+                .image {
+                    width: 30px;
+                    height: 30px;
+                    overflow: hidden;
+                    border-radius: 100%;
+                    margin-left: .75rem;
+                }
+            }
+        }
+    }
+
+    .btn-primary {
+        margin: 1rem auto 0 0;
+    }
+}

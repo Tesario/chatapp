@@ -16,7 +16,7 @@ export const getMessages = async (req, res, next) => {
       chatroomId,
     })
       .populate("senderId")
-      .select("body createdAt senderId");
+      .select("body createdAt senderId files");
 
     if (!messages) {
       return next(new ErrorResponse("Chatroom does not exist", 404));
@@ -44,11 +44,23 @@ export const getMessages = async (req, res, next) => {
 
 export const createMessage = async (req, res, next) => {
   const { chatroomName, message } = req.body;
+
   const chatroom = await Chatroom.findOne({ name: chatroomName }).select("_id");
+
+  let files = [];
+
+  req.files.forEach((file) => {
+    files.push({
+      url: "/uploaded-files/" + file.filename,
+      name: file.originalname,
+    });
+  });
+
   const newMessage = new Message({
     chatroomId: chatroom._id,
     senderId: req.user.id,
     body: message,
+    files,
   });
 
   try {

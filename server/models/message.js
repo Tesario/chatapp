@@ -14,7 +14,10 @@ const MessageSchema = new Schema(
     },
     body: {
       type: String,
-      required: [true, "Message is required"],
+      default: "",
+    },
+    files: {
+      type: Array,
     },
   },
   { timestamps: true }

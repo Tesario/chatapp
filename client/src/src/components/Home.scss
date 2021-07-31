@@ -1,0 +1,379 @@
+@import "../assets/css/global.scss";
+
+#home {
+    display: flex;
+    color: var(--text-color);
+    align-items: flex-start;
+
+    @media (max-width:$lg) {
+        flex-direction: column;
+    }
+
+    .title {
+        color: var(--text-color);
+    }
+
+    .desc {
+        margin-bottom: 1rem;
+    }
+
+    .my-chatrooms,
+    .friends {
+        padding: 0 1.5rem;
+
+        @media (min-width: $lg) {
+            flex: 1;
+            height: 100%;
+        }
+    }
+
+    .find {
+        margin-bottom: 2.5rem;
+
+        i {
+            margin-left: .5rem;
+        }
+    }
+
+    .my-chatrooms {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        border-right: 1px solid var(--primary-color);
+
+        @media (max-width: $lg) {
+            border: none;
+        }
+
+        .flex-chatrooms {
+            border: 0;
+            color: var(--text-color);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .accordion-item {
+            border: 0;
+            border-radius: 0;
+            background-color: transparent;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .accordion-btn {
+            background-color: transparent;
+            width: auto;
+            padding: 0 .25rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            transition: .1s ease-in-out;
+            transform: rotate(180deg);
+
+            i {
+                font-size: 1.3em;
+            }
+
+            &.collapsed {
+                transform: rotate(0deg);
+            }
+        }
+
+        .accordion-body {
+            background-color: $gray-dark;
+            padding-top: 0;
+        }
+
+        .accordion-collapse {
+            transition: 0s;
+
+            &.show {
+                transition-delay: .2s;
+            }
+        }
+
+        .flex-item {
+            display: flex;
+            align-items: center;
+            background-color: $gray-dark;
+            color: var(--text-color);
+        }
+    }
+
+    .link {
+        width: 100%;
+        padding: .75rem;
+        color: var(--text-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        i {
+            margin-left: .5rem;
+        }
+    }
+
+    .leave.btn {
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+            font-size: 1.4em;
+        }
+    }
+
+    .flex-info {
+        color: var(--text-color);
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--primary-color);
+
+        .flex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    .users {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        .users-list {
+            margin-top: .5rem;
+            width: 100%;
+        }
+    }
+
+    .user {
+        padding: .5rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .image {
+            width: 35px;
+            height: 35px;
+            overflow: hidden;
+            border-radius: 100%;
+        }
+
+        .name {
+            margin: 0 auto 0 1rem;
+        }
+
+        .btn {
+            padding: 0
+        }
+
+        i {
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+
+        &:not(:first-child) {
+            border-top: 1px solid var(--primary-color);
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    .friends {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+
+        @media (max-width:$lg) {
+            margin-top: 1.5rem;
+        }
+    }
+
+    .friend-requests {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .friend-request {
+        color: var(--text-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .75rem;
+        border-bottom: 1px solid var(--secondary-color);
+        background-color: $gray-dark;
+
+        @media (max-width: $sm) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .image {
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            overflow: hidden;
+            margin: 0 1rem;
+        }
+
+        .name {
+            margin-right: auto;
+
+            @media (max-width: $sm) {
+                margin: .5rem 0;
+            }
+        }
+    }
+
+    .buttons {
+        display: flex;
+    }
+
+    .add,
+    .cancel {
+        display: flex;
+        align-items: center;
+
+        i {
+            font-size: 1.15em;
+        }
+    }
+
+    .add {
+        padding: 0 .5rem 0 0;
+
+        i {
+            color: var(--primary-color);
+        }
+    }
+
+    .cancel {
+        padding: 0 0 0 .5rem;
+
+        i {
+            color: #dc3545;
+        }
+    }
+
+    .friend-list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .friend {
+        color: var(--text-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--secondary-color);
+        background-color: $gray-dark;
+
+        .name {
+            padding: .75rem;
+            color: var(--text-color);
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .image {
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            overflow: hidden;
+            margin-right: 1rem;
+        }
+
+        .cancel {
+            padding: .75rem;
+        }
+    }
+}
+
+#staticBackdrop {
+    .modal-content {
+        color: var(--text-color);
+        background-color: var(--secondary-color);
+    }
+
+    .btn.close {
+        padding: 0;
+
+        i {
+            color: var(--text-color);
+            font-size: 1.5em;
+        }
+    }
+
+    .modal-header {
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .modal-body {
+        label {
+            color: #000;
+        }
+
+        .grid-found-users {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+
+            @media (max-width: $lg) {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    }
+
+    .user {
+        color: var(--text-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $gray-dark;
+        padding: .75rem;
+
+        .btn {
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        i {
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+    }
+
+    .content {
+        display: flex;
+        align-items: center;
+
+        .image {
+            border-radius: 100%;
+            overflow: hidden;
+            width: 35px;
+            height: 35px;
+            margin-right: 1rem;
+        }
+    }
+
+    .cancel {
+        padding: 0 0 0 .5rem;
+
+        i {
+            color: #dc3545;
+        }
+    }
+}
