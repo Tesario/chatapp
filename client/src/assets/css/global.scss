@@ -57,6 +57,14 @@ h1 {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 3px solid var(--primary-color);
+
+  @media (max-width: $lg) {
+    font-size: 1.7em;
+  }
+
+  @media (max-width: $sm) {
+    font-size: 1.5em;
+  }
 }
 
 .subtitle {
@@ -66,6 +74,14 @@ h1 {
   padding-bottom: .5rem;
   font-size: $subtitle-size;
   border-bottom: 2px solid var(--primary-color);
+
+  @media (max-width: $lg) {
+    font-size: 1.3em;
+  }
+
+  @media (max-width: $sm) {
+    font-size: 1.2em;
+  }
 
   &.without-line {
     border: 0;

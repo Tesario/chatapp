@@ -65,7 +65,7 @@ function App() {
       <div className="app">
         <Switch>
           <UserRoute
-            path="/chatroom/:name"
+            path="/chatroom/:lowerCaseName"
             component={Chatroom}
             notify={notify}
           />

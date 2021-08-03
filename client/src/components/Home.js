@@ -94,10 +94,10 @@ function Home(props) {
       });
   };
 
-  const handleLeave = async (name) => {
+  const handleLeave = async (lowerCaseName) => {
     await axios({
       method: "PUT",
-      url: "chatroom/" + name + "/leave",
+      url: "chatroom/" + lowerCaseName + "/leave",
       headers: {
         authorization: sessionStorage.getItem("token"),
       },
@@ -118,7 +118,7 @@ function Home(props) {
   const handleFriendRequest = async (receiverName) => {
     await axios({
       method: "POST",
-      url: "friend-request/create",
+      url: "/friend-request/create",
       data: {
         receiverName,
       },
@@ -193,12 +193,11 @@ function Home(props) {
   const renderChatrooms = () => {
     if (chatrooms.length) {
       return chatrooms.map((chatroom, index) => {
-        const { name, isPrivate } = chatroom;
-
+        const { name, isPrivate, lowerCaseName } = chatroom;
         return (
           <div className="accordion-item" key={index}>
             <div className="accordion-header flex-item" id={"heading" + name}>
-              <Link className="link" to={"/chatroom/" + name}>
+              <Link className="link" to={"/chatroom/" + lowerCaseName}>
                 <div className="name"> {name}</div>
                 <div className="private">
                   {isPrivate ? (
@@ -226,7 +225,7 @@ function Home(props) {
                 type="button"
                 className="btn leave"
                 aria-label="Leave chatroom"
-                onClick={() => handleLeave(chatroom.name)}
+                onClick={() => handleLeave(chatroom.lowerCaseName)}
               >
                 <i className="fas fa-sign-out-alt"></i>
               </button>

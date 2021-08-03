@@ -50,7 +50,7 @@ function CreateChatroom(props) {
     e.preventDefault();
     if (joinRoomState.joinName && joinRoomState.joinPassword) {
       return await axios({
-        url: "/chatroom/join/private/" + joinRoomState.joinName,
+        url: "/chatroom/join/private",
         method: "PUT",
         data: joinRoomState,
         headers: {
@@ -60,7 +60,7 @@ function CreateChatroom(props) {
         .then((response) => {
           notify(response.data);
           getChatrooms();
-          history.push("/chatroom/" + joinRoomState.joinName);
+          history.push("/chatroom/" + joinRoomState.joinName.toLowerCase());
         })
         .catch((error) => {
           notify(error.response.data);
@@ -99,9 +99,9 @@ function CreateChatroom(props) {
       });
   };
 
-  const handleJoin = async (name) => {
+  const handleJoin = async (lowerCaseName) => {
     await axios({
-      url: "/chatroom/join/" + name,
+      url: "/chatroom/join/" + lowerCaseName,
       method: "PUT",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -110,7 +110,7 @@ function CreateChatroom(props) {
       .then((response) => {
         notify(response.data);
         getChatrooms();
-        history.push("/chatroom/" + name);
+        history.push("/chatroom/" + lowerCaseName);
       })
       .catch((error) => {
         notify(error.response.data);
@@ -126,7 +126,7 @@ function CreateChatroom(props) {
             <button
               type="button"
               className="btn btn-primary"
-              onClick={() => handleJoin(chatroom.name)}
+              onClick={() => handleJoin(chatroom.lowerCaseName)}
             >
               Join
             </button>

@@ -6,10 +6,10 @@ import { DirectChatroom } from "../models/DirectChatroom.js";
 
 export const getMessages = async (req, res, next) => {
   try {
-    const { chatroomName, messagesCount } = req.params;
+    const { lowerCaseName, messagesCount } = req.params;
 
     const chatroomId = await Chatroom.find({
-      name: chatroomName,
+      lowerCaseName,
     }).select("_id");
 
     let messages = await Message.find({
@@ -43,9 +43,11 @@ export const getMessages = async (req, res, next) => {
 };
 
 export const createMessage = async (req, res, next) => {
-  const { chatroomName, message } = req.body;
+  const { lowerCaseName, message } = req.body;
 
-  const chatroom = await Chatroom.findOne({ name: chatroomName }).select("_id");
+  const chatroom = await Chatroom.findOne({
+    lowerCaseName,
+  }).select("_id");
 
   let files = [];
 

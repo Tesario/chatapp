@@ -2,9 +2,10 @@ import Chatroom from "../models/Chatroom.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
 const IsMember = async (req, res, next) => {
+  const { lowerCaseName } = req.params;
   try {
     const chatroomMembers = await Chatroom.findOne({
-      name: req.params.chatroomName,
+      lowerCaseName,
     }).select("members");
 
     if (!chatroomMembers) {

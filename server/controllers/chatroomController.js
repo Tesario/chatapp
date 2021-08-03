@@ -98,17 +98,17 @@ export const joinToPrivateChatroom = async (req, res, next) => {
 };
 
 export const joinToChatroom = async (req, res, next) => {
-  try {
-    const foundChatroom = await Chatroom.findOne({ name: req.params.name });
+  const { lowerCaseName } = req.params;
+  const { id } = req.user;
 
-    if (foundChatroom.members.includes(req.user.id)) {
+  try {
+    const foundChatroom = await Chatroom.findOne({ lowerCaseName });
+
+    if (foundChatroom.members.includes(id)) {
       return next(new ErrorResponse("You are already in this chatroom"));
     }
 
-    await Chatroom.updateOne(
-      { name: req.params.name },
-      { $push: { members: req.user.id } }
-    );
+    await Chatroom.updateOne({ lowerCaseName }, { $push: { members: id } });
     res.json({ success: true, message: "You are joined successful" });
   } catch (error) {
     next(error);
@@ -116,17 +116,17 @@ export const joinToChatroom = async (req, res, next) => {
 };
 
 export const leaveChatroom = async (req, res, next) => {
+  const { lowerCaseName } = req.params;
+  const { id } = req.user;
+
   try {
-    const foundChatroom = await Chatroom.findOne({ name: req.params.name });
+    const foundChatroom = await Chatroom.findOne({ lowerCaseName });
 
     if (!foundChatroom) {
       return next(new ErrorResponse("Chatroom does not exist", 400));
     }
 
-    await Chatroom.updateOne(
-      { name: req.params.name },
-      { $pull: { members: req.user.id } }
-    );
+    await Chatroom.updateOne({ lowerCaseName }, { $pull: { members: id } });
     res.json({ success: true, message: "You left chatroom successful" });
   } catch (error) {
     next(error);

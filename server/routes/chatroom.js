@@ -21,12 +21,12 @@ router.get("/get-user-chatrooms", auth, getUsersChatroom);
 router.post("/create", auth, createChatroom);
 
 // User joining to the private chatroom
-router.put("/join/private/:name", auth, joinToPrivateChatroom);
+router.put("/join/private", auth, joinToPrivateChatroom);
 
 // User joining to the chatroom
-router.put("/join/:name", auth, joinToChatroom);
+router.put("/join/:lowerCaseName", auth, joinToChatroom);
 
 // User leaving to the chatroom
-router.put("/:name/leave", auth, leaveChatroom);
+router.put("/:lowerCaseName/leave", auth, leaveChatroom);
 
 export default router;

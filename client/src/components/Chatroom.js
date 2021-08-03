@@ -10,8 +10,10 @@ import "./Chatroom.scss";
 
 function Chatroom(props) {
   const { notify } = props;
-  let { name } = useParams();
-  const [state, setState] = useState({ message: "", chatroomName: name });
+  let { lowerCaseName } = useParams();
+  const [state, setState] = useState({
+    message: "",
+  });
   const [currentUser, setCurrentUser] = useState(null);
   const [chat, setChat] = useState([]);
   const [messagesCount, setMessagesCount] = useState(50);
@@ -84,7 +86,7 @@ function Chatroom(props) {
       messageInputRef.current.focus();
     });
 
-    socketRef.current.emit("joinRoom", name);
+    socketRef.current.emit("joinRoom", lowerCaseName);
     // eslint-disable-next-line
   }, []);
 
@@ -142,14 +144,14 @@ function Chatroom(props) {
     handleToggleEmoji(false);
 
     const formData = new FormData();
-    formData.append("chatroomName", state.chatroomName);
+    formData.append("lowerCaseName", lowerCaseName);
     formData.append("message", state.message);
     files.forEach((file) => {
       formData.append("files", file);
     });
 
     await axios({
-      url: "/message/" + name + "/create",
+      url: "/message/" + lowerCaseName + "/create",
       method: "POST",
       data: formData,
       headers: {
@@ -159,7 +161,10 @@ function Chatroom(props) {
     })
       .then(() => {
         setFiles([]);
-        socketRef.current.emit("message", { sended: true, room: name });
+        socketRef.current.emit("message", {
+          sended: true,
+          room: lowerCaseName,
+        });
       })
       .catch((error) => {
         notify(error);
@@ -169,7 +174,7 @@ function Chatroom(props) {
 
   const getMessages = async (enableScroll = true) => {
     await axios({
-      url: "/message/" + name + "/" + messagesCount,
+      url: "/message/" + lowerCaseName + "/" + messagesCount,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),

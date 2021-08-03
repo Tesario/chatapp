@@ -46,11 +46,11 @@ router.post(
 );
 
 // Get chatroom messages
-router.get("/:chatroomName/:messagesCount", auth, isMember, getMessages);
+router.get("/:lowerCaseName/:messagesCount", auth, isMember, getMessages);
 
 // Create chatroom message
 router.post(
-  "/:chatroomName/create",
+  "/:lowerCaseName/create",
   auth,
   isMember,
   function (req, res, next) {

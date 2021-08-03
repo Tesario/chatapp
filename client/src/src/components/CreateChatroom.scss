@@ -27,14 +27,14 @@
 
     &__desc {
         color: var(--text-color);
-        max-width: 500px;
+        max-width: 55vh;
     }
 
     &__form {
         margin-top: 1rem;
         display: flex;
         flex-direction: column;
-        max-width: 500px;
+        max-width: 55vh;
         width: 100%;
 
         &__inner {
@@ -127,7 +127,7 @@
         }
 
         form {
-            max-width: 500px;
+            max-width: 55vh;
             display: flex;
             align-items: center;
             flex-direction: column;
