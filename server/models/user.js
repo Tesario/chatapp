@@ -35,6 +35,10 @@ const UserSchema = new Schema({
     required: true,
     default: "/default-profile-picture.png",
   },
+  isOnline: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 UserSchema.pre("save", async function (next) {

@@ -157,3 +157,17 @@ export const getUser = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const changeStatus = async (req, res, next) => {
+  const { id } = req.user;
+  const { isOnline } = req.params;
+  console.log(isOnline);
+
+  try {
+    await User.updateOne({ _id: id }, { isOnline });
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    return next(error);
+  }
+};

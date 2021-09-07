@@ -1,0 +1,780 @@
+@import "../assets/css/global.scss";
+
+@mixin custom-container {
+    max-width: 1920px;
+    width: 100%;
+
+    @media (min-width: $lg) {
+        padding: 0 10rem;
+    }
+}
+
+@mixin hamburger-bar {
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background-color: var(--primary-color);
+    transition: .2s ease-in-out;
+}
+
+@mixin image-frame {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+
+    &::after {
+        position: absolute;
+        content: "";
+        height: 100%;
+        width: 100%;
+        top: .5rem;
+        left: -0.5rem;
+        background-color: var(--secondary-color);
+    }
+}
+
+#navbar {
+    width: 100%;
+    position: fixed;
+    z-index: 1500;
+    transition: .2s ease-in-out;
+
+    &.scrolling {
+        @media (min-width: $lg) {
+            background-color: var(--secondary-color);
+
+            .menu-wrapper {
+                padding: 1rem 0;
+            }
+        }
+    }
+
+    @media (max-width: $lg) {
+        background-color: var(--secondary-color);
+        border-bottom: 1px solid var(--primary-color);
+    }
+
+    .hamburger {
+        cursor: pointer;
+        display: flex;
+        top: 0;
+        right: 1rem;
+        position: absolute;
+        z-index: 2000;
+
+        @media (min-width: $lg) {
+            display: none;
+        }
+
+        svg {
+            width: 60px;
+            height: 60px;
+            transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .active svg {
+            transform: rotate(90deg);
+        }
+
+        path {
+            pointer-events: none;
+            transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1),
+                stroke-dasharray 500ms cubic-bezier(0.4, 0, 0.2, 1),
+                stroke-dashoffset 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        path:nth-child(1) {
+            transform-origin: 36% 40%;
+        }
+
+        path:nth-child(2) {
+            stroke-dasharray: 29 299;
+        }
+
+        path:nth-child(3) {
+            transform-origin: 35% 63%;
+        }
+
+        path:nth-child(4) {
+            stroke-dasharray: 29 299;
+        }
+
+        path:nth-child(5) {
+            transform-origin: 61% 52%;
+        }
+
+        path:nth-child(6) {
+            transform-origin: 62% 52%;
+        }
+
+        .active path:nth-child(1) {
+            transform: translateX(9px) translateY(1px) rotate(45deg);
+        }
+
+        .active path:nth-child(2) {
+            stroke-dasharray: 225 299;
+            stroke-dashoffset: -72px;
+        }
+
+        .active path:nth-child(3) {
+            transform: translateX(9px) translateY(1px) rotate(-45deg);
+        }
+
+        .active path:nth-child(4) {
+            stroke-dasharray: 225 299;
+            stroke-dashoffset: -72px;
+        }
+
+        .active path:nth-child(5) {
+            transform: translateX(9px) translateY(1px) rotate(-45deg);
+        }
+
+        .active path:nth-child(6) {
+            transform: translateX(9px) translateY(1px) rotate(45deg);
+        }
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+
+        @media (min-width: $xl) {
+            @include custom-container();
+        }
+
+        @media (max-width: $lg) {
+            height: 60px;
+        }
+    }
+
+    .menu-wrapper {
+        padding: 4rem 0;
+        transition: .2s ease-in-out;
+
+        @media (max-width: $lg) {
+            padding: 0;
+            position: fixed;
+            z-index: 1500;
+            overflow: hidden;
+            top: 0;
+            right: 0;
+            pointer-events: none;
+
+            &.show {
+                pointer-events: unset;
+
+                .menu {
+                    transform: translateX(0%);
+                }
+            }
+        }
+
+        li {
+            margin-right: 1.5rem;
+
+            @media (max-width: $lg) {
+                margin: 1rem 0 0;
+            }
+        }
+
+        a {
+            color: var(--text-color);
+            font-size: $menu-size;
+        }
+    }
+
+    .menu {
+        display: flex;
+        transition: .4s ease-in-out;
+
+        @media (max-width: $lg) {
+            transform: translateX(100%);
+            height: 100vh;
+            padding: 12rem calc(2rem + 40px) 8rem 2rem;
+            background-color: var(--primary-color);
+            flex-direction: column;
+        }
+    }
+}
+
+#homepage {
+    display: flex;
+    width: 100%;
+    color: var(--text-color);
+    flex-direction: column;
+}
+
+#hero {
+    height: 100%;
+    min-height: 1080px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: var(--text-color);
+
+    @media (max-width: $xl) {
+        min-height: unset;
+    }
+
+    .container {
+        position: relative;
+        overflow: hidden;
+
+        @media (min-width: $xl) {
+            @include custom-container();
+
+            .green-rect {
+                content: "";
+                position: absolute;
+                z-index: -1;
+                top: 0;
+                left: 0;
+                background-image: url("../assets/img/green-rect.svg");
+                background-size: contain;
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    .flex-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 14.5rem;
+
+        @media (max-width: 1920px) {
+            margin-top: 13vw;
+        }
+
+        @media (max-width: $xl) {
+            flex-direction: column;
+            justify-content: flex-start;
+            margin-top: 9.5rem;
+        }
+
+        @media (max-width: $lg) {
+            margin-top: 8rem;
+        }
+    }
+
+    .main-title {
+        font-size: 5em;
+        border: none;
+        text-align: left;
+        font-weight: 500;
+
+        @media (max-width: $xl) {
+            font-size: 3.5em;
+            text-align: center;
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+
+        p {
+            margin-top: 6rem;
+            max-width: 430px;
+            line-height: 24px;
+
+            @media (max-width: $xl) {
+                margin-top: .5rem;
+                max-width: 600px;
+                text-align: center;
+            }
+        }
+
+        a {
+            color: var(--primary-color);
+
+            @media (max-width: $xl) {
+                text-align: center;
+            }
+        }
+    }
+
+    .btn-box {
+        display: flex;
+        margin-top: 2rem;
+
+        @media (max-width: $xl) {
+            justify-content: center;
+        }
+
+        .btn {
+            color: var(--text-color);
+            border-radius: 2rem;
+            min-width: 120px;
+
+            &:not(:last-child) {
+                margin-right: 1rem;
+            }
+        }
+    }
+
+    .image {
+        margin-left: 5rem;
+        width: 35vw;
+        position: relative;
+        top: 8vh;
+        left: 2rem;
+
+        @media (max-width: 1600px) {
+            top: 4vh;
+        }
+
+        @media (max-width: 1450px) {
+            top: 2vh;
+        }
+
+        @media (max-width: $xl) {
+            top: unset;
+            margin: 2rem 0 0;
+            width: 100%;
+            max-width: 600px;
+            left: unset;
+        }
+
+        @media (min-width: 1920px) {
+            width: 650px;
+            top: 8rem;
+        }
+    }
+}
+
+#features {
+    margin-top: 1rem;
+    padding-bottom: 5rem;
+
+    @media (max-width: $xl) {
+        margin-top: 3rem;
+    }
+
+    .container {
+        @include custom-container();
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .title {
+        font-size: 3em;
+        margin-bottom: 7rem;
+
+        @media (max-width: $xl) {
+            font-size: 2em;
+            margin-bottom: 3rem;
+        }
+    }
+
+    .subtitle {
+        border-bottom: none;
+
+        &.link {
+            margin-top: 1.5rem;
+            color: var(--primary-color);
+        }
+    }
+
+    .flex-group {
+        display: flex;
+        align-items: center;
+
+        @media (max-width: $xl) {
+            flex-direction: column;
+        }
+
+        &>div:nth-child(2) {
+            margin-left: 5rem;
+
+            @media (max-width: $xl) {
+                margin: 3rem 2rem 0;
+            }
+        }
+
+        &:nth-child(3) {
+            margin-top: 7rem;
+
+            @media (max-width: $xl) {
+                margin-top: 4rem;
+                flex-direction: column-reverse;
+            }
+        }
+    }
+
+    .text-group,
+    .image-group {
+        flex: 1;
+    }
+
+    .text-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        @media (max-width: $xl) {
+            align-items: center;
+        }
+
+        p {
+            line-height: 1.5rem;
+
+            @media (max-width: $xl) {
+                text-align: center;
+            }
+        }
+    }
+
+    .image-group {
+        position: relative;
+
+        @media (max-width: $xl) {
+            margin: 0 2rem;
+
+            &.with-frames {
+                position: relative;
+                left: -1rem;
+            }
+        }
+
+        img {
+            position: relative;
+            z-index: 200;
+            border: 1px solid var(--primary-color);
+        }
+
+        &.with-frames {
+            img {
+                border: 2px solid var(--primary-color);
+            }
+        }
+
+        .frame {
+            position: relative;
+            z-index: 200;
+
+            .second-frame {
+                @include image-frame();
+                top: -2rem;
+                left: 2rem;
+                border: 2px solid var(--primary-color);
+            }
+
+            .third-frame {
+                @include image-frame();
+                z-index: 100;
+                top: -1rem;
+                left: 1rem;
+                border: 2px solid var(--primary-color);
+            }
+        }
+    }
+
+    .icon {
+        z-index: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        font-size: 2em;
+
+        @media (min-width: $xxl) {
+            width: 100px;
+            height: 100px;
+            font-size: 2.8em;
+        }
+
+        @media (max-width: $sm) {
+            width: 60px;
+            height: 60px;
+            font-size: 1.3em;
+        }
+
+        &.chat {
+            top: -25px;
+            left: -25px;
+            background-color: #87c232;
+        }
+
+        &.user {
+            bottom: 50px;
+            z-index: 600;
+            left: -25px;
+            background-color: #81cb18;
+
+            @media (min-width: $xxl) {
+                bottom: 60px;
+                left: -20px;
+            }
+
+            @media (max-width: $sm) {
+                bottom: 30px;
+                left: -25px;
+            }
+        }
+
+        &.contact {
+            z-index: 300;
+            bottom: -30px;
+            left: -35px;
+            width: 95px;
+            height: 95px;
+            font-size: 2.5em;
+            background-color: #6a6e70;
+
+            @media (min-width: $xxl) {
+                width: 120px;
+                height: 120px;
+                font-size: 3.2em;
+            }
+
+            @media (max-width: $sm) {
+                width: 70px;
+                height: 70px;
+                font-size: 1.5em;
+            }
+        }
+
+        &.plus {
+            z-index: 400;
+            bottom: 20px;
+            left: 30px;
+            background-color: #618930;
+
+            @media (min-width: $xxl) {
+                bottom: 20px;
+                left: 60px;
+            }
+
+            @media (max-width: $sm) {
+                bottom: 0px;
+                left: 15px;
+            }
+        }
+    }
+}
+
+#development {
+    margin-top: 6rem;
+    padding-bottom: 5rem;
+
+    @media (max-width: $lg) {
+        padding-bottom: 3rem;
+    }
+
+    .title {
+        font-size: 3em;
+        margin-bottom: 5rem;
+
+        @media (max-width: $xl) {
+            font-size: 2em;
+            margin-bottom: 5rem;
+        }
+    }
+
+    .container {
+        @include custom-container();
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .grid-items {
+        display: grid;
+        gap: 3rem;
+        grid-template-columns: repeat(4, 1fr);
+
+        @media (max-width: $lg) {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4rem 8rem;
+        }
+
+        @media (max-width: $sm) {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem 1rem;
+        }
+    }
+
+    .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 120px;
+
+        i {
+            font-size: 4em;
+            color: var(--primary-color);
+        }
+    }
+
+    .item {
+        .text {
+            margin-top: 1.25rem;
+        }
+    }
+
+    .number-wrapper {
+        margin-top: .75rem;
+        font-size: $subtitle-size;
+        display: flex;
+    }
+}
+
+#technology {
+    margin-top: 6rem;
+    padding-bottom: 5rem;
+
+    @media (max-width: $lg) {
+        padding-bottom: 1rem;
+    }
+
+    .title {
+        font-size: 3em;
+        margin-bottom: 5rem;
+
+        @media (max-width: $xl) {
+            font-size: 2em;
+            margin-bottom: 3rem;
+        }
+    }
+
+    .container {
+        @include custom-container();
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .card-group {
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 200px 1fr;
+        place-items: center;
+        gap: 1rem;
+
+        @media (max-width: $lg) {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+
+    .card {
+        background-color: $gray-dark;
+        padding: 2rem 5rem;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border-radius: 1rem;
+        height: 100%;
+        max-width: 305px;
+        width: 100%;
+
+        .image {
+            width: 100px;
+            height: 100px;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            margin-bottom: 2rem;
+        }
+
+        .plus {
+            font-size: 2.5em;
+            margin: 1.5rem 0;
+        }
+    }
+
+    .technology-group {
+        display: flex;
+        align-items: center;
+        height: 100%;
+
+        .image {
+            width: 40px;
+            height: 40px;
+        }
+
+        .text {
+            font-size: 2em;
+            font-weight: 300;
+            margin: .3rem .75rem 0 0;
+        }
+    }
+
+    .middle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        @media (max-width: $lg) {
+            flex-direction: row;
+
+            .arrow {
+                &:first-child {
+                    transform: rotate(90deg);
+                }
+
+                &:last-child {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+
+        i {
+            font-size: 3em;
+        }
+
+        .text {
+            font-size: 1.8em;
+            margin: 1rem 0;
+
+            @media (max-width: $lg) {
+                margin: 0 1rem;
+            }
+        }
+    }
+}
+
+#footer {
+    padding: 3rem 0;
+    display: flex;
+    justify-content: center;
+
+    a {
+        color: var(--primary-color);
+        transition: .2s ease-in-out;
+
+        &:hover {
+            filter: brightness(.85);
+        }
+    }
+}
+
+#dark-overlay {
+    position: fixed;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 900;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: .2s ease-in-out;
+    background-color: $black;
+
+    &.show {
+        pointer-events: unset;
+        opacity: .75;
+    }
+}

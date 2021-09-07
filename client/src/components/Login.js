@@ -10,7 +10,7 @@ function Login(props) {
     email: "vtesar2003@gmail.com",
     password: "",
   });
-  const { notify } = props;
+  const { notify, changeIsAuth } = props;
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -30,6 +30,7 @@ function Login(props) {
         setState({ email: "", password: "" });
         notify(res.data);
         sessionStorage.setItem("token", res.data.token);
+        changeIsAuth(true);
         history.push("/");
       });
     } catch (error) {

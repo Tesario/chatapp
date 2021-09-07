@@ -19,6 +19,7 @@
     "react-router-link": "^2.0.2",
     "react-scripts": "4.0.3",
     "react-toastify": "^7.0.4",
+    "scrollreveal": "^4.0.9",
     "socket.io-client": "^4.1.2",
     "unicode-emoji-picker": "^1.1.4",
     "web-vitals": "^1.1.2"

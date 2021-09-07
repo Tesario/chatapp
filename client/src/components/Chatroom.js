@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import axios from "axios";
 import dateFormat from "dateformat";
-import FormData from "form-data";
 import { useParams } from "react-router";
 import "unicode-emoji-picker";
 
