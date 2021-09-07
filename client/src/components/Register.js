@@ -12,13 +12,16 @@ function Register(props) {
     password: "",
     passwordAgain: "",
   });
-  const { notify } = props;
+  const { notify, changeIsHomepage, changeIsAuth } = props;
 
   useEffect(() => {
+    changeIsHomepage(false);
+
     if (sessionStorage.getItem("token")) {
       history.push("/create");
     }
-  });
+    // eslint-disable-next-line
+  }, []);
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
@@ -31,6 +34,7 @@ function Register(props) {
         setState({ name: "", email: "", password: "", passwordAgain: "" });
         notify(res.data);
         sessionStorage.setItem("token", res.data.token);
+        changeIsAuth(true);
         history.push("/");
       });
     } catch (error) {

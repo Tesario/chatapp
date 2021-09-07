@@ -10,9 +10,11 @@ function Login(props) {
     email: "vtesar2003@gmail.com",
     password: "",
   });
-  const { notify, changeIsAuth } = props;
+  const { notify, changeIsHomepage, changeIsAuth } = props;
 
   useEffect(() => {
+    changeIsHomepage(false);
+
     if (sessionStorage.getItem("token")) {
       history.push("/");
     }

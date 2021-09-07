@@ -54,6 +54,10 @@ function Sidebar(props) {
   return (
     <div className="sidebar" ref={sidebar}>
       <div className="sidebar__items">
+        <Link to="/" aria-label="Home">
+          <i className="fas fa-home fa-fw"></i>
+          <div className="link">Home</div>
+        </Link>
         {!isAuth && (
           <Link to="/login" aria-label="Login">
             <i className="fas fa-user fa-fw"></i>
@@ -62,10 +66,6 @@ function Sidebar(props) {
         )}
         {isAuth && (
           <>
-            <Link to="/" aria-label="Home">
-              <i className="fas fa-home fa-fw"></i>
-              <div className="link">Home</div>
-            </Link>
             <Link to="/create" aria-label="Chatrooms">
               <i className="fas fa-plus-circle fa-fw"></i>
               <div className="link">Chatrooms</div>
@@ -76,10 +76,6 @@ function Sidebar(props) {
             </Link>
           </>
         )}
-        <Link to="/info" aria-label="Information">
-          <i className="fas fa-info-circle fa-fw"></i>
-          <div className="link">Information</div>
-        </Link>
         {isAuth && (
           <a href="/" onClick={(e) => handleLogout(e)} aria-label="Logout">
             <i className="fas fa-sign-out-alt fa-fw"></i>

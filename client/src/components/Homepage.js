@@ -11,7 +11,8 @@ import node from "../assets/img/node.png";
 import sass from "../assets/img/sass.png";
 import "./Homepage.scss";
 
-const Homepage = () => {
+const Homepage = (props) => {
+  const { changeIsHomepage } = props;
   const menuRef = useRef("");
   const darkOverlayRef = useRef("");
   const hamburgerRef = useRef("");
@@ -23,6 +24,8 @@ const Homepage = () => {
   });
 
   useEffect(() => {
+    changeIsHomepage(true);
+
     if (window.innerWidth > 992) {
       sr.reveal("#navbar .menu li", {
         origin: "top",
@@ -288,7 +291,15 @@ const Homepage = () => {
                 Ratione nesciunt ullam non. De asperiores magnam vero autem,
                 odio atque! Ratione nesciunt ullam non.
               </p>
-              <a href="/#">Read more</a>
+              <a
+                href="/#"
+                onClick={(e) => {
+                  scrollToSection("#features", e);
+                  toggleMenu(e);
+                }}
+              >
+                Read more
+              </a>
               <div className="btn-box">
                 <Link to="/login" className="btn btn-primary">
                   Login

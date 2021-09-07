@@ -6,14 +6,12 @@ import Register from "./components/Register";
 import Chatroom from "./components/Chatroom";
 import DirectChatroom from "./components/DirectChatroom";
 import Login from "./components/Login";
-import Info from "./components/Info";
 import Settings from "./components/Settings";
 import CreateChatroom from "./components/CreateChatroom";
 import Forbidden from "./components/Forbidden";
 import NotFound from "./components/NotFound";
 import Sidebar from "./components/Sidebar";
 import Home from "./components/Home";
-// import axios from "axios";
 import io from "socket.io-client";
 import UserRoute from "./components/UserRoute";
 
@@ -41,11 +39,11 @@ const notify = (data) => {
 
 function App() {
   const socketRef = useRef();
+  const [isHomepage, setIsHomepage] = useState(true);
   const [isAuth, setIsAuth] = useState("");
 
   useEffect(() => {
     const root = document.documentElement;
-
     isAuthFunc();
 
     if (localStorage.getItem("primary-color")) {
@@ -71,29 +69,33 @@ function App() {
       transports: ["websocket"],
     });
 
-    socketRef.current.on("connect", async () => {
-      await axios({
-        url: "/user/status/true",
-        method: "PUT",
-        headers: {
-          authorization: sessionStorage.getItem("token"),
-        },
-      });
-    });
+    // socketRef.current.on("connect", async () => {
+    //   await axios({
+    //     url: "/user/status/true",
+    //     method: "PUT",
+    //     headers: {
+    //       authorization: sessionStorage.getItem("token"),
+    //     },
+    //   });
+    // });
 
-    window.onbeforeunload = async () => {
-      await axios({
-        url: "/user/status/false",
-        method: "PUT",
-        headers: {
-          authorization: sessionStorage.getItem("token"),
-        },
-      });
-    };
+    // window.onbeforeunload = async () => {
+    //   await axios({
+    //     url: "/user/status/false",
+    //     method: "PUT",
+    //     headers: {
+    //       authorization: sessionStorage.getItem("token"),
+    //     },
+    //   });
+    // };
   }, []);
 
   const changeIsAuth = (value) => {
     setIsAuth(value);
+  };
+
+  const changeIsHomepage = (value) => {
+    setIsHomepage(value);
   };
 
   const isAuthFunc = async () => {
@@ -127,16 +129,24 @@ function App() {
             notify={notify}
           />
           <Route path="/login">
-            <Login changeIsAuth={changeIsAuth} notify={notify} />
+            <Login
+              changeIsAuth={changeIsAuth}
+              changeIsHomepage={changeIsHomepage}
+              notify={notify}
+            />
           </Route>
           <Route path="/register">
-            <Register changeIsAuth={changeIsAuth} notify={notify} />
+            <Register
+              notify={notify}
+              changeIsHomepage={changeIsHomepage}
+              changeIsAuth={changeIsAuth}
+            />
           </Route>
           {isAuth ? (
             <UserRoute exact path="/" component={Home} notify={notify} />
           ) : (
             <Route exact path="/">
-              <Homepage notify={notify} />
+              <Homepage changeIsHomepage={changeIsHomepage} notify={notify} />
             </Route>
           )}
           <UserRoute
@@ -145,19 +155,14 @@ function App() {
             notify={notify}
           />
           <UserRoute path="/settings" component={Settings} notify={notify} />
-          <Route path="/info">
-            <Info />
-          </Route>
           <Route path="/forbidden">
-            <Forbidden />
+            <Forbidden changeIsHomepage={changeIsHomepage} />
           </Route>
           <Route path="*">
-            <NotFound />
+            <NotFound changeIsHomepage={changeIsHomepage} />
           </Route>
         </Switch>
-        {"/" !== window.location.pathname || isAuth ? (
-          <Sidebar notify={notify} />
-        ) : null}
+        {!isHomepage ? <Sidebar notify={notify} /> : null}
       </Router>
     </div>
   );
