@@ -162,7 +162,9 @@ function App() {
             <NotFound changeIsHomepage={changeIsHomepage} />
           </Route>
         </Switch>
-        {!isHomepage ? <Sidebar notify={notify} /> : null}
+        {!isHomepage ? (
+          <Sidebar notify={notify} changeIsAuth={changeIsAuth} />
+        ) : null}
       </Router>
     </div>
   );

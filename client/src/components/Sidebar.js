@@ -6,7 +6,7 @@ import "./Sidebar.scss";
 
 function Sidebar(props) {
   const history = useHistory();
-  const { notify } = props;
+  const { notify, changeIsAuth } = props;
   const [isAuth, setIsAuth] = useState(false);
   const sidebar = useRef(null);
 
@@ -48,6 +48,7 @@ function Sidebar(props) {
     e.preventDefault();
     sessionStorage.removeItem("token");
     notify({ success: true, message: "Logout was successful" });
+    changeIsAuth(false);
     history.push("/login");
   };
 
