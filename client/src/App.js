@@ -69,25 +69,25 @@ function App() {
       transports: ["websocket"],
     });
 
-    // socketRef.current.on("connect", async () => {
-    //   await axios({
-    //     url: "/user/status/true",
-    //     method: "PUT",
-    //     headers: {
-    //       authorization: sessionStorage.getItem("token"),
-    //     },
-    //   });
-    // });
+    socketRef.current.on("connect", async () => {
+      await axios({
+        url: "/user/status/true",
+        method: "PUT",
+        headers: {
+          authorization: sessionStorage.getItem("token"),
+        },
+      });
+    });
 
-    // window.onbeforeunload = async () => {
-    //   await axios({
-    //     url: "/user/status/false",
-    //     method: "PUT",
-    //     headers: {
-    //       authorization: sessionStorage.getItem("token"),
-    //     },
-    //   });
-    // };
+    window.onbeforeunload = async () => {
+      await axios({
+        url: "/user/status/false",
+        method: "PUT",
+        headers: {
+          authorization: sessionStorage.getItem("token"),
+        },
+      });
+    };
   }, []);
 
   const changeIsAuth = (value) => {
@@ -162,7 +162,7 @@ function App() {
             <NotFound changeIsHomepage={changeIsHomepage} />
           </Route>
         </Switch>
-        {!isHomepage ? (
+        {!isHomepage || isAuth ? (
           <Sidebar notify={notify} changeIsAuth={changeIsAuth} />
         ) : null}
       </Router>

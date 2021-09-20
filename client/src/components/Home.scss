@@ -162,6 +162,19 @@
             height: 35px;
             overflow: hidden;
             border-radius: 100%;
+            margin-left: 1rem;
+        }
+
+        .status {
+            width: 15px;
+            height: 15px;
+            content: "";
+            background-color: #198754;
+            border-radius: 50%;
+
+            &.offline {
+                background-color: #dc3545;
+            }
         }
 
         .name {
@@ -292,7 +305,19 @@
             height: 30px;
             border-radius: 100%;
             overflow: hidden;
-            margin-right: 1rem;
+            margin: 0 1rem;
+        }
+
+        .status {
+            width: 15px;
+            height: 15px;
+            content: "";
+            background-color: #198754;
+            border-radius: 50%;
+
+            &.offline {
+                background-color: #dc3545;
+            }
         }
 
         .cancel {

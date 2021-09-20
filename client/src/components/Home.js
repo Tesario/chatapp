@@ -21,6 +21,10 @@ function Home(props) {
     getChatrooms();
     getFriendRequests();
     getFriends();
+
+    setInterval(() => {
+      getFriends();
+    }, 10000);
     // eslint-disable-next-line
   }, []);
 
@@ -258,6 +262,11 @@ function Home(props) {
               {members.map((member, index) => {
                 return (
                   <li className="user" key={index}>
+                    <span
+                      className={
+                        "status " + (member.isOnline ? "online" : "offline")
+                      }
+                    ></span>
                     <div className="image">
                       <img src={member.picture} alt={member.name} />
                     </div>
@@ -341,6 +350,12 @@ function Home(props) {
             <Link to={"direct-chatroom/" + friend.name} className="name">
               {friend.members[0].name === currentUser ? (
                 <>
+                  <span
+                    className={
+                      "status " +
+                      (friend.members[1].isOnline ? "online" : "offline")
+                    }
+                  ></span>
                   <div className="image">
                     <img
                       src={friend.members[1].picture}
@@ -351,6 +366,12 @@ function Home(props) {
                 </>
               ) : (
                 <>
+                  <span
+                    className={
+                      "status " +
+                      (friend.members[0].isOnline ? "online" : "offline")
+                    }
+                  ></span>
                   <div className="image">
                     <img
                       src={friend.members[0].picture}
