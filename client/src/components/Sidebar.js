@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { Link, withRouter, useHistory } from "react-router-dom";
 import axios from "axios";
 
@@ -6,35 +6,16 @@ import "./Sidebar.scss";
 
 function Sidebar(props) {
   const history = useHistory();
-  const { notify, changeIsAuth } = props;
-  const [isAuth, setIsAuth] = useState(false);
+  const { notify, changeIsAuth, isAuth } = props;
   const sidebar = useRef(null);
 
   useEffect(() => {
-    isAuthFunc();
-
     if (window.location.href.includes("/chatroom/")) {
       sidebar.current.classList.add("sidebar--without-border");
     } else {
       sidebar.current.classList.remove("sidebar--without-border");
     }
   });
-
-  const isAuthFunc = async () => {
-    await axios({
-      url: "/user/is-auth",
-      method: "GET",
-      headers: {
-        authorization: sessionStorage.getItem("token"),
-      },
-    })
-      .then(() => {
-        setIsAuth(true);
-      })
-      .catch(() => {
-        setIsAuth(false);
-      });
-  };
 
   const handleTogglerClick = (e) => {
     if (sidebar.current.classList.contains("sidebar--active")) {
@@ -44,8 +25,15 @@ function Sidebar(props) {
     sidebar.current.classList.add("sidebar--active");
   };
 
-  const handleLogout = (e) => {
+  const handleLogout = async (e) => {
     e.preventDefault();
+    await axios({
+      url: "/user/status/false",
+      method: "PUT",
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
+    });
     sessionStorage.removeItem("token");
     notify({ success: true, message: "Logout was successful" });
     changeIsAuth(false);

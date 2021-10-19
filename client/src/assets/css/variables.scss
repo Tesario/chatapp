@@ -1,7 +1,6 @@
 // Colors
 $black:#000;
 $gray-dark: #474a4f;
-//$white: #fff;
 $white-darker: #e0e0e0;
 
 // Line height
@@ -21,7 +20,10 @@ $xl: 1200px;
 $xxl: 1400px;
 
 :root {
-    --primary-color: #87c232;
-    --secondary-color: #222629;
+    --primary-color: #18a0fb;
+    --secondary-color: #0d1117;
     --text-color: #ffffff;
+    --grey: #26283d;
+    --grey-dark: #26283d4f;
+    --grey-2: #505377;
 }

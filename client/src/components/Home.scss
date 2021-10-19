@@ -1,12 +1,25 @@
 @import "../assets/css/global.scss";
 
 #home {
-    display: flex;
     color: var(--text-color);
-    align-items: flex-start;
+    padding: 0;
 
-    @media (max-width:$lg) {
-        flex-direction: column;
+    .home-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        padding: 2rem;
+        place-items: flex-start;
+
+        @media (max-width: $xxl) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: $lg) {
+            grid-template-columns: repeat(1, 1fr);
+            padding: 1rem .75rem;
+            gap: .75rem;
+        }
     }
 
     .title {
@@ -17,18 +30,20 @@
         margin-bottom: 1rem;
     }
 
+    .friend-requests,
     .my-chatrooms,
     .friends {
-        padding: 0 1.5rem;
+        padding: 1.5rem;
+        background: linear-gradient(180deg, var(--grey) 0%, var(--grey-dark) 100%);
+        width: 100%;
 
-        @media (min-width: $lg) {
-            flex: 1;
-            height: 100%;
+        @media (max-width: $md) {
+            padding: 1rem;
         }
     }
 
     .find {
-        margin-bottom: 2.5rem;
+        margin-bottom: 1.5rem;
 
         i {
             margin-left: .5rem;
@@ -39,27 +54,32 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        width: 100%;
-        border-right: 1px solid var(--primary-color);
 
-        @media (max-width: $lg) {
-            border: none;
+        @media (max-width: $xxl) and (min-width: $lg) {
+            grid-column: 1/3;
         }
 
         .flex-chatrooms {
             border: 0;
             color: var(--text-color);
             width: 100%;
-            height: 100%;
             display: flex;
             flex-direction: column;
         }
 
         .accordion-item {
             border: 0;
-            border-radius: 0;
+            border-radius: .2rem;
             background-color: transparent;
-            border-bottom: 2px solid var(--secondary-color);
+            transition: .2s ease-in-out;
+
+            &:hover {
+                background-color: var(--grey-2);
+            }
+
+            &:not(:first-child) {
+                margin-top: .5rem;
+            }
         }
 
         .accordion-btn {
@@ -82,7 +102,6 @@
         }
 
         .accordion-body {
-            background-color: $gray-dark;
             padding-top: 0;
         }
 
@@ -97,7 +116,6 @@
         .flex-item {
             display: flex;
             align-items: center;
-            background-color: $gray-dark;
             color: var(--text-color);
         }
     }
@@ -190,10 +208,6 @@
             font-size: 1.2em;
         }
 
-        &:not(:first-child) {
-            border-top: 1px solid var(--primary-color);
-        }
-
         &:last-child {
             padding-bottom: 0;
         }
@@ -203,18 +217,18 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        width: 100%;
-
-        @media (max-width:$lg) {
-            margin-top: 1.5rem;
-        }
     }
 
     .friend-requests {
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .requests {
+        display: flex;
+        flex-direction: column;
         width: 100%;
-        margin-bottom: 2rem;
     }
 
     .friend-request {
@@ -222,13 +236,18 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: .75rem;
-        border-bottom: 1px solid var(--secondary-color);
-        background-color: $gray-dark;
+        padding: .44rem;
+        transition: .2s ease-in-out;
+        border-radius: .2rem;
 
         @media (max-width: $sm) {
-            flex-direction: column;
-            align-items: flex-start;
+            display: grid;
+            grid-template-columns: 30px auto 1fr;
+            gap: .5rem 1rem;
+        }
+
+        &:hover {
+            background-color: var(--grey-2);
         }
 
         .image {
@@ -237,19 +256,41 @@
             border-radius: 100%;
             overflow: hidden;
             margin: 0 1rem;
+
+            @media (max-width: $sm) {
+                margin: 0;
+            }
         }
 
         .name {
             margin-right: auto;
+        }
 
-            @media (max-width: $sm) {
-                margin: .5rem 0;
+        .date {
+            display: flex;
+            font-size: 13px;
+
+            @media (max-width: 390px) {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .time {
+            margin-left: 1rem;
+
+            @media (max-width: 390px) {
+                margin-left: 0;
             }
         }
     }
 
     .buttons {
         display: flex;
+
+        @media (max-width: $sm) {
+            justify-content: flex-end;
+        }
     }
 
     .add,
@@ -271,7 +312,7 @@
     }
 
     .cancel {
-        padding: 0 0 0 .5rem;
+        padding: 0 .5rem 0;
 
         i {
             color: #dc3545;
@@ -289,11 +330,19 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid var(--secondary-color);
-        background-color: $gray-dark;
+        border-radius: .2rem;
+        transition: .2s ease-in-out;
+
+        &:not(:first-child) {
+            margin-top: .5rem;
+        }
+
+        &:hover {
+            background-color: var(--grey-2);
+        }
 
         .name {
-            padding: .75rem;
+            padding: .44rem;
             color: var(--text-color);
             width: 100%;
             display: flex;
@@ -301,16 +350,25 @@
         }
 
         .image {
+            border-radius: 100%;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .avatar {
+            position: relative;
             width: 30px;
             height: 30px;
-            border-radius: 100%;
-            overflow: hidden;
-            margin: 0 1rem;
+            margin: 0 1rem 0 0;
         }
 
         .status {
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
             content: "";
             background-color: #198754;
             border-radius: 50%;
@@ -366,7 +424,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: $gray-dark;
+        background-color: var(--grey);
         padding: .75rem;
 
         .btn {

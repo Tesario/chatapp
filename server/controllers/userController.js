@@ -87,18 +87,22 @@ export const searchUsers = async (req, res, next) => {
     foundUsers = await Promise.all(
       foundUsers.map(async (user) => {
         const user1 = await User.findOne({ name: user.name });
-        let action = "not-friends";
 
         const foundDirectChatroom = await DirectChatroom.findOne({
           members: { $all: [id, user1._id] },
         });
 
         if (user1._id == id) {
-          action = "same-user";
+          return { user, action: "same-user", directChatroomName: null };
         } else if (foundDirectChatroom) {
-          action = "friends";
+          return {
+            user,
+            action: "friends",
+            directChatroomName: foundDirectChatroom.name,
+          };
         }
-        return { user, action };
+
+        return { user, action: "not-friends", directChatroomName: null };
       })
     );
 
@@ -161,7 +165,6 @@ export const getUser = async (req, res, next) => {
 export const changeStatus = async (req, res, next) => {
   const { id } = req.user;
   const { isOnline } = req.params;
-  console.log(isOnline);
 
   try {
     await User.updateOne({ _id: id }, { isOnline });

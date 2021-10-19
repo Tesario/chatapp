@@ -1,5 +1,5 @@
 import { DirectChatroom } from "../models/DirectChatroom.js";
-import User from "../models/User.js";
+import ErrorResponse from "../utils/ErrorResponse.js";
 
 export const getFriends = async (req, res, next) => {
   const { id } = req.user;
@@ -18,24 +18,10 @@ export const getFriends = async (req, res, next) => {
 export const removeFriend = async (req, res, next) => {
   const { name } = req.params;
   try {
-    const deletedChatroom = await DirectChatroom.deleteOne({
-      name,
-    });
+    const deletedChatroom = await DirectChatroom.deleteOne({ name });
 
     if (!deletedChatroom.deletedCount) {
-      const user = await User.findOne({ name });
-      const generatedName = await DirectChatroom.generateName(
-        req.user.id,
-        user._id
-      );
-
-      const deletedChatroom2 = await DirectChatroom.deleteOne({
-        name: generatedName,
-      });
-
-      if (!deletedChatroom2.deletedCount) {
-        return next(new ErrorResponse("Nothing was deleted", 403));
-      }
+      return next(new ErrorResponse("You are not friends already", 403));
     }
 
     res

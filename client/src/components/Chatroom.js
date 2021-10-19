@@ -15,11 +15,11 @@ function Chatroom(props) {
   });
   const [currentUser, setCurrentUser] = useState(null);
   const [chat, setChat] = useState([]);
-  const [messagesCount, setMessagesCount] = useState(50);
+  const [messagesCount, setMessagesCount] = useState(100);
   const [moreMessages, setMoreMessages] = useState(false);
   const [emoji, setEmoji] = useState("");
+  const [chatroom, setChatroom] = useState({});
   const [files, setFiles] = useState([]);
-
   const messageInputRef = useRef();
   const scrollDown = useRef();
   const socketRef = useRef();
@@ -49,6 +49,11 @@ function Chatroom(props) {
   }, [messagesCount]);
 
   useEffect(() => {
+    getChatroom();
+    let interval = setInterval(() => {
+      getChatroom();
+    }, 10000);
+
     emojiRef.current.setTranslation({
       "face-emotion": {
         emoji: "😀️",
@@ -86,6 +91,10 @@ function Chatroom(props) {
     });
 
     socketRef.current.emit("joinRoom", lowerCaseName);
+
+    return () => {
+      clearInterval(interval);
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -124,7 +133,7 @@ function Chatroom(props) {
   };
 
   const handleMessagesCount = () => {
-    setMessagesCount(messagesCount * 1 + 50);
+    setMessagesCount(messagesCount * 1 + 100);
   };
 
   const handleToggleEmoji = (toggle = true) => {
@@ -169,6 +178,22 @@ function Chatroom(props) {
         notify(error);
       });
     setState({ ...state, message: "" });
+  };
+
+  const getChatroom = async () => {
+    await axios({
+      url: "/chatroom/public/" + lowerCaseName,
+      method: "GET",
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        setChatroom(res.data);
+      })
+      .catch((error) => {
+        notify(error.response.data);
+      });
   };
 
   const getMessages = async (enableScroll = true) => {
@@ -278,6 +303,36 @@ function Chatroom(props) {
 
   return (
     <div className="chatbox container-fluid">
+      <div className="chatbox-header">
+        <div className="subtitle without-line name">{chatroom.name}</div>
+        <div className="members">
+          <i className="fas fa-users"></i>
+          {chatroom.members ? (
+            <>
+              <div className="count">{chatroom.members.length}</div>
+              <ul className="members-dropdown">
+                {chatroom.members.map((member, index) => {
+                  return (
+                    <li className="user" key={index}>
+                      <span
+                        className={
+                          "status " + (member.isOnline ? "online" : "offline")
+                        }
+                      ></span>
+                      <div className="image">
+                        <img src={member.picture} alt={member.name} />
+                      </div>
+                      <div className="name">{member.name}</div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
       <div className="chatbox__messages" onScroll={() => showScrollDownBtn()}>
         {moreMessages ? (
           <button

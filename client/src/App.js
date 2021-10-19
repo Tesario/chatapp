@@ -43,8 +43,12 @@ function App() {
   const [isAuth, setIsAuth] = useState("");
 
   useEffect(() => {
+    let mounted = true;
     const root = document.documentElement;
-    isAuthFunc();
+
+    if (mounted) {
+      isAuthFunc();
+    }
 
     if (localStorage.getItem("primary-color")) {
       root.style.setProperty(
@@ -65,30 +69,42 @@ function App() {
       );
     }
 
+    return () => (mounted = false);
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
     socketRef.current = io.connect("http://localhost:8000", {
       transports: ["websocket"],
     });
 
-    socketRef.current.on("connect", async () => {
-      await axios({
-        url: "/user/status/true",
-        method: "PUT",
-        headers: {
-          authorization: sessionStorage.getItem("token"),
-        },
+    if (mounted) {
+      socketRef.current.on("connect", async () => {
+        if (isAuth) {
+          await axios({
+            url: "/user/status/true",
+            method: "PUT",
+            headers: {
+              authorization: sessionStorage.getItem("token"),
+            },
+          });
+        }
       });
-    });
 
-    window.onbeforeunload = async () => {
-      await axios({
-        url: "/user/status/false",
-        method: "PUT",
-        headers: {
-          authorization: sessionStorage.getItem("token"),
-        },
-      });
-    };
-  }, []);
+      if (isAuth) {
+        window.onbeforeunload = async () => {
+          await axios({
+            url: "/user/status/false",
+            method: "PUT",
+            headers: {
+              authorization: sessionStorage.getItem("token"),
+            },
+          });
+        };
+      }
+    }
+    return () => (mounted = false);
+  }, [isAuth]);
 
   const changeIsAuth = (value) => {
     setIsAuth(value);
@@ -163,7 +179,11 @@ function App() {
           </Route>
         </Switch>
         {!isHomepage || isAuth ? (
-          <Sidebar notify={notify} changeIsAuth={changeIsAuth} />
+          <Sidebar
+            notify={notify}
+            changeIsAuth={changeIsAuth}
+            isAuth={isAuth}
+          />
         ) : null}
       </Router>
     </div>

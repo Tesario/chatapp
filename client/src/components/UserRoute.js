@@ -6,7 +6,11 @@ const UserRoute = ({ component: Component, notify, ...rest }) => {
   const history = useHistory();
 
   useEffect(() => {
-    isAuthFunc();
+    let mounted = true;
+    if (mounted) {
+      isAuthFunc();
+    }
+    return () => (mounted = false);
   });
 
   const isAuthFunc = async () => {

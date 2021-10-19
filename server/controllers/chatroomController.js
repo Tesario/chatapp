@@ -66,6 +66,20 @@ export const getPublicChatrooms = async (req, res, next) => {
   }
 };
 
+export const getPublicChatroom = async (req, res, next) => {
+  const { lowerCaseName } = req.params;
+
+  try {
+    const chatroom = await Chatroom.findOne({ lowerCaseName }).populate(
+      "members"
+    );
+
+    res.status(200).json(chatroom);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const joinToPrivateChatroom = async (req, res, next) => {
   const { joinName, joinPassword } = req.body;
 
