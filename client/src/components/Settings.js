@@ -81,8 +81,8 @@ function Settings(props) {
     localStorage.removeItem("text-color");
 
     const root = document.documentElement;
-    root.style.setProperty("--primary-color", "#87c232");
-    root.style.setProperty("--secondary-color", "#222629");
+    root.style.setProperty("--primary-color", "#18a0fb");
+    root.style.setProperty("--secondary-color", "#0d1117");
     root.style.setProperty("--text-color", "#ffffff");
   };
 
@@ -119,46 +119,7 @@ function Settings(props) {
       <h1 className="settings__title">
         Settings <i className="fas fa-cog"></i>
       </h1>
-      <div className="controlls">
-        <form className="colors-form">
-          <div className="subtitle without-line">
-            Theme <i className="fas fa-palette"></i>
-          </div>
-          <div className="form-input">
-            <label htmlFor="primary-color">Primary color</label>
-            <input
-              type="color"
-              id="primary-color"
-              defaultValue="#87c232"
-              onChange={(e) => handleColor(e)}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="secondary-color">Secondary color</label>
-            <input
-              type="color"
-              id="secondary-color"
-              defaultValue="#222629"
-              onChange={(e) => handleColor(e)}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="text-color">Text color</label>
-            <input
-              type="color"
-              id="text-color"
-              defaultValue="#ffffff"
-              onChange={(e) => handleColor(e)}
-            />
-          </div>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => handleReset()}
-          >
-            Reset to default
-          </button>
-        </form>
+      <div className="settings-grid">
         <form
           className="profile-form"
           onSubmit={(e) => onSubmitForm(e)}
@@ -206,6 +167,45 @@ function Settings(props) {
 
           <button type="submit" className="btn btn-primary">
             Save
+          </button>
+        </form>
+        <form className="colors-form">
+          <div className="subtitle without-line">
+            Theme <i className="fas fa-palette"></i>
+          </div>
+          <div className="form-input">
+            <label htmlFor="primary-color">Primary color</label>
+            <input
+              type="color"
+              id="primary-color"
+              defaultValue="#18a0fb"
+              onChange={(e) => handleColor(e)}
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="secondary-color">Secondary color</label>
+            <input
+              type="color"
+              id="secondary-color"
+              defaultValue="#0d1117"
+              onChange={(e) => handleColor(e)}
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="text-color">Text color</label>
+            <input
+              type="color"
+              id="text-color"
+              defaultValue="#ffffff"
+              onChange={(e) => handleColor(e)}
+            />
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => handleReset()}
+          >
+            Reset to default
           </button>
         </form>
       </div>
