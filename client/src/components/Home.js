@@ -455,7 +455,6 @@ function Home(props) {
   const renderFoundUsers = () => {
     if (foundUsers.length) {
       return foundUsers.map((item, index) => {
-        console.log(item);
         return (
           <div key={index} className="user">
             <div className="content">
@@ -517,9 +516,9 @@ function Home(props) {
         <div className="modal-dialog modal-lg modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
-              <div className="modal-title" id="searchModalLabel">
+              <h1 className="modal-title" id="searchModalLabel">
                 Find friends
-              </div>
+              </h1>
               <button
                 type="button"
                 className="btn close"

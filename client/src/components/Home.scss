@@ -387,7 +387,7 @@
 #staticBackdrop {
     .modal-content {
         color: var(--text-color);
-        background-color: var(--secondary-color);
+        background: linear-gradient(180deg, var(--grey) 0%, var(--grey-dark) 100%);
     }
 
     .btn.close {
@@ -401,6 +401,7 @@
 
     .modal-header {
         border-bottom: 2px solid var(--primary-color);
+        padding: .75rem 1rem;
     }
 
     .modal-body {
@@ -411,7 +412,7 @@
         .grid-found-users {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1px;
+            gap: .5rem;
 
             @media (max-width: $lg) {
                 grid-template-columns: repeat(1, 1fr);
@@ -424,8 +425,13 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: var(--grey);
-        padding: .75rem;
+        padding: .44rem;
+        transition: .2s ease-in-out;
+        border-radius: .2rem;
+
+        &:hover {
+            background-color: var(--grey-2);
+        }
 
         .btn {
             padding: 0;

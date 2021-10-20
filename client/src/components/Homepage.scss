@@ -502,14 +502,14 @@
         &.chat {
             top: -25px;
             left: -25px;
-            background-color: #87c232;
+            background-color: var(--primary-color);
         }
 
         &.user {
             bottom: 50px;
             z-index: 600;
             left: -25px;
-            background-color: #81cb18;
+            background-color: var(--grey-2);
 
             @media (min-width: $xxl) {
                 bottom: 60px;
@@ -548,7 +548,7 @@
             z-index: 400;
             bottom: 20px;
             left: 30px;
-            background-color: #618930;
+            background-color: var(--primary-color);
 
             @media (min-width: $xxl) {
                 bottom: 20px;
@@ -668,7 +668,7 @@
     }
 
     .card {
-        background-color: $gray-dark;
+        background-color: var(--grey);
         padding: 2rem 5rem;
         display: flex;
         align-items: center;
