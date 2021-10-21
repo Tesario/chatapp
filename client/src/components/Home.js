@@ -26,6 +26,7 @@ function Home(props) {
       getFriendRequests();
 
       interval = setInterval(() => {
+        getChatrooms();
         getFriendRequests();
         getFriends();
       }, 10000);
@@ -273,33 +274,26 @@ function Home(props) {
             <div>{members.length} Members:</div>
             <ul className="users-list">
               {members.map((member, index) => {
+                const { chatroomUser, directChatroomName, action } = member;
+                const { name, picture, isOnline } = chatroomUser;
+
                 return (
                   <li className="user" key={index}>
-                    <span
-                      className={
-                        "status " + (member.isOnline ? "online" : "offline")
-                      }
-                    ></span>
-                    <div className="image">
-                      <img src={member.picture} alt={member.name} />
+                    <div className="avatar">
+                      <div className="image">
+                        <img src={picture} alt={name} />
+                      </div>
+                      <span
+                        className={
+                          "status " + (isOnline ? "online" : "offline")
+                        }
+                      ></span>
                     </div>
-                    <div className="name">{member.name}</div>
-                    {currentUser !== member.name ? (
-                      <button
-                        className="btn"
-                        type="button"
-                        aria-label="Find friend"
-                        data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop"
-                        onClick={() => {
-                          handleSearch(member.name);
-                          searchInput.current.value = member.name;
-                        }}
-                      >
-                        <i className="fas fa-search"></i>
-                      </button>
-                    ) : (
-                      <div>You</div>
+                    <div className="name">{name}</div>
+                    {renderActionButton(
+                      action,
+                      chatroomUser,
+                      directChatroomName
                     )}
                   </li>
                 );
@@ -422,9 +416,10 @@ function Home(props) {
   };
 
   const renderActionButton = (action, user, directChatroomName) => {
+    let button;
     switch (action) {
       case "not-friends":
-        return (
+        button = (
           <button
             type="button"
             className="btn add"
@@ -433,8 +428,9 @@ function Home(props) {
             <i className="fas fa-user-plus"></i>
           </button>
         );
+        break;
       case "friends":
-        return (
+        button = (
           <button
             type="button"
             className="btn cancel"
@@ -447,9 +443,25 @@ function Home(props) {
             <i className="fas fa-user-minus"></i>
           </button>
         );
+        break;
       default:
-        return "You";
+        button = <div>You</div>;
+        break;
     }
+
+    return (
+      <div className="action-box">
+        {directChatroomName && (
+          <Link
+            className="btn-chat"
+            to={"/direct-chatroom/" + directChatroomName}
+          >
+            <i className="fas fa-comments"></i>
+          </Link>
+        )}
+        {button}
+      </div>
+    );
   };
 
   const renderFoundUsers = () => {
