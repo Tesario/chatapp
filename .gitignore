@@ -6,6 +6,10 @@
 client/public/profile-pictures
 client/public/uploaded-files
 
+# Build
+client/build/*
+client/!build/build.xml
+
 ### Node ###
 # Logs
 logs
