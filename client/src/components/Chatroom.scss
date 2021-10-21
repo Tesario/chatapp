@@ -71,7 +71,7 @@
         height: calc(100vh - 45px - 1.5rem);
         overflow-y: scroll;
         margin: .5rem 0 0;
-        padding: 0 .5rem 0 0;
+        padding: 0 .5rem 0 .5rem;
         color: var(--text-color);
 
         .image {
@@ -120,6 +120,8 @@
 
                 .body {
                     margin: 0 0 0 6.7rem;
+                    display: flex;
+                    justify-content: flex-end;
                     text-align: right;
                 }
             }
