@@ -333,7 +333,7 @@ function Chatroom(props) {
               aria-label="Show more messages"
               onClick={() => handleMessagesCount()}
             >
-              <i className="fas fa-plus"></i>
+              <i class="fas fa-comment-dots"></i>
             </button>
           ) : (
             ""
