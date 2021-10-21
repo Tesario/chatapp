@@ -24,11 +24,6 @@
         }
     }
 
-    &--without-border {
-        border: 0;
-        padding-left: 0;
-    }
-
     &__items {
         display: flex;
         flex-direction: column;

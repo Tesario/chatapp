@@ -303,113 +303,107 @@ function Chatroom(props) {
 
   return (
     <div className="chatbox container-fluid">
-      <div className="chatbox-header">
-        <div className="subtitle without-line name">{chatroom.name}</div>
-        <div className="members">
-          <i className="fas fa-users"></i>
-          {chatroom.members ? (
-            <>
-              <div className="count">{chatroom.members.length}</div>
-              <ul className="members-dropdown">
-                {chatroom.members.map((member, index) => {
-                  return (
-                    <li className="user" key={index}>
+      <div className="chatbox-grid">
+        <ul className="members-dropdown">
+          <div className="subtitle without-line name">{chatroom.name}</div>
+          {chatroom.members
+            ? chatroom.members.map((member, index) => {
+                return (
+                  <li className="user" key={index}>
+                    <div className="avatar">
+                      <div className="image">
+                        <img src={member.picture} alt={member.name} />
+                      </div>
                       <span
                         className={
                           "status " + (member.isOnline ? "online" : "offline")
                         }
                       ></span>
-                      <div className="image">
-                        <img src={member.picture} alt={member.name} />
-                      </div>
-                      <div className="name">{member.name}</div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </>
+                    </div>
+                    <div className="name">{member.name}</div>
+                  </li>
+                );
+              })
+            : ""}
+        </ul>
+        <div className="chatbox__messages" onScroll={() => showScrollDownBtn()}>
+          {moreMessages ? (
+            <button
+              className="btn more-messages"
+              aria-label="Show more messages"
+              onClick={() => handleMessagesCount()}
+            >
+              <i className="fas fa-plus"></i>
+            </button>
           ) : (
             ""
           )}
+          {renderChat()}
         </div>
-      </div>
-      <div className="chatbox__messages" onScroll={() => showScrollDownBtn()}>
-        {moreMessages ? (
-          <button
-            className="btn more-messages"
-            aria-label="Show more messages"
-            onClick={() => handleMessagesCount()}
-          >
-            <i className="fas fa-plus"></i>
-          </button>
-        ) : (
-          ""
-        )}
-        {renderChat()}
-      </div>
-      <span
-        id="emoji-filler"
-        ref={emojiFillerRef}
-        onClick={handleToggleEmoji}
-      ></span>
-      <form
-        className="chatbox__form"
-        onSubmit={(e) => onMessageSubmit(e)}
-        encType="multipart/form-data"
-      >
-        <unicode-emoji-picker ref={emojiRef}></unicode-emoji-picker>
-        <input
-          name="message"
-          className="form-control"
-          onChange={(e) => onTextChange(e)}
-          value={state.message}
-          ref={messageInputRef}
-          onClick={() => handleToggleEmoji(false)}
-          placeholder="Message..."
-          autoComplete="off"
-        />
-        <button
-          type="button"
-          className="btn btn-emoji"
-          aria-label="Emoji"
+        <span
+          id="emoji-filler"
+          ref={emojiFillerRef}
           onClick={handleToggleEmoji}
+        ></span>
+        <form
+          className="chatbox__form"
+          onSubmit={(e) => onMessageSubmit(e)}
+          encType="multipart/form-data"
         >
-          <i className="far fa-grin-alt"></i>
-        </button>
-        <button
-          type="button"
-          className="btn btn-file"
-          aria-label="File"
-          onClick={() => {
-            handleToggleEmoji(false);
-            document.querySelector("#files").click();
-          }}
-        >
-          <span>{files.length !== 0 && files.length}</span>
-          <i className="far fa-folder-open"></i>
-        </button>
-        <input
-          type="file"
-          id="files"
-          onChange={uploadFiles}
-          multiple="multiple"
-        />
-        <button className="btn btn-primary" aria-label="Send message">
-          <i className="fas fa-paper-plane"></i>
-        </button>
-        <a
-          ref={scrollDown}
-          href="/#"
-          aria-label="Scroll to down"
-          className="chatbox__form__scroll-down btn btn-primary"
-          onClick={(e) => {
-            e.preventDefault();
-            chatScrollToDown();
-          }}
-        >
-          <i className="fas fa-angle-double-down"></i>
-        </a>
-      </form>
+          <unicode-emoji-picker ref={emojiRef}></unicode-emoji-picker>
+          <input
+            name="message"
+            className="form-control"
+            onChange={(e) => onTextChange(e)}
+            value={state.message}
+            ref={messageInputRef}
+            onClick={() => handleToggleEmoji(false)}
+            placeholder="Message..."
+            autoComplete="off"
+          />
+          <button
+            type="button"
+            className="btn btn-emoji"
+            aria-label="Emoji"
+            onClick={handleToggleEmoji}
+          >
+            <i className="far fa-grin-alt"></i>
+          </button>
+          <button
+            type="button"
+            className="btn btn-file"
+            aria-label="File"
+            onClick={() => {
+              handleToggleEmoji(false);
+              document.querySelector("#files").click();
+            }}
+          >
+            <span>{files.length !== 0 && files.length}</span>
+            <i className="far fa-folder-open"></i>
+          </button>
+          <input
+            type="file"
+            id="files"
+            onChange={uploadFiles}
+            multiple="multiple"
+          />
+          <button className="btn btn-primary" aria-label="Send message">
+            <i className="fas fa-paper-plane"></i>
+          </button>
+          <a
+            ref={scrollDown}
+            href="/#"
+            aria-label="Scroll to down"
+            className="chatbox__form__scroll-down btn btn-primary"
+            onClick={(e) => {
+              e.preventDefault();
+              chatScrollToDown();
+            }}
+          >
+            <i className="fas fa-angle-double-down"></i>
+          </a>
+        </form>
+      </div>
     </div>
   );
 }
