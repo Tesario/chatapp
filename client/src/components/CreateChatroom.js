@@ -121,7 +121,7 @@ function CreateChatroom(props) {
     if (chatrooms.length) {
       return chatrooms.map((chatroom, index) => {
         return (
-          <li key={index} className="chatroom__list__inner__item">
+          <li key={index} className="list-item">
             {chatroom.name}
             <button
               type="button"
@@ -138,11 +138,9 @@ function CreateChatroom(props) {
 
   return (
     <div className="chatroom container-fluid">
-      <div className="forms">
+      <div className="chatroom-grid">
         <div className="create-chatroom">
-          <h1 className="chatroom__title">
-            Create room <i className="fas fa-comments"></i>
-          </h1>
+          <h1 className="chatroom__title">Create room</h1>
           <p className="chatroom__desc">You can create your own chatroom!</p>
           <form className="chatroom__form" onSubmit={(e) => onFormSubmit(e)}>
             <div className="chatroom__form__inner">
@@ -196,9 +194,7 @@ function CreateChatroom(props) {
           </form>
         </div>
         <div className="join-chatroom">
-          <h1 className="chatroom__title">
-            Join to private room <i className="fas fa-key"></i>
-          </h1>
+          <h1 className="chatroom__title">Join to private room</h1>
           <p className="chatroom__desc">You can join to private chatroom!</p>
           <form onSubmit={(e) => onJoinFormSubmit(e)}>
             <div className="form-floating">
@@ -232,10 +228,10 @@ function CreateChatroom(props) {
             </div>
           </form>
         </div>
-      </div>
-      <div className="chatroom__list">
-        <div className="subtitle">Public chatrooms</div>
-        <ul className="chatroom__list__inner">{renderChatrooms()}</ul>
+        <div className="chatroom-list">
+          <h1 className="title">Public chatrooms</h1>
+          <ul className="grid-list">{renderChatrooms()}</ul>
+        </div>
       </div>
     </div>
   );

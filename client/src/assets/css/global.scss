@@ -1,11 +1,15 @@
 @import "_reset.scss";
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;500;600&display=swap');
 @import "variables.scss";
 
 body {
   font-family: 'Montserrat';
   background-color: var(--secondary-color);
   line-height: $line-height;
+
+  &.scroll-lock {
+    overflow-y: hidden;
+  }
 }
 
 a {
@@ -42,6 +46,7 @@ img {
 textarea,
 input {
   background-color: $white-darker !important;
+  font-family: 'Montserrat';
 
   &:hover,
   &:focus {
@@ -55,8 +60,6 @@ h1 {
   text-align: center;
   font-size: $title-size;
   margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 3px solid var(--primary-color);
 
   @media (max-width: $lg) {
     font-size: 1.7em;

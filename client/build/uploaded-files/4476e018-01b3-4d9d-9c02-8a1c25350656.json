@@ -1,0 +1,12 @@
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "purgecss-with-wordpress": {
+      "version": "4.0.3",
+      "resolved": "https://registry.npmjs.org/purgecss-with-wordpress/-/purgecss-with-wordpress-4.0.3.tgz",
+      "integrity": "sha512-TpbJJ8Iq/dJVvdp3QxoXc1rBpYIR/uuaowRETOeAFMdpSOGfsxt+pmOlWw0nzfAdx/39w9zIAWMynuoRjVlHNQ==",
+      "dev": true
+    }
+  }
+}

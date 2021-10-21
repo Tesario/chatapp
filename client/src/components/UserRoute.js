@@ -6,7 +6,11 @@ const UserRoute = ({ component: Component, notify, ...rest }) => {
   const history = useHistory();
 
   useEffect(() => {
-    isAuthFunc();
+    let mounted = true;
+    if (mounted) {
+      isAuthFunc();
+    }
+    return () => (mounted = false);
   });
 
   const isAuthFunc = async () => {
@@ -17,7 +21,7 @@ const UserRoute = ({ component: Component, notify, ...rest }) => {
         authorization: sessionStorage.getItem("token"),
       },
     }).catch(() => {
-      history.push("/login");
+      history.push("/");
     });
   };
 

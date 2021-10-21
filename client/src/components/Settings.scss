@@ -1,30 +1,40 @@
 @import "../assets/css/global.scss";
 
 .settings {
+    padding: 2rem !important;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
 
-    .controlls {
+    @media (max-width: $lg) {
+        padding: 1rem .75rem;
+    }
+
+    .settings-grid {
         display: grid;
         width: 100%;
-        gap: 3rem;
-        place-items: flex-start center;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        place-items: flex-start;
+
+        @media (max-width: $xxl) {
+            grid-template-columns: repeat(2, 1fr);
+        }
 
         @media (max-width: $lg) {
             grid-template-columns: repeat(1, 1fr);
+            gap: .75rem;
         }
     }
 
     form {
-        max-width: 55vh;
+        background: linear-gradient(180deg, var(--grey) 0%, var(--grey-dark) 100%);
         color: var(--text-color);
         width: 100%;
         display: flex;
         align-items: center;
         flex-direction: column;
+        padding: 1.5rem !important;
 
         @media (max-width: $lg) {
             padding: 1rem !important;
@@ -43,10 +53,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            padding: .44rem;
+            border-radius: .2rem;
+            transition: .2s ease-in-out;
 
             &:not(:first-child) {
-                border-top: 1px solid var(--primary-color);
+                margin-top: .5rem;
+            }
+
+            &:hover {
+                background-color: var(--grey-2);
             }
         }
 

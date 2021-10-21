@@ -18,14 +18,31 @@ function Home(props) {
   const searchInput = useRef();
 
   useEffect(() => {
-    getChatrooms();
-    getFriendRequests();
-    getFriends();
+    let mounted = true;
+    let interval;
+    if (mounted) {
+      getChatrooms();
+      getFriends();
+      getFriendRequests();
+
+      interval = setInterval(() => {
+        getFriendRequests();
+        getFriends();
+      }, 10000);
+    }
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    getFoundUsers();
+    let mounted = true;
+    if (mounted) {
+      getFoundUsers();
+    }
+    return () => (mounted = false);
     // eslint-disable-next-line
   }, [search]);
 
@@ -258,6 +275,11 @@ function Home(props) {
               {members.map((member, index) => {
                 return (
                   <li className="user" key={index}>
+                    <span
+                      className={
+                        "status " + (member.isOnline ? "online" : "offline")
+                      }
+                    ></span>
                     <div className="image">
                       <img src={member.picture} alt={member.name} />
                     </div>
@@ -294,16 +316,23 @@ function Home(props) {
       return friendRequests.map((friendRequest, index) => {
         return (
           <div key={index} className="friend-request">
-            <div className="date">
-              {dateFormat(friendRequest.createdAt, "hh:MM TT, dd. mm. yyyy")}
-            </div>
             <div className="image">
               <img
                 src={friendRequest.senderId.picture}
                 alt={friendRequest.senderId.name}
               />
             </div>
-            <div className="name"> {friendRequest.senderId.name}</div>
+            <div className="name">
+              {friendRequest.senderId.name}
+              <div className="date">
+                <div className="days">
+                  {dateFormat(friendRequest.createdAt, "dd. mm. yyyy")}
+                </div>
+                <div className="time">
+                  {dateFormat(friendRequest.createdAt, "hh:MM TT")}
+                </div>
+              </div>
+            </div>
             <div className="buttons">
               <button
                 type="button"
@@ -341,21 +370,37 @@ function Home(props) {
             <Link to={"direct-chatroom/" + friend.name} className="name">
               {friend.members[0].name === currentUser ? (
                 <>
-                  <div className="image">
-                    <img
-                      src={friend.members[1].picture}
-                      alt={friend.members[1].name}
-                    />
+                  <div className="avatar">
+                    <div className="image">
+                      <img
+                        src={friend.members[1].picture}
+                        alt={friend.members[1].name}
+                      />
+                      <span
+                        className={
+                          "status " +
+                          (friend.members[1].isOnline ? "online" : "offline")
+                        }
+                      ></span>
+                    </div>
                   </div>
                   {friend.members[1].name}
                 </>
               ) : (
                 <>
-                  <div className="image">
-                    <img
-                      src={friend.members[0].picture}
-                      alt={friend.members[0].name}
-                    />
+                  <div className="avatar">
+                    <div className="image">
+                      <img
+                        src={friend.members[0].picture}
+                        alt={friend.members[0].name}
+                      />
+                    </div>
+                    <span
+                      className={
+                        "status " +
+                        (friend.members[0].isOnline ? "online" : "offline")
+                      }
+                    ></span>
                   </div>
                   {friend.members[0].name}
                 </>
@@ -376,7 +421,7 @@ function Home(props) {
     return <div className="desc darken">No friends found</div>;
   };
 
-  const renderActionButton = (action, user) => {
+  const renderActionButton = (action, user, directChatroomName) => {
     switch (action) {
       case "not-friends":
         return (
@@ -395,7 +440,7 @@ function Home(props) {
             className="btn cancel"
             aria-label="Remove friend"
             onClick={() => {
-              handleRemoveFriend(user.name);
+              handleRemoveFriend(directChatroomName);
               getFoundUsers();
             }}
           >
@@ -418,7 +463,11 @@ function Home(props) {
               </div>
               <div className="name">{item.user.name}</div>
             </div>
-            {renderActionButton(item.action, item.user)}
+            {renderActionButton(
+              item.action,
+              item.user,
+              item.directChatroomName
+            )}
           </div>
         );
       });
@@ -429,28 +478,30 @@ function Home(props) {
   return (
     <>
       <div id="home" className="container-fluid">
-        <div className="my-chatrooms">
-          <h1 className="title">My chatrooms</h1>
-          <div className="desc">Avalible chatrooms:</div>
-          <div className="flex-chatrooms accordion" id="accordionChatrooms">
-            {renderChatrooms()}
+        <div className="home-grid">
+          <div className="my-chatrooms">
+            <h1 className="title">My chatrooms</h1>
+            <div className="flex-chatrooms accordion" id="accordionChatrooms">
+              {renderChatrooms()}
+            </div>
           </div>
-        </div>
-        <div className="friends">
-          <h1 className="title">Friends</h1>
-          <div className="desc">Friend requests:</div>
-          <div className="friend-requests">{renderFriendRequests()}</div>
-          <button
-            type="button"
-            className="btn btn-primary find"
-            aria-label="Find friends"
-            data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop"
-          >
-            Find friends <i className="fas fa-search"></i>
-          </button>
-          <div className="desc">My friends:</div>
-          <div className="friend-list">{renderFriends()}</div>
+          <div className="friends">
+            <h1 className="title">My Friends</h1>
+            <div className="friend-list">{renderFriends()}</div>
+          </div>
+          <div className="friend-requests">
+            <h1 className="title">Friend requests</h1>
+            <button
+              type="button"
+              className="btn btn-primary find"
+              aria-label="Find friends"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+            >
+              Find friends <i className="fas fa-search"></i>
+            </button>
+            <div className="requests">{renderFriendRequests()}</div>
+          </div>
         </div>
       </div>
       <div
@@ -465,9 +516,9 @@ function Home(props) {
         <div className="modal-dialog modal-lg modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
-              <div className="modal-title" id="searchModalLabel">
+              <h1 className="modal-title" id="searchModalLabel">
                 Find friends
-              </div>
+              </h1>
               <button
                 type="button"
                 className="btn close"

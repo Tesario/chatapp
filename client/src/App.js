@@ -1,22 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 import Register from "./components/Register";
 import Chatroom from "./components/Chatroom";
 import DirectChatroom from "./components/DirectChatroom";
 import Login from "./components/Login";
-import Info from "./components/Info";
 import Settings from "./components/Settings";
 import CreateChatroom from "./components/CreateChatroom";
 import Forbidden from "./components/Forbidden";
 import NotFound from "./components/NotFound";
 import Sidebar from "./components/Sidebar";
 import Home from "./components/Home";
-
+import io from "socket.io-client";
 import UserRoute from "./components/UserRoute";
 
 import "./assets/css/global.scss";
 import "react-toastify/dist/ReactToastify.css";
+import Homepage from "./components/Homepage";
 
 toast.configure();
 const notify = (data) => {
@@ -37,8 +38,17 @@ const notify = (data) => {
 };
 
 function App() {
+  const socketRef = useRef();
+  const [isHomepage, setIsHomepage] = useState(true);
+  const [isAuth, setIsAuth] = useState("");
+
   useEffect(() => {
+    let mounted = true;
     const root = document.documentElement;
+
+    if (mounted) {
+      isAuthFunc();
+    }
 
     if (localStorage.getItem("primary-color")) {
       root.style.setProperty(
@@ -58,11 +68,71 @@ function App() {
         localStorage.getItem("text-color")
       );
     }
+
+    return () => (mounted = false);
   }, []);
 
+  useEffect(() => {
+    let mounted = true;
+    socketRef.current = io.connect("http://localhost:8000", {
+      transports: ["websocket"],
+    });
+
+    if (mounted) {
+      socketRef.current.on("connect", async () => {
+        if (isAuth) {
+          await axios({
+            url: "/user/status/true",
+            method: "PUT",
+            headers: {
+              authorization: sessionStorage.getItem("token"),
+            },
+          });
+        }
+      });
+
+      if (isAuth) {
+        window.onbeforeunload = async () => {
+          await axios({
+            url: "/user/status/false",
+            method: "PUT",
+            headers: {
+              authorization: sessionStorage.getItem("token"),
+            },
+          });
+        };
+      }
+    }
+    return () => (mounted = false);
+  }, [isAuth]);
+
+  const changeIsAuth = (value) => {
+    setIsAuth(value);
+  };
+
+  const changeIsHomepage = (value) => {
+    setIsHomepage(value);
+  };
+
+  const isAuthFunc = async () => {
+    await axios({
+      url: "/user/is-auth",
+      method: "GET",
+      headers: {
+        authorization: sessionStorage.getItem("token"),
+      },
+    })
+      .then(() => {
+        setIsAuth(true);
+      })
+      .catch(() => {
+        setIsAuth(false);
+      });
+  };
+
   return (
-    <Router>
-      <div className="app">
+    <div className="app">
+      <Router>
         <Switch>
           <UserRoute
             path="/chatroom/:lowerCaseName"
@@ -75,31 +145,48 @@ function App() {
             notify={notify}
           />
           <Route path="/login">
-            <Login notify={notify} />
+            <Login
+              changeIsAuth={changeIsAuth}
+              changeIsHomepage={changeIsHomepage}
+              notify={notify}
+            />
           </Route>
           <Route path="/register">
-            <Register notify={notify} />
+            <Register
+              notify={notify}
+              changeIsHomepage={changeIsHomepage}
+              changeIsAuth={changeIsAuth}
+            />
           </Route>
-          <UserRoute exact path="/" component={Home} notify={notify} />
+          {isAuth ? (
+            <UserRoute exact path="/" component={Home} notify={notify} />
+          ) : (
+            <Route exact path="/">
+              <Homepage changeIsHomepage={changeIsHomepage} notify={notify} />
+            </Route>
+          )}
           <UserRoute
             path="/create"
             component={CreateChatroom}
             notify={notify}
           />
           <UserRoute path="/settings" component={Settings} notify={notify} />
-          <Route path="/info">
-            <Info />
-          </Route>
           <Route path="/forbidden">
-            <Forbidden />
+            <Forbidden changeIsHomepage={changeIsHomepage} />
           </Route>
           <Route path="*">
-            <NotFound />
+            <NotFound changeIsHomepage={changeIsHomepage} />
           </Route>
         </Switch>
-        <Sidebar notify={notify} />
-      </div>
-    </Router>
+        {!isHomepage || isAuth ? (
+          <Sidebar
+            notify={notify}
+            changeIsAuth={changeIsAuth}
+            isAuth={isAuth}
+          />
+        ) : null}
+      </Router>
+    </div>
   );
 }
 

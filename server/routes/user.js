@@ -7,6 +7,7 @@ import {
   searchUsers,
   editUser,
   getUser,
+  changeStatus,
 } from "../controllers/UserController.js";
 import User from "../models/User.js";
 import auth from "../middlewares/Auth.js";
@@ -57,5 +58,8 @@ router.get("/search/:search?", auth, searchUsers);
 
 // Edit user's profile
 router.put("/edit", auth, upload.single("picture"), editUser);
+
+// Change user online status
+router.put("/status/:isOnline", auth, changeStatus);
 
 export default router;
