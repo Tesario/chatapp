@@ -415,7 +415,12 @@ const Home = (props) => {
     return <div className="desc darken">No friends found</div>;
   };
 
-  const renderActionButton = (action, user, directChatroomName) => {
+  const renderActionButton = (
+    action,
+    user,
+    directChatroomName,
+    showChatBtn = true
+  ) => {
     let button;
     switch (action) {
       case "not-friends":
@@ -451,7 +456,7 @@ const Home = (props) => {
 
     return (
       <div className="action-box">
-        {directChatroomName && (
+        {directChatroomName && showChatBtn && (
           <Link
             className="btn-chat"
             to={"/direct-chatroom/" + directChatroomName}
@@ -478,7 +483,8 @@ const Home = (props) => {
             {renderActionButton(
               item.action,
               item.user,
-              item.directChatroomName
+              item.directChatroomName,
+              false
             )}
           </div>
         );

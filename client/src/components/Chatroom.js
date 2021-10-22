@@ -139,7 +139,6 @@ function Chatroom(props) {
 
     for (let i = 0; i < uploadedFiles.length; i++) {
       if (uploadedFiles[i].size > 10000000) {
-        console.log(uploadedFiles[i]);
         notify({
           success: false,
           message: "Maximum size of file is 10MB",
@@ -178,33 +177,35 @@ function Chatroom(props) {
     e.preventDefault();
     handleToggleEmoji(false);
 
-    const formData = new FormData();
-    formData.append("lowerCaseName", lowerCaseName);
-    formData.append("message", state.message);
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
-
-    await axios({
-      url: "/message/" + lowerCaseName + "/create",
-      method: "POST",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization: sessionStorage.getItem("token"),
-      },
-    })
-      .then(() => {
-        setFiles([]);
-        socketRef.current.emit("message", {
-          sended: true,
-          room: lowerCaseName,
-        });
-      })
-      .catch((error) => {
-        notify(error);
+    if (state.message !== "" || files.length !== 0) {
+      const formData = new FormData();
+      formData.append("lowerCaseName", lowerCaseName);
+      formData.append("message", state.message);
+      files.forEach((file) => {
+        formData.append("files", file);
       });
-    setState({ ...state, message: "" });
+
+      await axios({
+        url: "/message/" + lowerCaseName + "/create",
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: sessionStorage.getItem("token"),
+        },
+      })
+        .then(() => {
+          setFiles([]);
+          socketRef.current.emit("message", {
+            sended: true,
+            room: lowerCaseName,
+          });
+        })
+        .catch((error) => {
+          notify(error);
+        });
+      setState({ ...state, message: "" });
+    }
   };
 
   const getChatroom = async () => {

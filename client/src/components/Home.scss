@@ -228,15 +228,6 @@
         }
     }
 
-    .action-box {
-        display: flex;
-
-        .btn-chat {
-            margin-right: 1rem;
-            font-size: 1.15em;
-        }
-    }
-
     .friends {
         display: flex;
         flex-direction: column;
@@ -405,6 +396,15 @@
         .cancel {
             padding: .75rem;
         }
+    }
+}
+
+.action-box {
+    display: flex;
+
+    .btn-chat {
+        margin-right: 1rem;
+        font-size: 1.15em;
     }
 }
 

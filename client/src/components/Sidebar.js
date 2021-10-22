@@ -43,18 +43,24 @@ function Sidebar(props) {
   return (
     <div className="sidebar" ref={sidebar}>
       <div className="sidebar__items">
-        <Link to="/" aria-label="Home">
-          <i className="fas fa-comments"></i>
-          <div className="link">Chatting</div>
-        </Link>
         {!isAuth && (
-          <Link to="/login" aria-label="Login">
-            <i className="fas fa-user fa-fw"></i>
-            <div className="link">Login</div>
-          </Link>
+          <>
+            <Link to="/" aria-label="Home">
+              <i className="fas fa-home"></i>
+              <div className="link">Homepage</div>
+            </Link>
+            <Link to="/login" aria-label="Login">
+              <i className="fas fa-user fa-fw"></i>
+              <div className="link">Login</div>
+            </Link>
+          </>
         )}
         {isAuth && (
           <>
+            <Link to="/" aria-label="Home">
+              <i className="fas fa-comments"></i>
+              <div className="link">Chatting</div>
+            </Link>
             <Link to="/create" aria-label="Chatrooms">
               <i className="fas fa-plus-circle fa-fw"></i>
               <div className="link">Chatrooms</div>

@@ -31,7 +31,7 @@ img {
 
   &:hover,
   &:focus {
-    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color), .5);
+    box-shadow: 0 0 0 .2rem rgba(var(--primary-color), .5);
   }
 }
 
@@ -50,7 +50,7 @@ input {
 
   &:hover,
   &:focus {
-    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color), .5) !important;
+    box-shadow: 0 0 0 .2rem rgba(var(--primary-color), .5) !important;
     border: 1px solid var(--primary-color) !important;
   }
 }
