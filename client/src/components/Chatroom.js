@@ -197,6 +197,11 @@ function Chatroom(props) {
       });
   };
 
+  const toggleImage = (e) => {
+    e.preventDefault();
+    e.target.parentNode.parentNode.classList.toggle("show");
+  };
+
   const getMessages = async (enableScroll = true) => {
     await axios({
       url: "/message/" + lowerCaseName + "/" + messagesCount,
@@ -267,6 +272,7 @@ function Chatroom(props) {
             ""
           )}
           <div className="body">{message.body}</div>
+
           {message.files.length !== 0 &&
             message.files.map((file, index) => {
               const ext = file.url.split(".")[1];
@@ -274,14 +280,32 @@ function Chatroom(props) {
                 ext === "jpeg" ||
                 ext === "jpg" ||
                 ext === "gif" ? (
-                <a
-                  key={index}
-                  className="file-image"
-                  download={file.url}
-                  href={file.url}
-                >
+                <div className="file-image" key={index}>
+                  <div className="btn-menu">
+                    <a
+                      className="btn-download"
+                      download={file.url}
+                      href={file.url}
+                    >
+                      <i className="fas fa-download"></i>
+                    </a>
+                    <a
+                      href="/#"
+                      onClick={(e) => toggleImage(e)}
+                      className="btn-show"
+                    >
+                      <i className="fas fa-eye"></i>
+                    </a>
+                    <a
+                      className="btn-hide"
+                      href="/#"
+                      onClick={(e) => toggleImage(e)}
+                    >
+                      <i className="fas fa-times-circle"></i>
+                    </a>
+                  </div>
                   <img src={file.url} alt={file.name} />
-                </a>
+                </div>
               ) : (
                 <a
                   className="file"
@@ -289,7 +313,7 @@ function Chatroom(props) {
                   download={file.url}
                   href={file.url}
                 >
-                  <i className="fas fa-file-download"></i>
+                  <i className="fas fa-download"></i>
                   <div>{file.name}</div>
                 </a>
               );

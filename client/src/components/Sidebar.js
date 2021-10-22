@@ -44,8 +44,8 @@ function Sidebar(props) {
     <div className="sidebar" ref={sidebar}>
       <div className="sidebar__items">
         <Link to="/" aria-label="Home">
-          <i className="fas fa-home fa-fw"></i>
-          <div className="link">Home</div>
+          <i className="fas fa-comments"></i>
+          <div className="link">Chatting</div>
         </Link>
         {!isAuth && (
           <Link to="/login" aria-label="Login">

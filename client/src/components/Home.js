@@ -5,7 +5,7 @@ import axios from "axios";
 
 import "./Home.scss";
 
-function Home(props) {
+const Home = (props) => {
   const { notify } = props;
   const [chatrooms, setChatrooms] = useState([]);
   const [currentChatroom, setCurrentChatroom] = useState(null);
@@ -490,6 +490,9 @@ function Home(props) {
   return (
     <>
       <div id="home" className="container-fluid">
+        <h1 className="title">
+          Chatting <i className="fas fa-comments"></i>
+        </h1>
         <div className="home-grid">
           <div className="my-chatrooms">
             <h1 className="title">My chatrooms</h1>
@@ -560,6 +563,6 @@ function Home(props) {
       </div>
     </>
   );
-}
+};
 
 export default Home;

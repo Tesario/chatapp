@@ -2,14 +2,21 @@
 
 #home {
     color: var(--text-color);
-    padding: 0;
+    padding: 2rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    @media (max-width: $lg) {
+        padding: 1rem .75rem;
+    }
 
     .home-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
-        padding: 2rem;
         place-items: flex-start;
+        width: 100%;
 
         @media (max-width: $xxl) {
             grid-template-columns: repeat(2, 1fr);
@@ -17,7 +24,6 @@
 
         @media (max-width: $lg) {
             grid-template-columns: repeat(1, 1fr);
-            padding: 1rem .75rem;
             gap: .75rem;
         }
     }

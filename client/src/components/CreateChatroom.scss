@@ -1,14 +1,21 @@
 @import "../assets/css/global.scss";
 
 .chatroom {
-    padding: 0 !important;
+    padding: 2rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    @media (max-width: $lg) {
+        padding: 1rem .75rem;
+    }
 
     .chatroom-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
         place-items: flex-start;
-        padding: 2rem;
+        width: 100%;
 
         @media (max-width: $xxl) and (min-width: $lg) {
             grid-template-columns: repeat(2, 1fr);
@@ -17,7 +24,6 @@
 
         @media (max-width: $lg) {
             grid-template-columns: repeat(1, 1fr);
-            padding: 1rem .75rem;
             gap: .75rem;
         }
     }
