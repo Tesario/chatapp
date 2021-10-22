@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({
-  limits: { fileSize: 3000000, files: 10 },
+  limits: { fileSize: 10000000, files: 10 },
   storage: storage,
 }).array("files");
 const router = express.Router();

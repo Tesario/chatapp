@@ -125,12 +125,38 @@ function Chatroom(props) {
   const uploadFiles = (e) => {
     const uploadedFiles = e.target.files;
     let fileArr = [];
+    let isValid = true;
 
-    for (let i = 0; i < uploadedFiles.length; i++) {
-      fileArr.push(uploadedFiles[i]);
+    if (uploadedFiles.length > 10) {
+      notify({
+        success: false,
+        message: "Maximum number of files is 10",
+        isShow: true,
+      });
+      e.target.value = "";
+      isValid = false;
     }
 
-    setFiles(fileArr);
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      if (uploadedFiles[i].size > 10000000) {
+        console.log(uploadedFiles[i]);
+        notify({
+          success: false,
+          message: "Maximum size of file is 10MB",
+          isShow: true,
+        });
+        isValid = false;
+        break;
+      }
+    }
+
+    if (isValid) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        fileArr.push(uploadedFiles[i]);
+      }
+
+      setFiles(fileArr);
+    }
   };
 
   const handleMessagesCount = () => {
@@ -272,7 +298,6 @@ function Chatroom(props) {
             ""
           )}
           <div className="body">{message.body}</div>
-
           {message.files.length !== 0 &&
             message.files.map((file, index) => {
               const ext = file.url.split(".")[1];

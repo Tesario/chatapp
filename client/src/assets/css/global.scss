@@ -68,6 +68,10 @@ h1 {
   @media (max-width: $sm) {
     font-size: 1.5em;
   }
+
+  i {
+    margin-left: .5rem;
+  }
 }
 
 .subtitle {
