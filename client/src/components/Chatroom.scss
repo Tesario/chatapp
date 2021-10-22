@@ -193,6 +193,7 @@
                         height: auto;
                         width: auto;
                         object-fit: unset;
+                        border-radius: 0;
                     }
 
                     .btn-menu {
@@ -296,6 +297,7 @@
         }
 
         .body {
+            word-break: break-word;
             display: flex;
             margin-right: 6.7rem;
 
