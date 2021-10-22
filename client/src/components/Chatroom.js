@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import io from "socket.io-client";
 import axios from "axios";
 import dateFormat from "dateformat";
@@ -124,12 +125,37 @@ function Chatroom(props) {
   const uploadFiles = (e) => {
     const uploadedFiles = e.target.files;
     let fileArr = [];
+    let isValid = true;
 
-    for (let i = 0; i < uploadedFiles.length; i++) {
-      fileArr.push(uploadedFiles[i]);
+    if (uploadedFiles.length > 10) {
+      notify({
+        success: false,
+        message: "Maximum number of files is 10",
+        isShow: true,
+      });
+      e.target.value = "";
+      isValid = false;
     }
 
-    setFiles(fileArr);
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      if (uploadedFiles[i].size > 10000000) {
+        notify({
+          success: false,
+          message: "Maximum size of file is 10MB",
+          isShow: true,
+        });
+        isValid = false;
+        break;
+      }
+    }
+
+    if (isValid) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        fileArr.push(uploadedFiles[i]);
+      }
+
+      setFiles(fileArr);
+    }
   };
 
   const handleMessagesCount = () => {
@@ -151,33 +177,35 @@ function Chatroom(props) {
     e.preventDefault();
     handleToggleEmoji(false);
 
-    const formData = new FormData();
-    formData.append("lowerCaseName", lowerCaseName);
-    formData.append("message", state.message);
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
-
-    await axios({
-      url: "/message/" + lowerCaseName + "/create",
-      method: "POST",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization: sessionStorage.getItem("token"),
-      },
-    })
-      .then(() => {
-        setFiles([]);
-        socketRef.current.emit("message", {
-          sended: true,
-          room: lowerCaseName,
-        });
-      })
-      .catch((error) => {
-        notify(error);
+    if (state.message !== "" || files.length !== 0) {
+      const formData = new FormData();
+      formData.append("lowerCaseName", lowerCaseName);
+      formData.append("message", state.message);
+      files.forEach((file) => {
+        formData.append("files", file);
       });
-    setState({ ...state, message: "" });
+
+      await axios({
+        url: "/message/" + lowerCaseName + "/create",
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: sessionStorage.getItem("token"),
+        },
+      })
+        .then(() => {
+          setFiles([]);
+          socketRef.current.emit("message", {
+            sended: true,
+            room: lowerCaseName,
+          });
+        })
+        .catch((error) => {
+          notify(error);
+        });
+      setState({ ...state, message: "" });
+    }
   };
 
   const getChatroom = async () => {
@@ -194,6 +222,11 @@ function Chatroom(props) {
       .catch((error) => {
         notify(error.response.data);
       });
+  };
+
+  const toggleImage = (e) => {
+    e.preventDefault();
+    e.target.parentNode.parentNode.classList.toggle("show");
   };
 
   const getMessages = async (enableScroll = true) => {
@@ -273,14 +306,32 @@ function Chatroom(props) {
                 ext === "jpeg" ||
                 ext === "jpg" ||
                 ext === "gif" ? (
-                <a
-                  key={index}
-                  className="file-image"
-                  download={file.url}
-                  href={file.url}
-                >
+                <div className="file-image" key={index}>
+                  <div className="btn-menu">
+                    <a
+                      className="btn-download"
+                      download={file.url}
+                      href={file.url}
+                    >
+                      <i className="fas fa-download"></i>
+                    </a>
+                    <a
+                      href="/#"
+                      onClick={(e) => toggleImage(e)}
+                      className="btn-show"
+                    >
+                      <i className="fas fa-eye"></i>
+                    </a>
+                    <a
+                      className="btn-hide"
+                      href="/#"
+                      onClick={(e) => toggleImage(e)}
+                    >
+                      <i className="fas fa-times-circle"></i>
+                    </a>
+                  </div>
                   <img src={file.url} alt={file.name} />
-                </a>
+                </div>
               ) : (
                 <a
                   className="file"
@@ -288,7 +339,7 @@ function Chatroom(props) {
                   download={file.url}
                   href={file.url}
                 >
-                  <i className="fas fa-file-download"></i>
+                  <i className="fas fa-download"></i>
                   <div>{file.name}</div>
                 </a>
               );
@@ -307,23 +358,41 @@ function Chatroom(props) {
         <ul className="members-dropdown">
           <div className="subtitle without-line name">{chatroom.name}</div>
           {chatroom.members
-            ? chatroom.members.map((member, index) => {
-                return (
-                  <li className="user" key={index}>
-                    <div className="avatar">
-                      <div className="image">
-                        <img src={member.picture} alt={member.name} />
+            ? chatroom.members.map(
+                ({ chatroomUser, action, directChatroomName }, index) => {
+                  const { picture, name, isOnline } = chatroomUser;
+                  return (
+                    <li
+                      className={
+                        "user" + (action === "friends" ? " friend" : "")
+                      }
+                      key={index}
+                    >
+                      <div className="avatar">
+                        <div className="image">
+                          <img src={picture} alt={name} />
+                        </div>
+                        <span
+                          className={
+                            "status " + (isOnline ? "online" : "offline")
+                          }
+                        ></span>
                       </div>
-                      <span
-                        className={
-                          "status " + (member.isOnline ? "online" : "offline")
-                        }
-                      ></span>
-                    </div>
-                    <div className="name">{member.name}</div>
-                  </li>
-                );
-              })
+                      <div className="name">{name}</div>
+                      {action === "friends" ? (
+                        <Link
+                          className="btn-chat"
+                          to={"/direct-chatroom/" + directChatroomName}
+                        >
+                          <i className="fas fa-comments"></i>
+                        </Link>
+                      ) : (
+                        ""
+                      )}
+                    </li>
+                  );
+                }
+              )
             : ""}
         </ul>
         <div className="chatbox__messages" onScroll={() => showScrollDownBtn()}>
@@ -333,7 +402,7 @@ function Chatroom(props) {
               aria-label="Show more messages"
               onClick={() => handleMessagesCount()}
             >
-              <i class="fas fa-comment-dots"></i>
+              <i className="fas fa-comment-dots"></i>
             </button>
           ) : (
             ""

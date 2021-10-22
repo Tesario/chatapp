@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import "./CreateChatroom.scss";
 
-function CreateChatroom(props) {
+const CreateChatroom = (props) => {
   const history = useHistory();
   const [state, setState] = useState({
     name: "",
@@ -20,7 +20,11 @@ function CreateChatroom(props) {
   const { notify } = props;
 
   useEffect(() => {
-    getChatrooms();
+    let mounted = true;
+    if (mounted) {
+      getChatrooms();
+    }
+    return () => (mounted = false);
     // eslint-disable-next-line
   }, []);
 
@@ -38,7 +42,7 @@ function CreateChatroom(props) {
       .then((res) => {
         notify(res.data);
         setState({ name: "", isPrivate: false, password: "" });
-        history.push("/chatroom/" + res.data.chatroom.name);
+        history.push("/chatroom/" + res.data.chatroom.lowerCaseName);
       })
       .catch((error) => {
         notify(error.response.data);
@@ -138,6 +142,9 @@ function CreateChatroom(props) {
 
   return (
     <div className="chatroom container-fluid">
+      <h1 className="title">
+        Chatrooms <i className="fas fa-plus-circle"></i>
+      </h1>
       <div className="chatroom-grid">
         <div className="create-chatroom">
           <h1 className="chatroom__title">Create room</h1>
@@ -235,6 +242,6 @@ function CreateChatroom(props) {
       </div>
     </div>
   );
-}
+};
 
 export default CreateChatroom;
