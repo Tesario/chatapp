@@ -30,6 +30,7 @@ const Homepage = (props) => {
       sr.reveal("#navbar .menu li", {
         origin: "top",
         interval: 75,
+        scale: 0.5,
         delay: 200,
       });
     }
@@ -42,34 +43,39 @@ const Homepage = (props) => {
       origin: "top",
       interval: 200,
       delay: 200,
+      scale: 0.5,
     });
     sr.reveal("#hero .image", {
       origin: "right",
       distance: "500px",
       delay: 500,
+      scale: 0.5,
     });
     sr.reveal("#features .subtitle, #features p, #features a", {
       interval: 100,
     });
-    sr.reveal("#features .frame");
+    sr.reveal("#features .image-group", { scale: 0.5 });
     sr.reveal("#features .second-frame", { delay: 600 });
     sr.reveal("#features .third-frame", { delay: 300 });
     sr.reveal("#features .icon", { scale: 0.5, interval: 200 });
-    sr.reveal("#development .item", { interval: 200, delay: 300 });
+    sr.reveal("#development .item", { interval: 200, delay: 300, scale: 0.2 });
     sr.reveal("#technology .card:first-child", {
       origin: "left",
       delay: 300,
       distance: "100px",
+      scale: 0.5,
     });
     sr.reveal("#technology .middle", {
       origin: "bottom",
       delay: 600,
       distance: "50px",
+      scale: 0.5,
     });
     sr.reveal("#technology .card:last-child", {
       origin: "right",
       delay: 300,
       distance: "100px",
+      scale: 0.2,
     });
 
     const navbar = document.querySelector("#navbar");

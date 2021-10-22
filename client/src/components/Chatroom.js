@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import io from "socket.io-client";
 import axios from "axios";
 import dateFormat from "dateformat";
@@ -307,23 +308,41 @@ function Chatroom(props) {
         <ul className="members-dropdown">
           <div className="subtitle without-line name">{chatroom.name}</div>
           {chatroom.members
-            ? chatroom.members.map((member, index) => {
-                return (
-                  <li className="user" key={index}>
-                    <div className="avatar">
-                      <div className="image">
-                        <img src={member.picture} alt={member.name} />
+            ? chatroom.members.map(
+                ({ chatroomUser, action, directChatroomName }, index) => {
+                  const { picture, name, isOnline } = chatroomUser;
+                  return (
+                    <li
+                      className={
+                        "user" + (action === "friends" ? " friend" : "")
+                      }
+                      key={index}
+                    >
+                      <div className="avatar">
+                        <div className="image">
+                          <img src={picture} alt={name} />
+                        </div>
+                        <span
+                          className={
+                            "status " + (isOnline ? "online" : "offline")
+                          }
+                        ></span>
                       </div>
-                      <span
-                        className={
-                          "status " + (member.isOnline ? "online" : "offline")
-                        }
-                      ></span>
-                    </div>
-                    <div className="name">{member.name}</div>
-                  </li>
-                );
-              })
+                      <div className="name">{name}</div>
+                      {action === "friends" ? (
+                        <Link
+                          className="btn-chat"
+                          to={"/direct-chatroom/" + directChatroomName}
+                        >
+                          <i className="fas fa-comments"></i>
+                        </Link>
+                      ) : (
+                        ""
+                      )}
+                    </li>
+                  );
+                }
+              )
             : ""}
         </ul>
         <div className="chatbox__messages" onScroll={() => showScrollDownBtn()}>
@@ -333,7 +352,7 @@ function Chatroom(props) {
               aria-label="Show more messages"
               onClick={() => handleMessagesCount()}
             >
-              <i class="fas fa-comment-dots"></i>
+              <i className="fas fa-comment-dots"></i>
             </button>
           ) : (
             ""

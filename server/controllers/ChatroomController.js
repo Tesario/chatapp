@@ -105,11 +105,40 @@ export const getPublicChatrooms = async (req, res, next) => {
 
 export const getPublicChatroom = async (req, res, next) => {
   const { lowerCaseName } = req.params;
+  const { id } = req.user;
 
   try {
-    const chatroom = await Chatroom.findOne({ lowerCaseName }).populate(
+    let chatroom = await Chatroom.findOne({ lowerCaseName }).populate(
       "members"
     );
+
+    let members = await Promise.all(
+      chatroom.members.map(async (chatroomUser) => {
+        const foundDirectChatroom = await DirectChatroom.findOne({
+          members: { $all: [id, chatroomUser._id] },
+        });
+        if (id.toString() === chatroomUser._id.toString()) {
+          return {
+            chatroomUser,
+            action: "same-user",
+            directChatroomName: null,
+          };
+        } else if (foundDirectChatroom) {
+          return {
+            chatroomUser,
+            action: "friends",
+            directChatroomName: foundDirectChatroom.name,
+          };
+        }
+        return {
+          chatroomUser,
+          action: "not-friends",
+          directChatroomName: null,
+        };
+      })
+    );
+
+    chatroom = { name: chatroom.name, members };
 
     res.status(200).json(chatroom);
   } catch (error) {
