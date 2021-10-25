@@ -22,7 +22,7 @@ const app = express();
 const server = createServer(app);
 const socketio = new io.Server(server);
 
-const port = process.env.port || 8000;
+const port = process.env.PORT || 8000;
 
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
