@@ -9,7 +9,7 @@ import {
 } from "../controllers/MessageController.js";
 import auth from "../middlewares/auth.js";
 import isMember from "../middlewares/isMember.js";
-import IsDirectMember from "../middlewares/isDirectMember.js";
+import IsDirectMember from "../middlewares/IsDirectMember.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
 const storage = multer.diskStorage({

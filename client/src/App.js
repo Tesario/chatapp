@@ -126,6 +126,7 @@ function App() {
         setIsAuth(true);
       })
       .catch(() => {
+        sessionStorage.removeItem("token");
         setIsAuth(false);
       });
   };

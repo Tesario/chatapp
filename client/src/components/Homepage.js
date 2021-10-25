@@ -231,6 +231,16 @@ const Homepage = (props) => {
                   Technology
                 </a>
               </li>
+              <li className="btn-item">
+                <Link className="btn btn-primary" to="/login">
+                  Login
+                </Link>
+              </li>
+              <li className="btn-item">
+                <Link className="btn btn-primary" to="/register">
+                  Register
+                </Link>
+              </li>
             </ul>
           </div>
           <div className="hamburger">

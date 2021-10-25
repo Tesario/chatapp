@@ -1,8 +1,38 @@
 {
-    "scripts": {
-        "build": "cd client && npm run build",
-        "install-client": "cd client && npm install",
-        "heroku-postbuild": "npm run install-client && npm run build",
-        "start": "cd server && npm install && node server.js"
-    }
+  "name": "chatapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tesario/chatapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tesario/chatapp/issues"
+  },
+  "engines": {
+    "node": "14.17.3"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "concurrently": "^6.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "js-sha256": "^0.9.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.13.5",
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.12",
+    "sharp": "^0.28.3",
+    "socket.io": "^4.2.0",
+    "uuid": "^8.3.2"
+  },
+  "homepage": "https://github.com/Tesario/chatapp#readme"
 }

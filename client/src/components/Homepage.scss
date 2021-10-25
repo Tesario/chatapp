@@ -178,11 +178,38 @@
             @media (max-width: $lg) {
                 margin: 1rem 0 0;
             }
+
+            &:nth-child(5) {
+                margin-top: auto;
+            }
+
+            &.btn-item {
+                @media (min-width: $lg) {
+                    display: none;
+                }
+            }
         }
 
         a {
             color: var(--text-color);
             font-size: $menu-size;
+            transition: .1s ease-in-out;
+
+            &:not(.btn):hover {
+                @media (min-width: $lg) {
+                    color: var(--primary-color);
+                }
+
+                @media (max-width: $lg) {
+                    filter: brightness(.8)
+                }
+            }
+
+            &.btn-primary {
+                font-size: 16px;
+                border-radius: 2rem;
+                width: 100%;
+            }
         }
     }
 
@@ -193,8 +220,8 @@
         @media (max-width: $lg) {
             transform: translateX(100%);
             height: 100vh;
-            padding: 12rem calc(2rem + 40px) 8rem 2rem;
-            background-color: var(--primary-color);
+            padding: 25vh 1.5rem 1.5rem;
+            background-color: var(--grey);
             flex-direction: column;
         }
     }
