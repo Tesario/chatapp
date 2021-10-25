@@ -69,10 +69,6 @@ mongoose.set("useFindAndModify", false);
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useCreateIndex", true);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
-
 server.listen(port, () => {
   console.log(`Server is running at ${port}`);
 });
