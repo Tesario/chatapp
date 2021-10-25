@@ -29,6 +29,10 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("Welcome to Daily Code Buffer in Heroku Auto Deployment!!");
+});
+
 // Routes
 app.use("/user", userRoutes);
 app.use("/chatroom", chatroomRoutes);
