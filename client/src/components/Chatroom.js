@@ -29,7 +29,7 @@ function Chatroom(props) {
 
   useEffect(() => {
     getMessages();
-    socketRef.current = io.connect("http://localhost:8000", {
+    socketRef.current = io.connect("https://tesar-chatapp.herokuapp.com", {
       transports: ["websocket"],
     });
 
