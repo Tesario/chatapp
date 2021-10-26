@@ -101,6 +101,7 @@ h1 {
 
 .app {
   display: flex;
+  overflow-y: auto;
 
   .container-fluid {
     min-height: 100vh;

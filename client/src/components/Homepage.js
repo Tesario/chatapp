@@ -232,12 +232,24 @@ const Homepage = (props) => {
                 </a>
               </li>
               <li className="btn-item">
-                <Link className="btn btn-primary" to="/login">
+                <Link
+                  className="btn btn-primary"
+                  to="/login"
+                  onClick={() => {
+                    document.body.classList.remove("scroll-lock");
+                  }}
+                >
                   Login
                 </Link>
               </li>
               <li className="btn-item">
-                <Link className="btn btn-primary" to="/register">
+                <Link
+                  className="btn btn-primary"
+                  to="/register"
+                  onClick={() => {
+                    document.body.classList.remove("scroll-lock");
+                  }}
+                >
                   Register
                 </Link>
               </li>

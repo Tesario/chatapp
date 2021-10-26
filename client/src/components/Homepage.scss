@@ -294,6 +294,7 @@
         border: none;
         text-align: left;
         font-weight: 500;
+        line-height: unset;
 
         @media (max-width: $xl) {
             font-size: 3.5em;
