@@ -101,10 +101,10 @@ h1 {
 
 .app {
   display: flex;
-  overflow-y: auto;
+  flex-direction: column;
 
   .container-fluid {
     min-height: 100vh;
-    padding: 2rem .5rem;
+    padding: 4.5rem 2rem 2rem;
   }
 }

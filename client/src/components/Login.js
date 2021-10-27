@@ -4,7 +4,7 @@ import { Link, withRouter, useHistory } from "react-router-dom";
 
 import "./Login.scss";
 
-function Login(props) {
+const Login = (props) => {
   const history = useHistory();
   const [state, setState] = useState({
     email: "vtesar2003@gmail.com",
@@ -80,6 +80,6 @@ function Login(props) {
       </form>
     </div>
   );
-}
+};
 
 export default withRouter(Login);

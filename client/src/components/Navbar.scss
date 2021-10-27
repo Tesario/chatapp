@@ -1,0 +1,44 @@
+@import "../assets/css/global.scss";
+
+.navbar {
+    padding: .75rem 2rem;
+    color: var(--text-color);
+    background-color: var(--grey);
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    @media (max-width: $sm) {
+        padding: .75rem 1rem;
+    }
+
+    .navbar-items {
+        display: flex;
+    }
+
+    a {
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        margin-left: 2rem;
+
+        @media (max-width: $sm) {
+            margin-left: 1.5rem;
+        }
+
+        i {
+            font-size: 1.6em;
+            transition: .2s ease-in-out;
+        }
+
+        &:hover {
+            i {
+                filter: brightness(.85);
+            }
+        }
+    }
+}
