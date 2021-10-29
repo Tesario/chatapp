@@ -494,8 +494,12 @@ const Homepage = (props) => {
       </section>
       <footer id="footer">
         <div className="text">
-          Code & design by{" "}
-          <a href="https://tesario.4fan.cz/" target="_blank" rel="noreferrer">
+          Code & design by&nbsp;
+          <a
+            href="https://vojtechtesar.gatsbyjs.io/"
+            target="_blank"
+            rel="noreferrer"
+          >
             Vojtěch Tesař
           </a>
         </div>

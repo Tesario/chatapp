@@ -207,7 +207,6 @@
 
             &.btn-primary {
                 font-size: 16px;
-                border-radius: 2rem;
                 width: 100%;
             }
         }
@@ -340,7 +339,7 @@
 
         .btn {
             color: var(--text-color);
-            border-radius: 2rem;
+            border-radius: 1.5rem;
             min-width: 120px;
 
             &:not(:last-child) {
