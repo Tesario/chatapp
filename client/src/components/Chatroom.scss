@@ -4,6 +4,26 @@
     padding: 0 !important;
     position: relative;
 
+    .aside-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba($black, .85);
+        z-index: 800;
+        opacity: 0;
+        pointer-events: none;
+        transition: .2s ease-in-out;
+
+        &.show {
+            @media (max-width: $md) {
+                opacity: 1;
+                pointer-events: unset;
+            }
+        }
+    }
+
     .chatroom-menu {
         position: fixed;
         z-index: 1500;
@@ -14,7 +34,7 @@
         padding: .8rem .25rem;
         align-items: flex-start;
         background-color: var(--grey);
-        min-height: 49px;
+        height: 49px;
 
         @media (min-width: $md) {
             width: $chatroom-aside-width;
@@ -23,11 +43,43 @@
 
         @media (max-width: $md) {
             justify-content: center;
+            left: 1rem;
         }
 
         .subtitle {
-            margin: 0 0 0 .5rem;
             padding: 0;
+            margin: 0;
+        }
+
+        .members-header {
+            display: flex;
+            align-items: center;
+
+            .subtitle {
+                margin-left: .5rem;
+
+                @media (max-width: $md) {
+                    display: none;
+                }
+            }
+        }
+
+        .members-toggler {
+            display: flex;
+            transition: .2s ease-in-out;
+
+            &:hover {
+                filter: brightness(.9);
+            }
+
+            @media (min-width: $md) {
+                display: none;
+            }
+
+            i {
+                font-size: 1.6em;
+                color: var(--text-color);
+            }
         }
     }
 
@@ -37,9 +89,35 @@
         color: var(--text-color);
         width: 100%;
         padding-top: 1rem;
+        transition: .2s ease-in-out left;
 
         @media (max-width: $md) {
-            display: none;
+            position: fixed;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            top: 49px;
+            left: -$chatroom-aside-width;
+            padding: 0 .25rem;
+            width: $chatroom-aside-width;
+            height: 100%;
+            background-color: var(--grey);
+        }
+
+        &.show {
+            @media (max-width: $md) {
+                pointer-events: unset;
+                left: 0;
+            }
+        }
+
+        .subtitle {
+            text-align: left;
+            margin: .25rem 0 .5rem .5rem;
+
+            @media (min-width: $md) {
+                display: none;
+            }
         }
 
         .user {
@@ -185,6 +263,7 @@
 
             .sender {
                 font-weight: 600;
+                word-break: break-word;
             }
 
             .time {
@@ -277,7 +356,7 @@
                     background-color: var(--grey);
                     opacity: 0;
                     pointer-events: none;
-                    transition: .2s ease-in-out;
+                    transition: .2s ease-in-out opacity;
                     display: flex;
                     align-items: center;
                     justify-content: center;

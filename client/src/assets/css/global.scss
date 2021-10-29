@@ -106,5 +106,9 @@ h1 {
   .container-fluid {
     min-height: 100vh;
     padding: 4.5rem 2rem 2rem;
+
+    @media (max-width: $lg) {
+      padding: 4.5rem .75rem .75rem;
+    }
   }
 }

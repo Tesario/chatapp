@@ -26,6 +26,8 @@ function Chatroom(props) {
   const socketRef = useRef();
   const emojiRef = useRef();
   const emojiFillerRef = useRef();
+  const membersAsideRef = useRef();
+  const asideMaskRef = useRef();
 
   useEffect(() => {
     getMessages();
@@ -250,6 +252,13 @@ function Chatroom(props) {
       });
   };
 
+  const toggleMembersAside = (e) => {
+    e.preventDefault();
+
+    membersAsideRef.current.classList.toggle("show");
+    asideMaskRef.current.classList.toggle("show");
+  };
+
   const showScrollDownBtn = () => {
     const chatboxMessages = document.querySelector(".chatbox__messages");
     if (
@@ -354,9 +363,24 @@ function Chatroom(props) {
 
   return (
     <div className="chatbox container-fluid">
+      <span
+        className="aside-mask"
+        ref={asideMaskRef}
+        onClick={(e) => toggleMembersAside(e)}
+      ></span>
       <div className="chatroom-menu">
-        <div className="subtitle without-line name">{chatroom.name}</div>
-        <ul className="members-aside">
+        <div className="members-header">
+          <a
+            href="/#"
+            onClick={(e) => toggleMembersAside(e)}
+            className="members-toggler"
+          >
+            <i className="fas fa-users"></i>
+          </a>
+          <div className="subtitle without-line name">{chatroom.name}</div>
+        </div>
+        <ul className="members-aside" ref={membersAsideRef}>
+          <div className="subtitle without-line name">{chatroom.name}</div>
           {chatroom.members
             ? chatroom.members.map(
                 ({ chatroomUser, action, directChatroomName }, index) => {
