@@ -10,35 +10,10 @@ import {
   changeStatus,
 } from "../controllers/UserController.js";
 import User from "../models/User.js";
+import upload from "../utils/Multer.js";
 import auth from "../middlewares/Auth.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "../client/public/profile-pictures/");
-  },
-  filename: async (req, file, cb) => {
-    const user = await User.findById(req.user.id);
-    const arr = file.originalname.split(".");
-    const fileName = user.name + "." + arr[arr.length - 1];
-    cb(null, fileName);
-  },
-});
-const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    if (
-      file.mimetype == "image/png" ||
-      file.mimetype == "image/jpg" ||
-      file.mimetype == "image/jpeg"
-    ) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-      return cb(new ErrorResponse("Only image format allowed"));
-    }
-  },
-});
 const router = express.Router();
 
 // Register an user

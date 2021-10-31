@@ -310,7 +310,8 @@ function Chatroom(props) {
           <div className="body">{message.body}</div>
           {message.files.length !== 0 &&
             message.files.map((file, index) => {
-              const ext = file.url.split(".")[1];
+              const split = file.url.split(".");
+              const ext = split[split.length - 1];
               return ext === "png" ||
                 ext === "jpeg" ||
                 ext === "jpg" ||
@@ -321,6 +322,8 @@ function Chatroom(props) {
                       className="btn-download"
                       download={file.url}
                       href={file.url}
+                      rel="noreferrer"
+                      target="_blank"
                     >
                       <i className="fas fa-download"></i>
                     </a>
@@ -347,6 +350,8 @@ function Chatroom(props) {
                   key={index}
                   download={file.url}
                   href={file.url}
+                  rel="noreferrer"
+                  target="_blank"
                 >
                   <i className="fas fa-download"></i>
                   <div>{file.name}</div>

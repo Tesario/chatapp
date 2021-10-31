@@ -3,6 +3,7 @@ import { DirectChatroom } from "../models/DirectChatroom.js";
 import sha256 from "js-sha256";
 import jwt from "jsonwebtoken";
 import ErrorResponse from "../utils/ErrorResponse.js";
+import cloudinary from "../utils/Cloudinary.js";
 
 export const userRegister = async (req, res, next) => {
   const { name, email, password, passwordAgain } = req.body;
@@ -126,11 +127,25 @@ export const editUser = async (req, res, next) => {
     if (userExist) {
       return next(new ErrorResponse("User already exist", 400));
     }
+
+    let result;
+    if (req.file) {
+      result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: "profile-pictures",
+      });
+
+      const user = await User.findOne({ _id: req.user.id });
+      if (user.cloudinary_id) {
+        await cloudinary.v2.uploader.destroy(user.cloudinary_id);
+      }
+    }
+
     await User.updateOne(
       { _id: req.user.id },
       req.file
         ? {
-            picture: "/profile-pictures/" + req.file.filename,
+            picture: result.secure_url,
+            cloudinary_id: result.public_id,
             email,
             name,
             lowerCaseName: name.toLowerCase(),

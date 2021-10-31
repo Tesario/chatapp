@@ -104,6 +104,7 @@ function Settings(props) {
     })
       .then((res) => {
         notify(res.data);
+        getUser();
       })
       .catch((error) => {
         notify(error.response.data);
