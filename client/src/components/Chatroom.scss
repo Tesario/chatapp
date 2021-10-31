@@ -15,11 +15,39 @@
         opacity: 0;
         pointer-events: none;
         transition: .2s ease-in-out;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         &.show {
             @media (max-width: $md) {
                 opacity: 1;
                 pointer-events: unset;
+            }
+        }
+
+        &.uploading {
+            opacity: 1;
+            pointer-events: unset;
+
+            .loading {
+                display: flex;
+                align-items: center;
+
+                @media (min-width: $md) {
+                    margin-right: -$chatroom-aside-width;
+                }
+            }
+
+            .spinner-border {
+                color: var(--primary-color);
+                width: 50px;
+                height: 50px;
+            }
+
+            .text {
+                color: var(--text-color);
+                margin-left: 1rem;
             }
         }
     }

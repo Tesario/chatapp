@@ -21,6 +21,7 @@ function Chatroom(props) {
   const [emoji, setEmoji] = useState("");
   const [chatroom, setChatroom] = useState({});
   const [files, setFiles] = useState([]);
+  const [fileUploading, setFileUploading] = useState(false);
   const messageInputRef = useRef();
   const scrollDown = useRef();
   const socketRef = useRef();
@@ -149,6 +150,20 @@ function Chatroom(props) {
         isValid = false;
         break;
       }
+
+      if (
+        uploadedFiles[i].type !== "image/png" &&
+        uploadedFiles[i].type !== "image/jpg" &&
+        uploadedFiles[i].type !== "image/jpeg"
+      ) {
+        notify({
+          success: false,
+          message: "Supported extension are only png, jpg and jpeg",
+          isShow: true,
+        });
+        isValid = false;
+        break;
+      }
     }
 
     if (isValid) {
@@ -157,7 +172,11 @@ function Chatroom(props) {
       }
 
       setFiles(fileArr);
+      return;
     }
+
+    e.target.value = "";
+    setFiles([]);
   };
 
   const handleMessagesCount = () => {
@@ -187,6 +206,10 @@ function Chatroom(props) {
         formData.append("files", file);
       });
 
+      if (files.length) {
+        setFileUploading(true);
+      }
+
       await axios({
         url: "/message/" + lowerCaseName + "/create",
         method: "POST",
@@ -197,6 +220,7 @@ function Chatroom(props) {
         },
       })
         .then(() => {
+          setFileUploading(false);
           setFiles([]);
           socketRef.current.emit("message", {
             sended: true,
@@ -369,10 +393,15 @@ function Chatroom(props) {
   return (
     <div className="chatbox container-fluid">
       <span
-        className="aside-mask"
+        className={"aside-mask" + (fileUploading ? " uploading" : "")}
         ref={asideMaskRef}
         onClick={(e) => toggleMembersAside(e)}
-      ></span>
+      >
+        <div className="loading">
+          <div className="spinner-border" role="status"></div>
+          <span className="text">Uploading...</span>
+        </div>
+      </span>
       <div className="chatroom-menu">
         <div className="members-header">
           <a

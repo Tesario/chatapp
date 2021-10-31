@@ -60,12 +60,15 @@ function Settings(props) {
             notify("Failed file loaded");
           });
         return;
+      } else {
+        notify({
+          message: "Supported extensions are only png, jpg and jpeg",
+          success: false,
+        });
       }
-
-      setProfile({ ...profile, picture: file });
-      return;
     }
 
+    e.target.value = "";
     setProfile({ ...profile, picture: null });
   };
 
