@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 import {
   userRegister,
   userLogin,
@@ -9,10 +8,8 @@ import {
   getUser,
   changeStatus,
 } from "../controllers/UserController.js";
-import User from "../models/User.js";
 import upload from "../utils/Multer.js";
 import auth from "../middlewares/Auth.js";
-import ErrorResponse from "../utils/ErrorResponse.js";
 
 const router = express.Router();
 

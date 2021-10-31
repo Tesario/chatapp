@@ -152,13 +152,14 @@ function Chatroom(props) {
       }
 
       if (
+        uploadedFiles[i].type !== "application/pdf" &&
         uploadedFiles[i].type !== "image/png" &&
         uploadedFiles[i].type !== "image/jpg" &&
         uploadedFiles[i].type !== "image/jpeg"
       ) {
         notify({
           success: false,
-          message: "Supported extension are only png, jpg and jpeg",
+          message: "Supported extension are only pdf, png, jpg and jpeg",
           isShow: true,
         });
         isValid = false;
