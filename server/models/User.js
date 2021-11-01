@@ -18,7 +18,7 @@ const UserSchema = new Schema({
     required: [true, "Please fill a name field"],
     unique: true,
     match: [/^[a-zA-Z0-9_.]+$/, "Username is not valid"],
-    maxlength: [15, "Maximum length for username is 20 characters"],
+    maxlength: [15, "Maximum length for username is 15 characters"],
     minlength: [3, "Minimum length for username is 3 characters"],
   },
   lowerCaseName: {

@@ -4,25 +4,120 @@
     padding: 0 !important;
     position: relative;
 
-    .chatbox-grid {
-        display: grid;
-        grid-template-columns: 250px auto;
+    .aside-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: 100%;
+        background-color: rgba($black, .85);
+        z-index: 800;
+        opacity: 0;
+        pointer-events: none;
+        transition: .2s ease-in-out;
+
+        &.show {
+            @media (max-width: $md) {
+                opacity: 1;
+                pointer-events: unset;
+            }
+        }
     }
 
-    .members-dropdown {
+    .chatroom-menu {
+        position: fixed;
+        z-index: 1500;
+        left: 0;
+        top: 0;
         display: flex;
         flex-direction: column;
+        padding: .8rem .25rem;
         align-items: flex-start;
-        grid-row: 1/4;
         background-color: var(--grey);
-        padding: 1.5rem .25rem;
+        height: 49px;
+
+        @media (min-width: $md) {
+            width: $chatroom-aside-width;
+            height: 100%;
+        }
+
+        @media (max-width: $md) {
+            justify-content: center;
+            left: 1rem;
+        }
+
+        .subtitle {
+            padding: 0;
+            margin: 0;
+        }
+
+        .members-header {
+            display: flex;
+            align-items: center;
+
+            .subtitle {
+                margin-left: .5rem;
+
+                @media (max-width: $md) {
+                    display: none;
+                }
+            }
+        }
+
+        .members-toggler {
+            display: flex;
+            transition: .2s ease-in-out;
+
+            &:hover {
+                filter: brightness(.9);
+            }
+
+            @media (min-width: $md) {
+                display: none;
+            }
+
+            i {
+                font-size: 1.6em;
+                color: var(--text-color);
+            }
+        }
+    }
+
+    .members-aside {
         max-height: 100vh;
         overflow-y: auto;
         color: var(--text-color);
+        width: 100%;
+        padding-top: 1rem;
+        transition: .2s ease-in-out left;
+
+        @media (max-width: $md) {
+            position: fixed;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            top: 49px;
+            left: -$chatroom-aside-width;
+            padding: 0 .25rem;
+            width: $chatroom-aside-width;
+            height: 100%;
+            background-color: var(--grey);
+        }
+
+        &.show {
+            @media (max-width: $md) {
+                pointer-events: unset;
+                left: 0;
+            }
+        }
 
         .subtitle {
-            margin-left: .5rem;
+            text-align: left;
+            margin: .25rem 0 .5rem .5rem;
+
+            @media (min-width: $md) {
+                display: none;
+            }
         }
 
         .user {
@@ -80,24 +175,20 @@
                     background-color: #dc3545;
                 }
             }
-
-            &:first-child {
-                padding-top: 0;
-            }
-
-            &:last-child {
-                padding-bottom: 0;
-            }
         }
     }
 
     &__messages {
         position: relative;
-        height: calc(100vh - 45px - 1.5rem);
+        height: calc(100vh - 45px - 1.5rem - 49px);
         overflow-y: scroll;
-        margin: .5rem 0 0;
+        margin: calc(49px + .5rem) .5rem 0 0;
         padding: 0 .5rem 0 .5rem;
         color: var(--text-color);
+
+        @media (min-width: $md) {
+            margin-left: $chatroom-aside-width;
+        }
 
         .image {
             position: absolute;
@@ -156,6 +247,10 @@
                 .file {
                     flex-direction: row-reverse;
 
+                    div {
+                        text-align: right;
+                    }
+
                     i {
                         margin: 0 0 0 1rem;
                     }
@@ -168,6 +263,7 @@
 
             .sender {
                 font-weight: 600;
+                word-break: break-word;
             }
 
             .time {
@@ -188,23 +284,32 @@
                     position: fixed;
                     z-index: 500;
                     top: 0;
-                    left: 0;
+                    right: 0;
                     max-width: unset;
-                    height: 100vh;
-                    width: 100vw;
-                    margin: 0;
+                    height: calc(100vh - 49px);
+                    width: calc(100vw - 290px);
+                    margin: 49px 0 0;
                     background-color: rgba($black, .85);
                     border: 0;
                     display: flex;
                     align-items: center;
                     justify-content: center;
 
+                    @media (max-width: $md) {
+                        width: 100vw;
+                    }
+
                     img {
-                        max-height: 90vh;
+                        max-height: 80vh;
+                        max-width: calc(80vw - 290px);
                         height: auto;
                         width: auto;
                         object-fit: unset;
                         border-radius: 0;
+
+                        @media (max-width: $md) {
+                            max-width: 90vw;
+                        }
                     }
 
                     .btn-menu {
@@ -251,7 +356,7 @@
                     background-color: var(--grey);
                     opacity: 0;
                     pointer-events: none;
-                    transition: .2s ease-in-out;
+                    transition: .2s ease-in-out opacity;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -337,6 +442,11 @@
         height: 45px;
         position: relative;
 
+        @media (min-width: $md) {
+            margin-left: $chatroom-aside-width;
+            padding-left: .5rem;
+        }
+
         .form-control {
             padding-right: 6.1rem;
         }
@@ -347,6 +457,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-right: .5rem;
         }
 
         .btn-file,
@@ -356,7 +467,7 @@
             height: 45px;
             display: flex;
             align-items: center;
-            right: calc(45px + 1rem);
+            right: calc(45px + 1.5rem);
 
             i {
                 color: var(--primary-color);
@@ -380,7 +491,7 @@
         }
 
         .btn-emoji {
-            right: calc(78px + 2rem);
+            right: calc(78px + 2.5rem);
 
             @media (max-width: $lg) {
                 display: none;

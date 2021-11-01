@@ -10,7 +10,7 @@ import Settings from "./components/Settings";
 import CreateChatroom from "./components/CreateChatroom";
 import Forbidden from "./components/Forbidden";
 import NotFound from "./components/NotFound";
-import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import io from "socket.io-client";
 import UserRoute from "./components/UserRoute";
@@ -74,7 +74,7 @@ function App() {
 
   useEffect(() => {
     let mounted = true;
-    socketRef.current = io.connect("http://localhost:8000", {
+    socketRef.current = io.connect("https://tesar-chatapp.herokuapp.com", {
       transports: ["websocket"],
     });
 
@@ -126,6 +126,7 @@ function App() {
         setIsAuth(true);
       })
       .catch(() => {
+        sessionStorage.removeItem("token");
         setIsAuth(false);
       });
   };
@@ -133,6 +134,9 @@ function App() {
   return (
     <div className="app">
       <Router>
+        {!isHomepage || isAuth ? (
+          <Navbar notify={notify} changeIsAuth={changeIsAuth} isAuth={isAuth} />
+        ) : null}
         <Switch>
           <UserRoute
             path="/chatroom/:lowerCaseName"
@@ -178,13 +182,6 @@ function App() {
             <NotFound changeIsHomepage={changeIsHomepage} />
           </Route>
         </Switch>
-        {!isHomepage || isAuth ? (
-          <Sidebar
-            notify={notify}
-            changeIsAuth={changeIsAuth}
-            isAuth={isAuth}
-          />
-        ) : null}
       </Router>
     </div>
   );

@@ -57,8 +57,8 @@ input {
 
 h1 {
   color: var(--text-color);
-  text-align: center;
   font-size: $title-size;
+  line-height: $line-height;
   margin-bottom: 1.5rem;
 
   @media (max-width: $lg) {
@@ -101,9 +101,14 @@ h1 {
 
 .app {
   display: flex;
+  flex-direction: column;
 
   .container-fluid {
     min-height: 100vh;
-    padding: 2rem .5rem;
+    padding: 4.5rem 2rem 2rem;
+
+    @media (max-width: $lg) {
+      padding: 4.5rem .75rem .75rem;
+    }
   }
 }

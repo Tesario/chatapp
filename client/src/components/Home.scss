@@ -2,14 +2,9 @@
 
 #home {
     color: var(--text-color);
-    padding: 2rem !important;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
-    @media (max-width: $lg) {
-        padding: 1rem .75rem;
-    }
 
     .home-grid {
         display: grid;

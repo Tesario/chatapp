@@ -4,6 +4,7 @@ import * as io from "socket.io";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 
 // Routes
 import userRoutes from "./routes/user.js";
@@ -11,6 +12,8 @@ import chatroomRoutes from "./routes/chatroom.js";
 import messageRoutes from "./routes/message.js";
 import friendRequestRoutes from "./routes/friendRequest.js";
 import directChatroomRoutes from "./routes/directChatroom.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 // Middlewares
 import errorHandler from "./middlewares/errorHandler.js";
@@ -22,7 +25,9 @@ const app = express();
 const server = createServer(app);
 const socketio = new io.Server(server);
 
-const port = process.env.port || 8000;
+const port = process.env.PORT || 8000;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
@@ -71,6 +76,10 @@ mongoose.set("useCreateIndex", true);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
+  });
 }
 
 server.listen(port, () => {

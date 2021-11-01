@@ -231,6 +231,28 @@ const Homepage = (props) => {
                   Technology
                 </a>
               </li>
+              <li className="btn-item">
+                <Link
+                  className="btn btn-primary"
+                  to="/login"
+                  onClick={() => {
+                    document.body.classList.remove("scroll-lock");
+                  }}
+                >
+                  Login
+                </Link>
+              </li>
+              <li className="btn-item">
+                <Link
+                  className="btn btn-primary"
+                  to="/register"
+                  onClick={() => {
+                    document.body.classList.remove("scroll-lock");
+                  }}
+                >
+                  Register
+                </Link>
+              </li>
             </ul>
           </div>
           <div className="hamburger">
@@ -472,8 +494,12 @@ const Homepage = (props) => {
       </section>
       <footer id="footer">
         <div className="text">
-          Code & design by{" "}
-          <a href="https://tesario.4fan.cz/" target="_blank" rel="noreferrer">
+          Code & design by&nbsp;
+          <a
+            href="https://vojtechtesar.gatsbyjs.io/"
+            target="_blank"
+            rel="noreferrer"
+          >
             Vojtěch Tesař
           </a>
         </div>
