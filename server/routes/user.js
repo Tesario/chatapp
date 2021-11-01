@@ -9,7 +9,7 @@ import {
   changeStatus,
 } from "../controllers/UserController.js";
 import upload from "../utils/Multer.js";
-import auth from "../middlewares/Auth.js";
+import Auth from "../middlewares/Auth.js";
 
 const router = express.Router();
 
@@ -20,18 +20,18 @@ router.post("/register", userRegister);
 router.post("/login", userLogin);
 
 // Get an user
-router.get("/get", auth, getUser);
+router.get("/get", Auth, getUser);
 
 // Is user auth
-router.get("/is-auth", auth, isAuth);
+router.get("/is-auth", Auth, isAuth);
 
 // Get users by search
-router.get("/search/:search?", auth, searchUsers);
+router.get("/search/:search?", Auth, searchUsers);
 
 // Edit user's profile
-router.put("/edit", auth, upload.single("picture"), editUser);
+router.put("/edit", Auth, upload.single("picture"), editUser);
 
 // Change user online status
-router.put("/status/:isOnline", auth, changeStatus);
+router.put("/status/:isOnline", Auth, changeStatus);
 
 export default router;
