@@ -2,14 +2,18 @@ import express from "express";
 import {
   getFriends,
   removeFriend,
+  getChatroom,
 } from "../controllers/DirectChatroomController.js";
-import auth from "../middlewares/Auth.js";
+import Auth from "../middlewares/Auth.js";
 const router = express.Router();
 
 // Get user's friends
-router.get("/get", auth, getFriends);
+router.get("/get", Auth, getFriends);
 
 // Remove friend
-router.delete("/:name/remove", auth, removeFriend);
+router.delete("/:name/remove", Auth, removeFriend);
+
+// Get chatroom
+router.get("/get/:name", Auth, getChatroom);
 
 export default router;

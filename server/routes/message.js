@@ -26,6 +26,7 @@ router.post(
   "/direct-chatroom/:chatroomName/create",
   Auth,
   IsDirectMember,
+  upload.array("files"),
   createDirectMessage
 );
 

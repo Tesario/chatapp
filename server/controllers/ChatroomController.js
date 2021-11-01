@@ -103,7 +103,7 @@ export const getPublicChatrooms = async (req, res, next) => {
   }
 };
 
-export const getPublicChatroom = async (req, res, next) => {
+export const getChatroom = async (req, res, next) => {
   const { lowerCaseName } = req.params;
   const { id } = req.user;
 
