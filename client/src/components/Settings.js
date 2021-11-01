@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import convert from "image-file-resize";
 
@@ -6,6 +6,8 @@ import "./Settings.scss";
 
 function Settings(props) {
   const { notify } = props;
+  const maskRef = useRef();
+  const [fileUploading, setFileUploading] = useState(false);
   const [profile, setProfile] = useState({
     email: "",
     name: "",
@@ -39,6 +41,12 @@ function Settings(props) {
       });
   };
 
+  const toggleMembersAside = (e) => {
+    e.preventDefault();
+
+    maskRef.current.classList.toggle("show");
+  };
+
   const onChangePicture = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -60,12 +68,15 @@ function Settings(props) {
             notify("Failed file loaded");
           });
         return;
+      } else {
+        notify({
+          message: "Supported extensions are only png, jpg and jpeg",
+          success: false,
+        });
       }
-
-      setProfile({ ...profile, picture: file });
-      return;
     }
 
+    e.target.value = "";
     setProfile({ ...profile, picture: null });
   };
 
@@ -94,6 +105,10 @@ function Settings(props) {
     formData.append("email", profile.email);
     formData.append("name", profile.name);
 
+    if (profile.picture) {
+      setFileUploading(true);
+    }
+
     await axios({
       url: "/user/edit",
       method: "PUT",
@@ -103,7 +118,9 @@ function Settings(props) {
       },
     })
       .then((res) => {
+        setFileUploading(false);
         notify(res.data);
+        getUser();
       })
       .catch((error) => {
         notify(error.response.data);
@@ -116,6 +133,16 @@ function Settings(props) {
 
   return (
     <div className="settings container-fluid">
+      <span
+        className={"aside-mask" + (fileUploading ? " uploading" : "")}
+        ref={maskRef}
+        onClick={(e) => toggleMembersAside(e)}
+      >
+        <div className="loading">
+          <div className="spinner-border" role="status"></div>
+          <span className="text">Uploading...</span>
+        </div>
+      </span>
       <h1 className="settings__title">
         Settings <i className="fas fa-cog"></i>
       </h1>

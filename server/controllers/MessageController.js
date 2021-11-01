@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import Chatroom from "../models/Chatroom.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 import { DirectChatroom } from "../models/DirectChatroom.js";
+import cloudinary from "../utils/Cloudinary.js";
 
 export const getMessages = async (req, res, next) => {
   try {
@@ -44,19 +45,18 @@ export const getMessages = async (req, res, next) => {
 
 export const createMessage = async (req, res, next) => {
   const { lowerCaseName, message } = req.body;
+  const files = [];
+
+  for (const file of req.files) {
+    let newPath = await cloudinary.v2.uploader.upload(file.path, {
+      folder: "uploaded-files",
+    });
+    files.push({ name: file.originalname, url: newPath.secure_url });
+  }
 
   const chatroom = await Chatroom.findOne({
     lowerCaseName,
   }).select("_id");
-
-  let files = [];
-
-  req.files.forEach((file) => {
-    files.push({
-      url: "/uploaded-files/" + file.filename,
-      name: file.originalname,
-    });
-  });
 
   const newMessage = new Message({
     chatroomId: chatroom._id,

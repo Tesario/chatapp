@@ -21,6 +21,7 @@ function Chatroom(props) {
   const [emoji, setEmoji] = useState("");
   const [chatroom, setChatroom] = useState({});
   const [files, setFiles] = useState([]);
+  const [fileUploading, setFileUploading] = useState(false);
   const messageInputRef = useRef();
   const scrollDown = useRef();
   const socketRef = useRef();
@@ -149,6 +150,21 @@ function Chatroom(props) {
         isValid = false;
         break;
       }
+
+      if (
+        uploadedFiles[i].type !== "application/pdf" &&
+        uploadedFiles[i].type !== "image/png" &&
+        uploadedFiles[i].type !== "image/jpg" &&
+        uploadedFiles[i].type !== "image/jpeg"
+      ) {
+        notify({
+          success: false,
+          message: "Supported extension are only pdf, png, jpg and jpeg",
+          isShow: true,
+        });
+        isValid = false;
+        break;
+      }
     }
 
     if (isValid) {
@@ -157,7 +173,11 @@ function Chatroom(props) {
       }
 
       setFiles(fileArr);
+      return;
     }
+
+    e.target.value = "";
+    setFiles([]);
   };
 
   const handleMessagesCount = () => {
@@ -187,6 +207,10 @@ function Chatroom(props) {
         formData.append("files", file);
       });
 
+      if (files.length) {
+        setFileUploading(true);
+      }
+
       await axios({
         url: "/message/" + lowerCaseName + "/create",
         method: "POST",
@@ -197,6 +221,7 @@ function Chatroom(props) {
         },
       })
         .then(() => {
+          setFileUploading(false);
           setFiles([]);
           socketRef.current.emit("message", {
             sended: true,
@@ -310,7 +335,8 @@ function Chatroom(props) {
           <div className="body">{message.body}</div>
           {message.files.length !== 0 &&
             message.files.map((file, index) => {
-              const ext = file.url.split(".")[1];
+              const split = file.url.split(".");
+              const ext = split[split.length - 1];
               return ext === "png" ||
                 ext === "jpeg" ||
                 ext === "jpg" ||
@@ -321,6 +347,8 @@ function Chatroom(props) {
                       className="btn-download"
                       download={file.url}
                       href={file.url}
+                      rel="noreferrer"
+                      target="_blank"
                     >
                       <i className="fas fa-download"></i>
                     </a>
@@ -347,6 +375,8 @@ function Chatroom(props) {
                   key={index}
                   download={file.url}
                   href={file.url}
+                  rel="noreferrer"
+                  target="_blank"
                 >
                   <i className="fas fa-download"></i>
                   <div>{file.name}</div>
@@ -364,10 +394,15 @@ function Chatroom(props) {
   return (
     <div className="chatbox container-fluid">
       <span
-        className="aside-mask"
+        className={"aside-mask" + (fileUploading ? " uploading" : "")}
         ref={asideMaskRef}
         onClick={(e) => toggleMembersAside(e)}
-      ></span>
+      >
+        <div className="loading">
+          <div className="spinner-border" role="status"></div>
+          <span className="text">Uploading...</span>
+        </div>
+      </span>
       <div className="chatroom-menu">
         <div className="members-header">
           <a

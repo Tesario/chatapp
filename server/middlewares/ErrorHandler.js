@@ -1,6 +1,6 @@
 import ErrorResponse from "../utils/ErrorResponse.js";
 
-const errorHandler = (err, req, res, next) => {
+const ErrorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
   error.isShow = err.isShow;
@@ -22,4 +22,4 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-export default errorHandler;
+export default ErrorHandler;

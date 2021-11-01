@@ -5,19 +5,19 @@ import {
   deleteFriendRequest,
   acceptFriendRequest,
 } from "../controllers/FriendRequestController.js";
-import auth from "../middlewares/Auth.js";
+import Auth from "../middlewares/Auth.js";
 const router = express.Router();
 
 // Create a friend request
-router.post("/create", auth, createFriendRequest);
+router.post("/create", Auth, createFriendRequest);
 
 // Get a user's friend requests
-router.get("/get", auth, getFriendRequests);
+router.get("/get", Auth, getFriendRequests);
 
 // Delete a friend request
-router.delete("/delete", auth, deleteFriendRequest);
+router.delete("/delete", Auth, deleteFriendRequest);
 
 // Accept a friend request
-router.post("/accept", auth, acceptFriendRequest);
+router.post("/accept", Auth, acceptFriendRequest);
 
 export default router;

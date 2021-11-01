@@ -35,6 +35,11 @@ const UserSchema = new Schema({
     required: true,
     default: "/default-profile-picture.png",
   },
+  cloudinary_id: {
+    type: String,
+    required: true,
+    default: "null",
+  },
   isOnline: {
     type: Boolean,
     default: false,

@@ -16,7 +16,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 // Middlewares
-import errorHandler from "./middlewares/errorHandler.js";
+import ErrorHandler from "./middlewares/ErrorHandler.js";
 
 dotenv.config();
 
@@ -42,7 +42,7 @@ app.use("/friend-request", friendRequestRoutes);
 app.use("/direct-chatroom", directChatroomRoutes);
 
 //  Error middleware
-app.use(errorHandler);
+app.use(ErrorHandler);
 
 // Socket.io
 socketio.on("connection", function (socket) {
