@@ -38,7 +38,7 @@ const UserSchema = new Schema({
   cloudinary_id: {
     type: String,
     required: true,
-    default: null,
+    default: "null",
   },
   isOnline: {
     type: Boolean,
