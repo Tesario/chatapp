@@ -78,7 +78,7 @@ export const getUsersChatroom = async (req, res, next) => {
 
         return {
           members: members,
-          isPrivate: false,
+          isPrivate: chatroom.isPrivate,
           lowerCaseName: chatroom.lowerCaseName,
           name: chatroom.name,
         };
