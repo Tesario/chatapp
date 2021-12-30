@@ -8,8 +8,7 @@ import "unicode-emoji-picker";
 
 import "./Chatroom.scss";
 
-function Chatroom(props) {
-  const { notify } = props;
+const Chatroom = ({ notify }) => {
   let { lowerCaseName } = useParams();
   const [state, setState] = useState({
     message: "",
@@ -237,7 +236,7 @@ function Chatroom(props) {
 
   const getChatroom = async () => {
     await axios({
-      url: "/chatroom/public/" + lowerCaseName,
+      url: "/chatroom/get/" + lowerCaseName,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -534,6 +533,6 @@ function Chatroom(props) {
       </form>
     </div>
   );
-}
+};
 
 export default Chatroom;

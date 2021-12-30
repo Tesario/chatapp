@@ -6,7 +6,7 @@ import {
   joinToChatroom,
   leaveChatroom,
   joinToPrivateChatroom,
-  getPublicChatroom,
+  getChatroom,
 } from "../controllers/ChatroomController.js";
 import Auth from "../middlewares/Auth.js";
 
@@ -16,7 +16,7 @@ const router = express.Router();
 router.get("/public", Auth, getPublicChatrooms);
 
 // Get public chatroom
-router.get("/public/:lowerCaseName", Auth, getPublicChatroom);
+router.get("/get/:lowerCaseName", Auth, getChatroom);
 
 // Get user's chatrooms
 router.get("/get-user-chatrooms", Auth, getUsersChatroom);

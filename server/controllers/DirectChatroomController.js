@@ -31,3 +31,27 @@ export const removeFriend = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getChatroom = async (req, res, next) => {
+  const { name } = req.params;
+  const { id } = req.user;
+
+  try {
+    const chatroom = await DirectChatroom.findOne({ name })
+      .populate("members")
+      .select("members");
+
+    if (!chatroom) {
+      return next(new ErrorResponse("Chatroom do not exist", 403));
+    }
+
+    const friend =
+      chatroom.members[0]._id.toString() === id.toString()
+        ? chatroom.members[1]
+        : chatroom.members[0];
+
+    res.status(200).json({ friend });
+  } catch (error) {
+    next(error);
+  }
+};
