@@ -2,13 +2,13 @@ import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ScrollReveal from "scrollreveal";
 
-import devices from "../assets/img/devices.png";
-import realTimeChatting from "../assets/img/real-time-chatting.png";
-import createChatroom from "../assets/img/create-chatroom.png";
-import js from "../assets/img/js.png";
-import react from "../assets/img/react.png";
-import node from "../assets/img/node.png";
-import sass from "../assets/img/sass.png";
+import devices from "../assets/img/devices.webp";
+import realTimeChatting from "../assets/img/real-time-chatting.webp";
+import createChatroom from "../assets/img/create-chatroom.webp";
+import js from "../assets/img/js.webp";
+import react from "../assets/img/react.webp";
+import node from "../assets/img/node.webp";
+import sass from "../assets/img/sass.webp";
 import "./Homepage.scss";
 
 const Homepage = (props) => {
