@@ -277,6 +277,10 @@
         margin-top: 14.5rem;
 
         @media (max-width: 1920px) {
+            margin-top: 12vw;
+        }
+
+        @media (max-width: 1820px) {
             margin-top: 13vw;
         }
 
@@ -530,8 +534,8 @@
         }
 
         &.chat {
-            top: -25px;
-            left: -25px;
+            bottom: -25px;
+            right: -25px;
             background-color: var(--primary-color);
         }
 
