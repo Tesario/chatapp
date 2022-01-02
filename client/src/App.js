@@ -26,7 +26,7 @@ const notify = (data) => {
     if (success) {
       toast.success(message, {
         position: toast.POSITION.TOP_LEFT,
-        autoClose: 30000,
+        autoClose: 3000,
       });
     } else {
       toast.error(message, {

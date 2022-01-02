@@ -25,6 +25,7 @@ const DirectChatroom = ({ notify }) => {
   const messageInputRef = useRef();
   const emojiFillerRef = useRef();
   const asideMaskRef = useRef();
+  const maxCharsPerMess = 2000;
 
   useEffect(() => {
     getMessages();
@@ -99,14 +100,24 @@ const DirectChatroom = ({ notify }) => {
   }, []);
 
   useEffect(() => {
-    setState({ ...state, message: state.message + emoji });
+    if (state.message.length < maxCharsPerMess) {
+      setState({ ...state, message: state.message + emoji });
+    }
+
     setEmoji("");
     messageInputRef.current.focus();
     // eslint-disable-next-line
   }, [emoji]);
 
   const onTextChange = (e) => {
-    setState({ ...state, [e.target.name]: e.target.value });
+    if (e.target.value.length > maxCharsPerMess) {
+      notify({
+        success: false,
+        message: "Maximum characters is " + maxCharsPerMess + " per message.",
+      });
+    } else {
+      setState({ ...state, [e.target.name]: e.target.value });
+    }
   };
 
   const chatScrollToDown = () => {
