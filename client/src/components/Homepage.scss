@@ -274,10 +274,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 14.5rem;
+        margin-top: 15.5rem;
 
         @media (max-width: 1920px) {
-            margin-top: 12vw;
+            margin-top: 13vw;
         }
 
         @media (max-width: 1820px) {
@@ -313,9 +313,13 @@
         flex-direction: column;
 
         p {
-            margin-top: 6rem;
+            margin-top: 8rem;
             max-width: 430px;
             line-height: 24px;
+
+            @media (max-width: 1600px) {
+                margin-top: 7rem;
+            }
 
             @media (max-width: $xl) {
                 margin-top: .5rem;

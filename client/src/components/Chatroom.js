@@ -4,6 +4,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import dateFormat from "dateformat";
 import { useParams } from "react-router";
+import { TitleSkeleton, ChatSkeleton, UsersSkeleton } from "./Skeletons";
 import "unicode-emoji-picker";
 
 import "./Chatroom.scss";
@@ -14,7 +15,7 @@ const Chatroom = ({ notify }) => {
     message: "",
   });
   const [currentUser, setCurrentUser] = useState(null);
-  const [chat, setChat] = useState([]);
+  const [chat, setChat] = useState(null);
   const [messagesCount, setMessagesCount] = useState(100);
   const [moreMessages, setMoreMessages] = useState(false);
   const [emoji, setEmoji] = useState("");
@@ -298,8 +299,48 @@ const Chatroom = ({ notify }) => {
     }
   };
 
+  const renderMembers = () => {
+    if (Object.keys(chatroom).length !== 0) {
+      return chatroom.members.map(
+        ({ chatroomUser, action, directChatroomName }, index) => {
+          const { picture, name, isOnline } = chatroomUser;
+          return (
+            <li
+              className={"user" + (action === "friends" ? " friend" : "")}
+              key={index}
+            >
+              <div className="avatar">
+                <div className="image">
+                  <img src={picture} alt={name} />
+                </div>
+                <span
+                  className={"status " + (isOnline ? "online" : "offline")}
+                ></span>
+              </div>
+              <div className="name">{name}</div>
+              {action === "friends" ? (
+                <Link
+                  className="btn-chat"
+                  to={"/direct-chatroom/" + directChatroomName}
+                >
+                  <i className="fas fa-comments"></i>
+                </Link>
+              ) : (
+                ""
+              )}
+            </li>
+          );
+        }
+      );
+    }
+    return <UsersSkeleton />;
+  };
+
   const renderChat = () => {
-    if (chat === []) return;
+    if (!chat) {
+      return <ChatSkeleton />;
+    }
+
     let prevTime = 0;
     let prevName = "";
     return chat.map((message, index) => {
@@ -411,47 +452,19 @@ const Chatroom = ({ notify }) => {
           >
             <i className="fas fa-users"></i>
           </a>
-          <div className="subtitle without-line name">{chatroom.name}</div>
+          <div className="subtitle without-line name">
+            {chatroom.name ? (
+              chatroom.name
+            ) : (
+              <div style={{ marginTop: "-7px" }}>
+                <TitleSkeleton />
+              </div>
+            )}
+          </div>
         </div>
         <ul className="members-aside" ref={membersAsideRef}>
           <div className="subtitle without-line name">{chatroom.name}</div>
-          {chatroom.members
-            ? chatroom.members.map(
-                ({ chatroomUser, action, directChatroomName }, index) => {
-                  const { picture, name, isOnline } = chatroomUser;
-                  return (
-                    <li
-                      className={
-                        "user" + (action === "friends" ? " friend" : "")
-                      }
-                      key={index}
-                    >
-                      <div className="avatar">
-                        <div className="image">
-                          <img src={picture} alt={name} />
-                        </div>
-                        <span
-                          className={
-                            "status " + (isOnline ? "online" : "offline")
-                          }
-                        ></span>
-                      </div>
-                      <div className="name">{name}</div>
-                      {action === "friends" ? (
-                        <Link
-                          className="btn-chat"
-                          to={"/direct-chatroom/" + directChatroomName}
-                        >
-                          <i className="fas fa-comments"></i>
-                        </Link>
-                      ) : (
-                        ""
-                      )}
-                    </li>
-                  );
-                }
-              )
-            : ""}
+          {renderMembers()}
         </ul>
       </div>
       <div className="chatbox__messages" onScroll={() => showScrollDownBtn()}>
