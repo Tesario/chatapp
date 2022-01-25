@@ -5,6 +5,10 @@
     flex-direction: column;
     align-items: flex-start;
 
+    .desc.darken {
+        color: var(--text-color);
+    }
+
     .chatroom-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);

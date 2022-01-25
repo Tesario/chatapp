@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import dateFormat from "dateformat";
 import { useParams } from "react-router";
+import { ChatSkeleton, UserSkeleton } from "./Skeletons";
 import "unicode-emoji-picker";
 
 import "./DirectChatroom.scss";
@@ -11,7 +12,7 @@ const DirectChatroom = ({ notify }) => {
   let { name } = useParams();
   const [state, setState] = useState({ message: "" });
   const [currentUser, setCurrentUser] = useState(null);
-  const [chat, setChat] = useState([]);
+  const [chat, setChat] = useState(null);
   const [messagesCount, setMessagesCount] = useState(50);
   const [moreMessages, setMoreMessages] = useState(false);
   const [emoji, setEmoji] = useState("");
@@ -24,6 +25,7 @@ const DirectChatroom = ({ notify }) => {
   const messageInputRef = useRef();
   const emojiFillerRef = useRef();
   const asideMaskRef = useRef();
+  const maxCharsPerMess = 2000;
 
   useEffect(() => {
     getMessages();
@@ -98,14 +100,24 @@ const DirectChatroom = ({ notify }) => {
   }, []);
 
   useEffect(() => {
-    setState({ ...state, message: state.message + emoji });
+    if (state.message.length < maxCharsPerMess) {
+      setState({ ...state, message: state.message + emoji });
+    }
+
     setEmoji("");
     messageInputRef.current.focus();
     // eslint-disable-next-line
   }, [emoji]);
 
   const onTextChange = (e) => {
-    setState({ ...state, [e.target.name]: e.target.value });
+    if (e.target.value.length > maxCharsPerMess) {
+      notify({
+        success: false,
+        message: "Maximum characters is " + maxCharsPerMess + " per message.",
+      });
+    } else {
+      setState({ ...state, [e.target.name]: e.target.value });
+    }
   };
 
   const chatScrollToDown = () => {
@@ -286,8 +298,33 @@ const DirectChatroom = ({ notify }) => {
     }
   };
 
+  const renderMember = () => {
+    if (!chatroom.friend) {
+      return <UserSkeleton />;
+    }
+
+    return (
+      <div className="user">
+        <div className="avatar">
+          <div className="image">
+            <img src={chatroom.friend.picture} alt={chatroom.friend.name} />
+          </div>
+          <span
+            className={
+              "status " + (chatroom.friend.isOnline ? "online" : "offline")
+            }
+          ></span>
+        </div>
+        <div className="name">{chatroom.friend.name}</div>
+      </div>
+    );
+  };
+
   const renderChat = () => {
-    if (chat === []) return;
+    if (!chat) {
+      return <ChatSkeleton />;
+    }
+
     let prevTime = 0;
     let prevName = "";
     return chat.map((message, index) => {
@@ -389,25 +426,7 @@ const DirectChatroom = ({ notify }) => {
           <span className="text">Uploading...</span>
         </div>
       </span>
-      <div className="chatroom-menu">
-        {chatroom.friend ? (
-          <div className="user">
-            <div className="avatar">
-              <div className="image">
-                <img src={chatroom.friend.picture} alt={chatroom.friend.name} />
-              </div>
-              <span
-                className={
-                  "status " + (chatroom.friend.isOnline ? "online" : "offline")
-                }
-              ></span>
-            </div>
-            <div className="name">{chatroom.friend.name}</div>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
+      <div className="chatroom-menu">{renderMember()}</div>
       <div
         className="direct-chatbox__messages"
         onScroll={() => showScrollDownBtn()}

@@ -112,3 +112,45 @@ h1 {
     }
   }
 }
+
+.Toastify__toast-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.Toastify__toast {
+  min-height: unset;
+
+}
+
+.Toastify__toast-body {
+  display: flex;
+  margin: 0;
+  padding: .75rem 6px;
+  font-family: "Montserrat";
+  align-items: center;
+
+  &::before {
+    font-family: FontAwesome;
+    font-size: 1.2em;
+    margin-right: .75rem;
+  }
+}
+
+.Toastify__toast--success {
+  background: $green;
+
+  .Toastify__toast-body {
+    &::before {
+      content: "\f058";
+    }
+  }
+}
+
+.Toastify__toast--error {
+  .Toastify__toast-body {
+    &::before {
+      content: "\f071";
+    }
+  }
+}

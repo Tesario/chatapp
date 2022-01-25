@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { ChatroomSkeleton } from "./Skeletons";
 
 import "./CreateChatroom.scss";
 
@@ -16,7 +17,7 @@ const CreateChatroom = (props) => {
     joinName: "",
     joinPassword: "",
   });
-  const [chatrooms, setChatrooms] = useState([]);
+  const [chatrooms, setChatrooms] = useState(null);
   const { notify } = props;
 
   useEffect(() => {
@@ -122,7 +123,11 @@ const CreateChatroom = (props) => {
   };
 
   const renderChatrooms = () => {
-    if (chatrooms.length) {
+    if (!chatrooms) {
+      return <ChatroomSkeleton />;
+    } else if (chatrooms.length === 0) {
+      return <li className="desc darken">No public chatrooms avaliable</li>;
+    } else {
       return chatrooms.map((chatroom, index) => {
         return (
           <li key={index} className="list-item">

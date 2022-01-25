@@ -7,7 +7,7 @@ import "./Login.scss";
 const Login = (props) => {
   const history = useHistory();
   const [state, setState] = useState({
-    email: "vtesar2003@gmail.com",
+    email: "",
     password: "",
   });
   const { notify, changeIsHomepage, changeIsAuth } = props;

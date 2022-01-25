@@ -2,16 +2,17 @@ import React, { useEffect, useState, useRef } from "react";
 import dateFormat from "dateformat";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { ChatroomSkeleton, UsersSkeleton } from "./Skeletons";
 
 import "./Home.scss";
 
 const Home = (props) => {
   const { notify } = props;
-  const [chatrooms, setChatrooms] = useState([]);
+  const [chatrooms, setChatrooms] = useState(null);
   const [currentChatroom, setCurrentChatroom] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [friendRequests, setFriendRequests] = useState([]);
-  const [friends, setFriends] = useState([]);
+  const [friendRequests, setFriendRequests] = useState(null);
+  const [friends, setFriends] = useState(null);
   const [foundUsers, setFoundUsers] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -209,7 +210,13 @@ const Home = (props) => {
   };
 
   const renderChatrooms = () => {
-    if (chatrooms.length) {
+    if (!chatrooms) {
+      return <ChatroomSkeleton />;
+    } else if (chatrooms.length === 0) {
+      return (
+        <div className="desc darken">You have not joined to any chatroom</div>
+      );
+    } else {
       return chatrooms.map((chatroom, index) => {
         const { name, isPrivate, lowerCaseName } = chatroom;
         return (
@@ -260,8 +267,6 @@ const Home = (props) => {
         );
       });
     }
-
-    return <div className="desc darken">No chatrooms found</div>;
   };
 
   const renderInfo = () => {
@@ -306,7 +311,11 @@ const Home = (props) => {
   };
 
   const renderFriendRequests = () => {
-    if (friendRequests.length) {
+    if (!friendRequests) {
+      return <UsersSkeleton />;
+    } else if (friendRequests.length === 0) {
+      return <div className="desc darken">No friend requests found</div>;
+    } else {
       return friendRequests.map((friendRequest, index) => {
         return (
           <div key={index} className="friend-request">
@@ -353,11 +362,14 @@ const Home = (props) => {
         );
       });
     }
-    return <div className="desc darken">No friend requests found</div>;
   };
 
   const renderFriends = () => {
-    if (friends.length) {
+    if (!friends) {
+      return <UsersSkeleton />;
+    } else if (friends.length === 0) {
+      return <div className="desc darken">You have no friends yet</div>;
+    } else {
       return friends.map((friend, index) => {
         return (
           <div key={index} className="friend">
@@ -412,7 +424,6 @@ const Home = (props) => {
         );
       });
     }
-    return <div className="desc darken">No friends found</div>;
   };
 
   const renderActionButton = (
