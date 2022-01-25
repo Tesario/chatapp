@@ -28,7 +28,7 @@ function Register(props) {
     try {
       await axios({
         method: "POST",
-        url: "/user/register",
+        url: "https://tesar-chatapp.herokuapp.com/user/register",
         data: state,
       }).then((res) => {
         setState({ name: "", email: "", password: "", passwordAgain: "" });

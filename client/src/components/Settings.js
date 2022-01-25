@@ -22,7 +22,7 @@ function Settings(props) {
 
   const getUser = async () => {
     await axios({
-      url: "/user/get",
+      url: "https://tesar-chatapp.herokuapp.com/user/get",
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -110,7 +110,7 @@ function Settings(props) {
     }
 
     await axios({
-      url: "/user/edit",
+      url: "https://tesar-chatapp.herokuapp.com/user/edit",
       method: "PUT",
       data: formData,
       headers: {

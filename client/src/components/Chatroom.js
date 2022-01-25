@@ -223,7 +223,10 @@ const Chatroom = ({ notify }) => {
       }
 
       await axios({
-        url: "/message/" + lowerCaseName + "/create",
+        url:
+          "https://tesar-chatapp.herokuapp.com/message/" +
+          lowerCaseName +
+          "/create",
         method: "POST",
         data: formData,
         headers: {
@@ -248,7 +251,7 @@ const Chatroom = ({ notify }) => {
 
   const getChatroom = async () => {
     await axios({
-      url: "/chatroom/get/" + lowerCaseName,
+      url: "https://tesar-chatapp.herokuapp.com/chatroom/get/" + lowerCaseName,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -269,7 +272,11 @@ const Chatroom = ({ notify }) => {
 
   const getMessages = async (enableScroll = true) => {
     await axios({
-      url: "/message/" + lowerCaseName + "/" + messagesCount,
+      url:
+        "https://tesar-chatapp.herokuapp.com/message/" +
+        lowerCaseName +
+        "/" +
+        messagesCount,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),

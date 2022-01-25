@@ -15,7 +15,7 @@ const UserRoute = ({ component: Component, notify, ...rest }) => {
 
   const isAuthFunc = async () => {
     await axios({
-      url: "/user/is-auth",
+      url: "https://tesar-chatapp.herokuapp.com/user/is-auth",
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),

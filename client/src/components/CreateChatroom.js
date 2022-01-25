@@ -33,7 +33,7 @@ const CreateChatroom = (props) => {
     e.preventDefault();
 
     await axios({
-      url: "/chatroom/create",
+      url: "https://tesar-chatapp.herokuapp.com/chatroom/create",
       method: "POST",
       data: state,
       headers: {
@@ -55,7 +55,7 @@ const CreateChatroom = (props) => {
     e.preventDefault();
     if (joinRoomState.joinName && joinRoomState.joinPassword) {
       return await axios({
-        url: "/chatroom/join/private",
+        url: "https://tesar-chatapp.herokuapp.com/chatroom/join/private",
         method: "PUT",
         data: joinRoomState,
         headers: {
@@ -89,7 +89,7 @@ const CreateChatroom = (props) => {
 
   const getChatrooms = async () => {
     await axios({
-      url: "/chatroom/public",
+      url: "https://tesar-chatapp.herokuapp.com/chatroom/public",
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -106,7 +106,7 @@ const CreateChatroom = (props) => {
 
   const handleJoin = async (lowerCaseName) => {
     await axios({
-      url: "/chatroom/join/" + lowerCaseName,
+      url: "https://tesar-chatapp.herokuapp.com/chatroom/join/" + lowerCaseName,
       method: "PUT",
       headers: {
         authorization: sessionStorage.getItem("token"),
