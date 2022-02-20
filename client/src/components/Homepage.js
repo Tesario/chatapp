@@ -311,12 +311,12 @@ const Homepage = (props) => {
           <span className="green-rect"></span>
           <div className="flex-group">
             <div className="content">
-              <h1 className="main-title">Chat app</h1>
+              <h1 className="main-title">Chat App</h1>
               <p>
-                Welcome in Chatapp! I created this app for increasing my skills
-                in MERN stack. Despite it is graduation project, I wanted that
-                app has to contain elementary features every chatting
-                application such as Messanger or WhatsApp.
+                Welcome to Chatapp! I created this app in order to inscrease my
+                skills in MERN stack. Since it's an application made for
+                chatting, it will obviously contains features that are used in
+                Messenger, or WhatsApp.
               </p>
               <a
                 href="/#"
@@ -350,10 +350,9 @@ const Homepage = (props) => {
             <div className="text-group">
               <div className="subtitle">Real time chatting</div>
               <p>
-                There is live chatting avaliable! You can chat with your friend
-                or group of people. You can share our multimedia content such as
-                images or documents. Also there are own emoji system for emotion
-                sharing 😃.
+                Live chatting is also avaliable! You can chat with your friend
+                or with a group of people. You can share your multimedia content
+                such as images or documents and your emotions through emojis 😃.
               </p>
               <Link to="/register" className="subtitle link">
                 Let’s chat!
@@ -386,11 +385,10 @@ const Homepage = (props) => {
             <div className="text-group">
               <div className="subtitle">Chatroom creating</div>
               <p>
-                You can create your own chatroom! You can create private or
-                public chatroom. Private chatroom are protected by password, so
-                you need to send it to your friend. Do you have no friends? No
-                problem, you can join to public chatrooms and chat with new
-                people.
+                You can create private or public chatrooms. Private chatrooms
+                are protected by a password, so you will need to send it to your
+                friend. Do you have no friends? Well that won't be a problem,
+                you can join public chatrooms and chat with new people.
               </p>
               <Link to="/register" className="subtitle link">
                 Create chatroom!

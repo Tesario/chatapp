@@ -415,6 +415,10 @@
     .subtitle {
         border-bottom: none;
 
+        @media (max-width: $sm) {
+            font-size: 1.3em;
+        }
+
         &.link {
             margin-top: 1.5rem;
             color: var(--primary-color);
@@ -789,6 +793,7 @@
     padding: 3rem 0;
     display: flex;
     justify-content: center;
+    font-size: 18px;
 
     a {
         color: var(--primary-color);
