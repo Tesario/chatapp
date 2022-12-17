@@ -29,7 +29,7 @@ const DirectChatroom = ({ notify }) => {
 
   useEffect(() => {
     getMessages();
-    socketRef.current = io.connect("https://tesar-chatapp.herokuapp.com", {
+    socketRef.current = io.connect("/", {
       transports: ["websocket"],
     });
 
