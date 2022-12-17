@@ -153,10 +153,7 @@ const DirectChatroom = ({ notify }) => {
       }
 
       await axios({
-        url:
-          "https://tesar-chatapp.herokuapp.com/message/direct-chatroom/" +
-          name +
-          "/create",
+        url: "/message/direct-chatroom/" + name + "/create",
         method: "POST",
         data: formData,
         headers: {
@@ -178,11 +175,7 @@ const DirectChatroom = ({ notify }) => {
 
   const getMessages = async (enableScroll = true) => {
     await axios({
-      url:
-        "https://tesar-chatapp.herokuapp.com/message/direct-chatroom/" +
-        name +
-        "/" +
-        messagesCount,
+      url: "/message/direct-chatroom/" + name + "/" + messagesCount,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -203,7 +196,7 @@ const DirectChatroom = ({ notify }) => {
 
   const getDirectChatroom = async () => {
     await axios({
-      url: "https://tesar-chatapp.herokuapp.com/direct-chatroom/get/" + name,
+      url: "/direct-chatroom/get/" + name,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),

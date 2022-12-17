@@ -82,7 +82,7 @@ function App() {
       socketRef.current.on("connect", async () => {
         if (isAuth) {
           await axios({
-            url: "https://tesar-chatapp.herokuapp.com/user/status/true",
+            url: "/user/status/true",
             method: "PUT",
             headers: {
               authorization: sessionStorage.getItem("token"),
@@ -94,7 +94,7 @@ function App() {
       if (isAuth) {
         window.onbeforeunload = async () => {
           await axios({
-            url: "https://tesar-chatapp.herokuapp.com/user/status/false",
+            url: "/user/status/false",
             method: "PUT",
             headers: {
               authorization: sessionStorage.getItem("token"),
@@ -116,7 +116,7 @@ function App() {
 
   const isAuthFunc = async () => {
     await axios({
-      url: "https://tesar-chatapp.herokuapp.com/user/is-auth",
+      url: "/user/is-auth",
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),

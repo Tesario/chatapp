@@ -12,7 +12,7 @@ function Navbar(props) {
   const handleLogout = async (e) => {
     e.preventDefault();
     await axios({
-      url: "https://tesar-chatapp.herokuapp.com/user/status/false",
+      url: "/user/status/false",
       method: "PUT",
       headers: {
         authorization: sessionStorage.getItem("token"),

@@ -51,7 +51,7 @@ const Home = (props) => {
   const getChatrooms = async () => {
     await axios({
       method: "GET",
-      url: "https://tesar-chatapp.herokuapp.com/chatroom/get-user-chatrooms",
+      url: "/chatroom/get-user-chatrooms",
       headers: {
         authorization: sessionStorage.getItem("token"),
       },
@@ -67,7 +67,7 @@ const Home = (props) => {
 
   const getFriendRequests = async () => {
     await axios({
-      url: "https://tesar-chatapp.herokuapp.com/friend-request/get",
+      url: "/friend-request/get",
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -83,7 +83,7 @@ const Home = (props) => {
 
   const getFriends = async () => {
     await axios({
-      url: "https://tesar-chatapp.herokuapp.com/direct-chatroom/get",
+      url: "/direct-chatroom/get",
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -99,7 +99,7 @@ const Home = (props) => {
 
   const getFoundUsers = async () => {
     await axios({
-      url: "https://tesar-chatapp.herokuapp.com/user/search/" + search,
+      url: "/user/search/" + search,
       method: "GET",
       headers: {
         authorization: sessionStorage.getItem("token"),
@@ -116,10 +116,7 @@ const Home = (props) => {
   const handleLeave = async (lowerCaseName) => {
     await axios({
       method: "PUT",
-      url:
-        "https://tesar-chatapp.herokuapp.com/chatroom/" +
-        lowerCaseName +
-        "/leave",
+      url: "/chatroom/" + lowerCaseName + "/leave",
       headers: {
         authorization: sessionStorage.getItem("token"),
       },
@@ -140,7 +137,7 @@ const Home = (props) => {
   const handleFriendRequest = async (receiverName) => {
     await axios({
       method: "POST",
-      url: "https://tesar-chatapp.herokuapp.com/friend-request/create",
+      url: "/friend-request/create",
       data: {
         receiverName,
       },
@@ -159,7 +156,7 @@ const Home = (props) => {
 
   const handleDeleteRequest = async (requestId) => {
     await axios({
-      url: "https://tesar-chatapp.herokuapp.com/friend-request/delete",
+      url: "/friend-request/delete",
       method: "DELETE",
       data: {
         requestId,
@@ -179,7 +176,7 @@ const Home = (props) => {
 
   const handleAcceptRequest = async (requestId, senderId) => {
     await axios({
-      url: "https://tesar-chatapp.herokuapp.com/friend-request/accept",
+      url: "/friend-request/accept",
       method: "POST",
       data: {
         requestId,
@@ -199,10 +196,7 @@ const Home = (props) => {
 
   const handleRemoveFriend = async (name) => {
     await axios({
-      url:
-        "https://tesar-chatapp.herokuapp.com/direct-chatroom/" +
-        name +
-        "/remove",
+      url: "/direct-chatroom/" + name + "/remove",
       method: "DELETE",
       headers: { authorization: sessionStorage.getItem("token") },
     })

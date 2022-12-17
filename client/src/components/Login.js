@@ -25,7 +25,7 @@ const Login = (props) => {
 
     try {
       await axios({
-        url: "https://tesar-chatapp.herokuapp.com/user/login",
+        url: "/user/login",
         method: "post",
         data: state,
       }).then((res) => {
