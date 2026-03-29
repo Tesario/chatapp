@@ -51,7 +51,7 @@ const Home = (props) => {
   const getChatrooms = async () => {
     await axios({
       method: "GET",
-      url: "chatroom/get-user-chatrooms",
+      url: "/chatroom/get-user-chatrooms",
       headers: {
         authorization: sessionStorage.getItem("token"),
       },
@@ -116,7 +116,7 @@ const Home = (props) => {
   const handleLeave = async (lowerCaseName) => {
     await axios({
       method: "PUT",
-      url: "chatroom/" + lowerCaseName + "/leave",
+      url: "/chatroom/" + lowerCaseName + "/leave",
       headers: {
         authorization: sessionStorage.getItem("token"),
       },

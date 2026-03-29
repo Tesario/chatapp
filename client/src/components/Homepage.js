@@ -311,16 +311,16 @@ const Homepage = (props) => {
           <span className="green-rect"></span>
           <div className="flex-group">
             <div className="content">
-              <h1 className="main-title">Chat app</h1>
+              <h1 className="main-title">Chat App</h1>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis
-                corporis ea illo nesciunt, accusamus molestiae vel soluta,
-                voluptate impedit ad asperiores magnam vero autem, odio atque!
-                Ratione nesciunt ullam non. De asperiores magnam vero autem,
-                odio atque! Ratione nesciunt ullam non.
+                Welcome to Chatapp! I created this app in order to inscrease my
+                skills in MERN stack. Since it's an application made for
+                chatting, it will obviously contains features that are used in
+                Messenger, or WhatsApp.
               </p>
               <a
                 href="/#"
+                className="mt-2"
                 onClick={(e) => {
                   scrollToSection("#features", e);
                   toggleMenu(e);
@@ -350,12 +350,9 @@ const Homepage = (props) => {
             <div className="text-group">
               <div className="subtitle">Real time chatting</div>
               <p>
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                Quisque porta. Curabitur sagittis hendrerit ante. Nam sed tellus
-                id magna elementum tincidunt. Nulla non arcu lacinia neque
-                faucibus fringilla. Maecenas fermentum, sem in pharetra
-                pellentesque, velit turpis volutpat ante, in pharetra metus odio
-                a lectus.
+                Live chatting is also avaliable! You can chat with your friend
+                or with a group of people. You can share your multimedia content
+                such as images or documents and your emotions through emojis 😃.
               </p>
               <Link to="/register" className="subtitle link">
                 Let’s chat!
@@ -388,12 +385,10 @@ const Homepage = (props) => {
             <div className="text-group">
               <div className="subtitle">Chatroom creating</div>
               <p>
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                Quisque porta. Curabitur sagittis hendrerit ante. Nam sed tellus
-                id magna elementum tincidunt. Nulla non arcu lacinia neque
-                faucibus fringilla. Maecenas fermentum, sem in pharetra
-                pellentesque, velit turpis volutpat ante, in pharetra metus odio
-                a lectus.
+                You can create private or public chatrooms. Private chatrooms
+                are protected by a password, so you will need to send it to your
+                friend. Do you have no friends? Well that won't be a problem,
+                you can join public chatrooms and chat with new people.
               </p>
               <Link to="/register" className="subtitle link">
                 Create chatroom!
@@ -412,7 +407,7 @@ const Homepage = (props) => {
               </div>
               <div className="text">Lines of code</div>
               <div className="number-wrapper">
-                <div className="number lines" data-max="5000">
+                <div className="number lines" data-max="7000">
                   0
                 </div>
                 <div>+</div>
@@ -424,7 +419,7 @@ const Homepage = (props) => {
               </div>
               <div className="text">Files</div>
               <div className="number-wrapper">
-                <div className="number files" data-max="55">
+                <div className="number files" data-max="60">
                   0
                 </div>
                 <div>+</div>

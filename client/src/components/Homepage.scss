@@ -281,7 +281,7 @@
         }
 
         @media (max-width: 1820px) {
-            margin-top: 13vw;
+            margin-top: 12.9vw;
         }
 
         @media (max-width: $xl) {
@@ -315,7 +315,8 @@
         p {
             margin-top: 8rem;
             max-width: 430px;
-            line-height: 24px;
+            line-height: 30px;
+            font-size: 18px;
 
             @media (max-width: 1600px) {
                 margin-top: 7rem;
@@ -414,6 +415,10 @@
     .subtitle {
         border-bottom: none;
 
+        @media (max-width: $sm) {
+            font-size: 1.3em;
+        }
+
         &.link {
             margin-top: 1.5rem;
             color: var(--primary-color);
@@ -461,7 +466,8 @@
         }
 
         p {
-            line-height: 1.5rem;
+            line-height: 30px;
+            font-size: 18px;
 
             @media (max-width: $xl) {
                 text-align: center;
@@ -787,6 +793,7 @@
     padding: 3rem 0;
     display: flex;
     justify-content: center;
+    font-size: 18px;
 
     a {
         color: var(--primary-color);
